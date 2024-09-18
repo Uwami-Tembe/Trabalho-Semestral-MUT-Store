@@ -1,7 +1,8 @@
 package Controller;
 
-import Controller.Models.Api.User;
-import Controller.Models.Usuario;
+import Models.Api.Response;
+import Models.Api.User;
+import Models.Usuario;
 import View.TelaLogin;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -46,17 +47,17 @@ public class NewAccountController {
 
 
     @FXML
-    void onBT_criarContaPressed(ActionEvent event) {
-    // Validação dos campos
-    if (txt_usuario.getText().isEmpty() || ps_senha.getText().isEmpty() || ps_senha1.getText().isEmpty() || 
-        txt_numeroDeTelefone.getText().isEmpty() || txt_email.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos!");
+void onBT_criarContaPressed(ActionEvent event) {
+    // Validação dos campos obrigatórios
+    String mensagemErro = validarEntradasCriacaoConta();
+    if (mensagemErro != null) {
+        mostrarMensagemErro(mensagemErro);
         return;
     }
 
-    // Verificação de senhas
+    // Verificação se as senhas correspondem
     if (!ps_senha.getText().equals(ps_senha1.getText())) {
-        JOptionPane.showMessageDialog(null, "As senhas não correspondem!");
+        mostrarMensagemErro("As senhas não correspondem!");
         return;
     }
 
@@ -72,16 +73,57 @@ public class NewAccountController {
 
     // Chamada à API para criar a conta
     try {
-        boolean sucesso = User.criarContaAPI(user);
-        if (sucesso) {
-            JOptionPane.showMessageDialog(null, "Conta criada com sucesso!");
+        Response res = User.criarContaAPI(user);
+
+        // Exibir a mensagem retornada pela API
+        if (res.getError_code() == 0) {
+            exibirMensagemSucesso(res.getMsg());
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao criar conta. Tente novamente.");
+            mostrarMensagemErro(res.getMsg());
         }
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Ocorreu um erro: " + e.getMessage());
-    } 
+        mostrarMensagemErro("Ocorreu um erro no sistema: " + e.getMessage());
     }
+}
+
+// Valida as entradas de criação de conta e retorna uma mensagem de erro, se houver
+private String validarEntradasCriacaoConta() {
+    if (txt_usuario.getText().isEmpty() || ps_senha.getText().isEmpty() || ps_senha1.getText().isEmpty() || 
+        txt_numeroDeTelefone.getText().isEmpty() || txt_email.getText().isEmpty()) {
+        return "Todos os campos devem ser preenchidos!";
+    }
+    return null; // Nenhum erro
+}
+
+// Exibe a mensagem de sucesso e navega para outra tela
+private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
+    mostrarMensagemSucesso(mensagemSucesso);  // Exibe a mensagem de sucesso
+
+    // Exibe a tela de carregamento e, depois, navega para a tela de login
+    TelaLogin.changeScene("Carregando.fxml");
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+
+    pause.setOnFinished(e -> {
+        try {
+            TelaLogin.changeScene("LoginDesign.fxml");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    });
+
+    pause.play();
+}
+
+// Método para exibir mensagens de erro na GUI
+private void mostrarMensagemErro(String mensagemErro) {
+    JOptionPane.showMessageDialog(null, mensagemErro); // Exemplo usando JOptionPane
+}
+
+// Método para exibir mensagens de sucesso na GUI
+private void mostrarMensagemSucesso(String mensagemSucesso) {
+    JOptionPane.showMessageDialog(null, mensagemSucesso); // Exemplo usando JOptionPane
+}
+
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{

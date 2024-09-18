@@ -1,7 +1,8 @@
 package Controller;
 
-import Controller.Models.Api.User;
-import Controller.Models.Usuario;
+import Models.Api.Response;
+import Models.Api.User;
+import Models.Usuario;
 import View.TelaLogin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,44 +92,70 @@ void onBT_entrarPressed(ActionEvent event) throws Exception {
     String password = ps_senha.getText();
 
     // Validações essenciais
-    if (username == null || username.trim().isEmpty()) {
-        mostrarMensagemErro("O nome de usuário não pode estar vazio.");
-        return;
-    }
-
-    if (password == null || password.trim().isEmpty()) {
-        mostrarMensagemErro("A senha não pode estar vazia.");
+    String mensagemErro = validarEntradas(username, password);
+    if (mensagemErro != null) {
+        // Se houver erro de validação, exibe a mensagem correspondente
+        mostrarMensagemErro(mensagemErro);
         return;
     }
 
     // Cria o objeto Usuario com as informações fornecidas
     Usuario user = new Usuario(username, password);
 
-    // Chama o método loginAPI e verifica se o login foi bem-sucedido
-    boolean sucesso = User.loginAPI(user);
+    try {
+        // Chama o método loginAPI e verifica a resposta
+        Response res = User.loginAPI(user);
 
-    // Se o login for bem-sucedido, navega para o menu principal
-    if (sucesso) {
-                TelaLogin.changeScene("Carregando.fxml");
-         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-        
-         try{ 
-             pause.setOnFinished(e->{
-                 try {
-                     TelaLogin.changeScene("DigitarCodigo.fxml");
-                 } catch (Exception ex) {
-                     ex.printStackTrace();
-                 }
-             });
-         }
-         catch(Exception e){
-             e.printStackTrace();
-         }
-         pause.play();
-    } else {
-        // Exibe uma mensagem de erro ao usuário caso o login falhe
-        mostrarMensagemErro("Usuário ou senha incorretos. Tente novamente.");
+        // Exibe a mensagem retornada pela API, seja ela de sucesso ou falha
+        if (res.getError_code() == 0) {
+            exibirMensagemSucesso(res.getMsg());
+        } else {
+            mostrarMensagemErro(res.getMsg());  // Mensagem de erro da API
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
     }
+}
+
+
+// Valida as entradas e retorna a mensagem de erro, se houver, ou null
+private String validarEntradas(String username, String password) {
+    if (username == null || username.trim().isEmpty()) {
+        return "O nome de usuário não pode estar vazio.";
+    }
+    if (password == null || password.trim().isEmpty()) {
+        return "A senha não pode estar vazia.";
+    }
+    return null; // Nenhum erro, retorna null
+}
+
+// Exibe a mensagem de sucesso e navega para outra tela
+private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
+    mostrarMensagemSucesso(mensagemSucesso);  // Método para exibir mensagem na GUI
+
+    // Exibe a tela de carregamento antes de mudar para o próximo estágio
+    TelaLogin.changeScene("Carregando.fxml");
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+
+    pause.setOnFinished(e -> {
+        try {
+            // Troca de cena para uma tela de menu ou próximo passo
+            TelaLogin.changeScene("DigitarCodigo.fxml");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    });
+
+    pause.play();
+}
+
+
+// Método para exibir mensagens de sucesso na GUI
+private void mostrarMensagemSucesso(String mensagemSucesso) {
+    // Lógica para exibir a mensagem de sucesso na interface, por exemplo, em um Label ou Alert
+    System.out.println(mensagemSucesso); // Exemplo de saída no console
 }
 
    @FXML
