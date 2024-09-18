@@ -1,5 +1,7 @@
 package Controller;
 
+import Controller.Models.Api.User;
+import Controller.Models.Usuario;
 import View.TelaLogin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 public class LoginController {
@@ -55,7 +58,9 @@ public class LoginController {
          }
          pause.play();
               }
-    
+    public void mostrarMensagemErro(String S){
+        JOptionPane.showMessageDialog(null, S);
+    }
     
         @FXML
     void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
@@ -80,12 +85,52 @@ public class LoginController {
     }
     
     @FXML
-    void onBT_entrarPressed(ActionEvent event) {
-        
-        //A lógica necesssária para entar no menu principal fica aqui
-        
-        
+void onBT_entrarPressed(ActionEvent event) throws Exception {
+    // Obter as entradas do usuário
+    String username = txt_usuario.getText();
+    String password = ps_senha.getText();
+
+    // Validações essenciais
+    if (username == null || username.trim().isEmpty()) {
+        mostrarMensagemErro("O nome de usuário não pode estar vazio.");
+        return;
     }
+
+    if (password == null || password.trim().isEmpty()) {
+        mostrarMensagemErro("A senha não pode estar vazia.");
+        return;
+    }
+
+    // Cria o objeto Usuario com as informações fornecidas
+    Usuario user = new Usuario(username, password);
+
+    // Chama o método loginAPI e verifica se o login foi bem-sucedido
+    boolean sucesso = User.loginAPI(user);
+
+    // Se o login for bem-sucedido, navega para o menu principal
+    if (sucesso) {
+                TelaLogin.changeScene("Carregando.fxml");
+         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                     TelaLogin.changeScene("DigitarCodigo.fxml");
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
+    } else {
+        // Exibe uma mensagem de erro ao usuário caso o login falhe
+        mostrarMensagemErro("Usuário ou senha incorretos. Tente novamente.");
+    }
+}
+
    @FXML
     void showPassword(MouseEvent event) {
         genericTextField.setText(ps_senha.getText());

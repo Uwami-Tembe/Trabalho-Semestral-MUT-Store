@@ -27,6 +27,12 @@ public class Usuario {
         this.userStatus = true;
     }
 
+    public Usuario(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    
+
     public boolean isUserStatus() {
         return userStatus;
     }

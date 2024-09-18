@@ -1,12 +1,17 @@
 package Controller.Models.Api;
 
 import static Constants.Constants.API_URL;
+import static Constants.Constants.TOKEN_FILE_PATH;
 import Controller.Models.Usuario;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +64,7 @@ public class User {
     }
 
     // Método para realizar login do usuário
-    public static void loginAPI(Usuario user) {
+public static boolean loginAPI(Usuario user) {
         try {
             URI uri = new URI(API_URL + "/users/login");
 
@@ -83,15 +88,47 @@ public class User {
             // Verifica o código de resposta
             if (response.statusCode() == 200) {
                 System.out.println("Login realizado com sucesso!");
+
+                // Processar a resposta para extrair o token
+                String responseBody = response.body();
+                Map<String, Object> responseMap = objectMapper.readValue(responseBody, Map.class);
+                String token = (String) responseMap.get("token");
+
+                if (token != null) {
+                    // Salvar o token em um arquivo
+                    try (FileWriter fileWriter = new FileWriter(TOKEN_FILE_PATH)) {
+                        fileWriter.write(token);
+                        System.out.println("Token salvo com sucesso no arquivo: " + TOKEN_FILE_PATH);
+                        return true; // Retorna true se o login e a gravação do token forem bem-sucedidos
+                    } catch (IOException e) {
+                        System.err.println("Erro ao salvar o token: " + e.getMessage());
+                        return false; // Retorna false se houver um erro ao salvar o token
+                    }
+                } else {
+                    System.err.println("Token não encontrado na resposta.");
+                    return false; // Retorna false se o token não estiver presente na resposta
+                }
+
             } else {
                 System.out.println("Erro ao realizar login. Código: " + response.statusCode());
+                return false; // Retorna false se a resposta indicar falha no login
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false; // Retorna false se ocorrer uma exceção
         }
     }
 
+    // Método para ler o token do arquivo
+    public static String readTokenFromFile() {
+        try {
+            return new String(Files.readAllBytes(Paths.get(TOKEN_FILE_PATH)));
+        } catch (IOException e) {
+            System.err.println("Erro ao ler o token do arquivo: " + e.getMessage());
+            return null;
+        }
+    }
     // Método para atualizar os dados do usuário
     public static void atualizarDadosAPI(Usuario user) {
         try {
