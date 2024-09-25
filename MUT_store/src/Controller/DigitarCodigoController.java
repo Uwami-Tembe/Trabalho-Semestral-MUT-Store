@@ -1,6 +1,6 @@
 package Controller;
 
-import View.TelaLogin;
+import View.MainStage;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,13 +21,13 @@ public class DigitarCodigoController {
 
     @FXML
     void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
-         TelaLogin.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         //Aplicar uma condição se o código for o correcto segue os códigos abaixo mudando de tela caso contrário deve emitir um erro
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("AlterarSenha.fxml");
+                     MainStage.changeScene("AlterarSenha.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -41,13 +41,13 @@ public class DigitarCodigoController {
 
     @FXML
     void On_bt_voltar_pressed(ActionEvent event) throws Exception {
-         TelaLogin.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("LoginDesign.fxml");
+                     MainStage.changeScene("LoginDesign.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
