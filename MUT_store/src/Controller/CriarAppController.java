@@ -16,13 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -141,12 +135,6 @@ public class CriarAppController {
     public  String icon_path;
     
     
-    MenuPrincipalController m = new MenuPrincipalController();
-    
-    public void setMenuController(MenuPrincipalController m){
-        this.m=m;
-    }
-    
     public static List<AppModel>appList = new ArrayList();
     @FXML
     void On_add_file_click(MouseEvent event) {
@@ -187,9 +175,11 @@ public class CriarAppController {
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
            
-          m=(MenuPrincipalController)MainStage.changeScene("MenuPrincipal.fxml");
+          /*m=(MenuPrincipalController)MainStage.changeScene("MenuPrincipal.fxml");
           setMenuController(m);
-          m.updateMenu();
+          m.updateMenu();*/
+          
+          MainStage.goTo("MenuPrincipal");
 
     }
 
@@ -205,15 +195,18 @@ public class CriarAppController {
 
     @FXML
     void On_bt_sair_pressed(ActionEvent event) {
-
+        MainStage.goTo("TelaLogin");
     }
 
     @FXML
-    void On_bt_upload_pressed(ActionEvent event) {
+    void On_bt_upload_pressed(ActionEvent event) throws IOException {
         AppModel novaApp = new AppModel(img_icon,txt_appNome.getText(),Float.parseFloat(txt_appPreco.getText()),
                                         img_shot_1,img_shot_2,img_shot_3,img_shot_4,txt_appDetalhes.getText(),
                                         txt_appPolitics.getText(),"Uwami Tembe");
         appList.add(novaApp);
+        MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
+        MainStage.goTo("MenuPrincipal");
+        MainStage.actualizarMenu();
     }
 
     @FXML

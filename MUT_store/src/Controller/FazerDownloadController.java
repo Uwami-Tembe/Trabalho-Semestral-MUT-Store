@@ -71,7 +71,7 @@ public class FazerDownloadController {
     private Label lb_politicsLongo;
 
     @FXML
-    private Label lb_preco;
+    public Label lb_preco;
 
     @FXML
     private Label lb_preco1;
@@ -96,6 +96,8 @@ public class FazerDownloadController {
 
     @FXML
     private TextArea txt_comentar;
+    
+
 
     
     public void loadDownloadPageContent(ImageView icon,String nome, float preco, ImageView shot_1,ImageView shot_2,
@@ -121,10 +123,11 @@ public class FazerDownloadController {
        
         if(preco==0.0f){
              lb_preco.setText("Grátis");
-             lb_preco1.setText("");
+             
         }
         else
-            lb_preco.setText(Float.toString(preco));
+            lb_preco.setPrefWidth(224);
+            lb_preco.setText(Float.toString(preco)+" MZN");
     }
     
     
@@ -140,6 +143,8 @@ public class FazerDownloadController {
 
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws  Exception{
+        MainStage.goTo("MenuPrincipal");
+ 
         
     }
 

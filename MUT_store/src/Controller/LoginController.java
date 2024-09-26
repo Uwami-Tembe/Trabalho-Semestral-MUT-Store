@@ -1,8 +1,6 @@
 package Controller;
 
 import View.MainStage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,9 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.swing.SwingWorker;
 
 public class LoginController {
 
@@ -84,13 +80,15 @@ public class LoginController {
         
         //A lógica necesssária para entar no menu principal fica aqui
         
-                 MainStage.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando");
+         
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("MenuPrincipal.fxml");
+                     
+                     MainStage.changeScene("MenuPrincipal");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
