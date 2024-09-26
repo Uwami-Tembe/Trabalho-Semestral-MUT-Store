@@ -109,6 +109,7 @@ void onBT_entrarPressed(ActionEvent event) throws Exception {
         // Exibe a mensagem retornada pela API, seja ela de sucesso ou falha
         if (res.getError_code() == 0) {
             exibirMensagemSucesso(res.getMsg());
+            
         } else {
             mostrarMensagemErro(res.getMsg());  // Mensagem de erro da API
         }
@@ -142,7 +143,7 @@ private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
     pause.setOnFinished(e -> {
         try {
             // Troca de cena para uma tela de menu ou próximo passo
-            TelaLogin.changeScene("DigitarCodigo.fxml");
+            TelaLogin.changeScene("MenuPrincipal.fxml");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CriarAppController">
+   <children>
+      <AnchorPane prefHeight="811.0" prefWidth="1201.0">
+         <children>
+            <ImageView fitHeight="705.0" fitWidth="1210.0" layoutX="-6.0" layoutY="-1.0" pickOnBounds="true">
+               <image>
+                  <Image url="@Login/imagens/duplo25.jpg" />
+               </image>
+            </ImageView>
+            <Pane layoutX="-7.0" layoutY="-1.0" prefHeight="705.0" prefWidth="194.0" style="-fx-background-color: ffff; -fx-border-width: 2; -fx-background-radius: 20;">
+               <children>
+                  <ImageView fitHeight="104.0" fitWidth="111.0" layoutX="49.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/Ideia%20de%20logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="29.0" layoutY="141.0" text="MUT Store" textFill="#79a159">
+                     <font>
+                        <Font name="System Bold" size="29.0" />
+                     </font>
+                     <effect>
+                        <Glow level="0.26" />
+                     </effect>
+                  </Label>
+                  <Button fx:id="bt_loja" layoutX="8.0" layoutY="232.0" mnemonicParsing="false" onAction="#On_bt_Loja_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="    Loja" textFill="#517983">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="48.0" fitWidth="44.0" layoutX="37.0" layoutY="237.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/shopping-cart-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="bt_criarApp" layoutX="7.0" layoutY="307.0" mnemonicParsing="false" onAction="#On_bt_CriarApp_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="    Criar" textFill="#517983">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="39.0" layoutY="309.0" opacity="0.2" pickOnBounds="true">
+                     <image>
+                        <Image url="@Login/imagens/shopping-bag-add-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="bt_definicoes" layoutX="7.0" layoutY="388.0" mnemonicParsing="false" onAction="#On_bt_definicoes_pressed" prefHeight="50.0" prefWidth="194.0" style="-fx-background-color: transparent;" text="        Definições" textFill="#517983">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="48.0" fitWidth="44.0" layoutX="26.0" layoutY="395.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/settings-line-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="bt_sobre" layoutX="6.0" layoutY="472.0" mnemonicParsing="false" onAction="#On_bt_Sobre_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="       Sobre" textFill="#517983">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="43.0" fitWidth="43.0" layoutX="39.0" layoutY="476.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/info-circle-line-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="bt_sair" layoutX="18.0" layoutY="602.0" mnemonicParsing="false" onAction="#On_bt_sair_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="       Sair" textFill="#517983">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="43.0" fitWidth="43.0" layoutX="65.0" layoutY="606.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/logout-line-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Label fx:id="lb_FacaUpload" layoutX="398.0" layoutY="28.0" prefHeight="47.0" prefWidth="566.0" text="Faça upload da sua aplicação ou jogo" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txt_appNome" layoutX="269.0" layoutY="365.0" prefHeight="62.0" prefWidth="479.0" promptText="Digite seu nome da aplicação" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </TextField>
+            <Label fx:id="lb_Nome" layoutX="278.0" layoutY="329.0" prefHeight="47.0" prefWidth="175.0" text="Nome da aplicação" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="txt_appDetalhes" layoutX="756.0" layoutY="114.0" prefHeight="216.0" prefWidth="427.0" />
+            <Label fx:id="lb_Descricao" layoutX="770.0" layoutY="118.0" prefHeight="47.0" prefWidth="211.0" text="Descrição da aplicação" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txt_appPreco" layoutX="272.0" layoutY="463.0" prefHeight="62.0" prefWidth="478.0" promptText="Defina o preço da aplicação (0.00 mzn - 1300.00 mzn)" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </TextField>
+            <Label fx:id="lb_preco" layoutX="281.0" layoutY="427.0" prefHeight="47.0" prefWidth="175.0" text="Preço" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label fx:id="lb_nota" layoutX="401.0" layoutY="651.0" prefHeight="47.0" prefWidth="555.0" text="Por cada venda feita na nossa loja será cobrada uma taxa de 20%" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="txt_appPolitics" layoutX="758.0" layoutY="346.0" prefHeight="183.0" prefWidth="427.0" />
+            <Label fx:id="lb_politics" layoutX="769.0" layoutY="354.0" prefHeight="47.0" prefWidth="409.0" text="Politicas de privacidade, termos de uso e conformidade legal" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Pane fx:id="panel_add_shot_1" layoutX="480.0" layoutY="147.0" onMouseClicked="#On_add_shot_1_click" prefHeight="75.0" prefWidth="80.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_shot_1" fitHeight="49.0" fitWidth="63.0" layoutX="8.0" layoutY="12.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/image-icon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Pane fx:id="panel_add_shot_2" layoutX="569.0" layoutY="147.0" onMouseClicked="#On_add_shot_2_click" prefHeight="75.0" prefWidth="80.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_shot_2" fitHeight="49.0" fitWidth="63.0" layoutX="10.0" layoutY="11.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/image-icon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Pane fx:id="panel_add_shot_3" layoutX="479.0" layoutY="229.0" onMouseClicked="#On_add_shot_3_click" prefHeight="75.0" prefWidth="80.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_shot_3" fitHeight="49.0" fitWidth="63.0" layoutX="9.0" layoutY="13.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/image-icon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Pane fx:id="panel_add_icon" layoutX="336.0" layoutY="149.0" onMouseClicked="#On_add_icon_click" prefHeight="72.0" prefWidth="77.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_icon" fitHeight="45.0" fitWidth="59.0" layoutX="11.0" layoutY="13.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/image-icon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Pane fx:id="panel_add_shot_4" layoutX="569.0" layoutY="231.0" onMouseClicked="#On_add_shot_4_click" prefHeight="75.0" prefWidth="80.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_shot_4" fitHeight="49.0" fitWidth="63.0" layoutX="8.0" layoutY="12.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/image-icon.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Label fx:id="lb_carregueImagens" layoutX="292.0" layoutY="107.0" prefHeight="28.0" prefWidth="402.0" text="Carregue as imagens e o fiheiro da aplicação" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label fx:id="lb_screenshots" layoutX="507.0" layoutY="307.0" opacity="0.47" prefHeight="35.0" prefWidth="116.0" text="Screenshots">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <Label fx:id="lb_icon" layoutX="419.0" layoutY="174.0" opacity="0.47" prefHeight="35.0" prefWidth="38.0" text="Icon">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="img_delete_shots" fitHeight="28.0" fitWidth="18.0" layoutX="624.0" layoutY="314.0" onMouseClicked="#On_img_delete_shots_click" opacity="0.47" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/recycle-bin-line-icon.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="bt_Upload" layoutX="882.0" layoutY="575.0" mnemonicParsing="false" onAction="#On_bt_upload_pressed" prefHeight="47.0" prefWidth="195.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Upload" textFill="#ededed">
+               <font>
+                  <Font name="System Bold" size="23.0" />
+               </font>
+            </Button>
+            <CheckBox fx:id="checkB_mpesaeEmola" layoutX="279.0" layoutY="561.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="197.0" text="M-Pesa / E-mola" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </CheckBox>
+            <Label fx:id="lb_Nome1" layoutX="278.0" layoutY="521.0" prefHeight="47.0" prefWidth="284.0" text="Métodos de pagamento aceites" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checB_card" layoutX="485.0" layoutY="559.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="284.0" text="Cartão de crédito/ débito" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </CheckBox>
+            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="358.0" layoutY="599.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/m-pesa.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="407.0" layoutY="599.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/e-mola.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="55.0" fitWidth="135.0" layoutX="583.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/visa-mastercard.png" />
+               </image>
+            </ImageView>
+            <Pane fx:id="panel_add_file" layoutX="336.0" layoutY="231.0" onMouseClicked="#On_add_file_click" prefHeight="72.0" prefWidth="77.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
+               <children>
+                  <ImageView fx:id="img_file" fitHeight="45.0" fitWidth="59.0" layoutX="11.0" layoutY="13.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Login/imagens/folder-line-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Label fx:id="lb_ficheiro" layoutX="341.0" layoutY="311.0" opacity="0.47" prefHeight="28.0" prefWidth="72.0" text="ficheiro">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
