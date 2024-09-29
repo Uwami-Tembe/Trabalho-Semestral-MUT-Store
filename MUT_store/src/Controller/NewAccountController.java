@@ -3,6 +3,7 @@ package Controller;
 import Models.Api.Response;
 import Models.Api.User;
 import Models.Usuario;
+import View.MainStage;
 import View.TelaLogin;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -97,43 +98,47 @@ private String validarEntradasCriacaoConta() {
 
 // Exibe a mensagem de sucesso e navega para outra tela
 private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
-    mostrarMensagemSucesso(mensagemSucesso);  // Exibe a mensagem de sucesso
-
+    // Cria uma instância de TelaLogin passando o primaryStage
+    TelaLogin lg = new TelaLogin(MainStage.primaryStage);
+    
+    // Exibe a mensagem de sucesso
+    mostrarMensagemSucesso(mensagemSucesso);
+    
     // Exibe a tela de carregamento e, depois, navega para a tela de login
-    TelaLogin.changeScene("Carregando.fxml");
+    lg.changeScene("Carregando.fxml");
+    
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-
     pause.setOnFinished(e -> {
         try {
-            TelaLogin.changeScene("LoginDesign.fxml");
+            lg.changeScene("LoginDesign.fxml");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     });
-
+    
     pause.play();
 }
 
+// Método para exibir a mensagem de sucesso (deve ser definido se ainda não estiver)
+private void mostrarMensagemSucesso(String mensagem) {
+    JOptionPane.showMessageDialog(null, mensagem); // Usando JOptionPane para exibir a mensagem
+}
 // Método para exibir mensagens de erro na GUI
 private void mostrarMensagemErro(String mensagemErro) {
     JOptionPane.showMessageDialog(null, mensagemErro); // Exemplo usando JOptionPane
 }
 
-// Método para exibir mensagens de sucesso na GUI
-private void mostrarMensagemSucesso(String mensagemSucesso) {
-    JOptionPane.showMessageDialog(null, mensagemSucesso); // Exemplo usando JOptionPane
-}
-
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{
-                 TelaLogin.changeScene("Carregando.fxml");
+   TelaLogin lg = new TelaLogin(MainStage.primaryStage);
+                 lg.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("LoginDesign.fxml");
+                     lg.changeScene("LoginDesign.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

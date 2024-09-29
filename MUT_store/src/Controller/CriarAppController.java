@@ -1,7 +1,11 @@
 package Controller;
 
 import Model.AppModel;
+import Models.Api.App;
+import Models.Api.Response;
+import Models.Api.User;
 import View.MainStage;
+import View.TelaLogin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 
 public class CriarAppController {
@@ -87,6 +93,12 @@ public class CriarAppController {
     @FXML
     private Label lb_Nome1;
 
+    private File lastDirectory = null; // Variável para armazenar o último diretório
+
+    public Image image = null;
+    
+    public File file = null;
+    
     @FXML
     private Label lb_carregueImagens;
 
@@ -140,7 +152,28 @@ public class CriarAppController {
     
     public  String icon_path;
     
+       public void mostrarMensagemErro(String S){
+        JOptionPane.showMessageDialog(null, S);
+    }
     
+private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {  // Método para exibir mensagem na GUI
+                TelaLogin loginDisplay = new TelaLogin(MainStage.primaryStage);
+    // Exibe a tela de carregamento antes de mudar para o próximo estágio
+    loginDisplay.changeScene("Carregando.fxml");
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+
+    pause.setOnFinished(e -> {
+        try {
+            // Troca de cena para uma tela de menu ou próximo passo
+            loginDisplay.changeScene("MenuPrincipal.fxml");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    });
+
+    pause.play();
+}
+       
     MenuPrincipalController m = new MenuPrincipalController();
     
     public void setMenuController(MenuPrincipalController m){
@@ -209,11 +242,35 @@ public class CriarAppController {
     }
 
     @FXML
-    void On_bt_upload_pressed(ActionEvent event) {
+    void  On_bt_upload_pressed(ActionEvent event) {
         AppModel novaApp = new AppModel(img_icon,txt_appNome.getText(),Float.parseFloat(txt_appPreco.getText()),
                                         img_shot_1,img_shot_2,img_shot_3,img_shot_4,txt_appDetalhes.getText(),
-                                        txt_appPolitics.getText(),"Uwami Tembe");
+                                        txt_appPolitics.getText(),txt_appNome.getText(), checB_card.isSelected(),
+                                        checkB_mpesaeEmola.isSelected(),checkB_mpesaeEmola.isSelected(), img_file );
+        
+        
+      
+         try {
+        // Chama o método loginAPI e verifica a resposta
+        Response res =  App.adicionarApp(novaApp);
+
+        // Exibe a mensagem retornada pela API, seja ela de sucesso ou falha
+        if (res.getError_code() == 0) {
+            exibirMensagemSucesso(res.getMsg());
+            
+        } else {
+            mostrarMensagemErro(res.getMsg());  // Mensagem de erro da API
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
+    }
+        
         appList.add(novaApp);
+        
+        
+          
     }
 
     @FXML
@@ -230,29 +287,47 @@ public class CriarAppController {
         img_shot_4.setOpacity(0.4);
     }
     
-    private String handleOpenImage(ImageView imgv){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("*.png","*.jpg","*.jpeg","*.PNG","*.JPG","*.JPEG"));
-        Stage stage =(Stage) imgv.getScene().getWindow();
-        File file = fileChooser.showOpenDialog(stage);
-            if(file!=null){
-                Image image = new Image(file.toURI().toString());
-                imgv.setImage(image);
-                imgv.setOpacity(1.0);
-            }
-        return file.toURI().toString();
+    private String handleOpenImage(ImageView imgv) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("*.png", "*.jpg", "*.jpeg", "*.PNG", "*.JPG", "*.JPEG"));
+    
+    // Verificar se há um último diretório usado e definir como o diretório inicial
+    if (lastDirectory != null) {
+        fileChooser.setInitialDirectory(lastDirectory);
     }
-            
-      private void handleOpenFile(ImageView imgv){
-       FileChooser fileChooser = new FileChooser();
-       fileChooser.getExtensionFilters().add(new ExtensionFilter("*.apk","*.exe","*.APK","*.EXE"));
-       Stage stage = (Stage)imgv.getScene().getWindow();
-       File file = fileChooser.showOpenDialog(stage);
-        if(file!=null){
-            JOptionPane.showMessageDialog(null, file.getAbsolutePath());
-        }
+    
+    Stage stage = (Stage) imgv.getScene().getWindow();
+    File file = fileChooser.showOpenDialog(stage);
+    
+    if (file != null) {
+        lastDirectory = file.getParentFile(); // Atualizar o último diretório
+        Image image = new Image(file.toURI().toString());
+        imgv.setImage(image);
+        imgv.setOpacity(1.0);
+    }
+    
+    return file != null ? file.toURI().toString() : null;
+}
 
-      }
+            
+ private void handleOpenFile(ImageView imgv) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new ExtensionFilter("*.apk", "*.exe", "*.APK", "*.EXE"));
+    
+    // Verificar se há um último diretório usado e definir como o diretório inicial
+    if (lastDirectory != null) {
+        fileChooser.setInitialDirectory(lastDirectory);
+    }
+    
+    Stage stage = (Stage) imgv.getScene().getWindow();
+    File file = fileChooser.showOpenDialog(stage);
+    
+    if (file != null) {
+        lastDirectory = file.getParentFile(); // Atualizar o último diretório
+        JOptionPane.showMessageDialog(null, file.getAbsolutePath());
+    }
+}
+
       
 
 }   

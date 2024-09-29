@@ -3,6 +3,7 @@ package Controller;
 import Models.Api.Response;
 import Models.Api.User;
 import Models.Usuario;
+import View.MainStage;
 import View.TelaLogin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,13 +43,14 @@ public class LoginController {
     
     @FXML
     void onBT_criarContaPressed(ActionEvent event) throws Exception {
-         TelaLogin.changeScene("Carregando.fxml");
+   TelaLogin loginDisplay = new TelaLogin(MainStage.primaryStage);
+         loginDisplay.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("CriarConta.fxml");
+                     loginDisplay.changeScene("CriarConta.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -65,13 +67,14 @@ public class LoginController {
     
         @FXML
     void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
-         TelaLogin.changeScene("Carregando.fxml");
+            TelaLogin loginDisplay = new TelaLogin(MainStage.primaryStage);
+         loginDisplay.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("DigitarCodigo.fxml");
+                     loginDisplay.changeScene("DigitarCodigo.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -135,15 +138,15 @@ private String validarEntradas(String username, String password) {
 // Exibe a mensagem de sucesso e navega para outra tela
 private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
     mostrarMensagemSucesso(mensagemSucesso);  // Método para exibir mensagem na GUI
-
+                TelaLogin loginDisplay = new TelaLogin(MainStage.primaryStage);
     // Exibe a tela de carregamento antes de mudar para o próximo estágio
-    TelaLogin.changeScene("Carregando.fxml");
+    loginDisplay.changeScene("Carregando.fxml");
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
 
     pause.setOnFinished(e -> {
         try {
             // Troca de cena para uma tela de menu ou próximo passo
-            TelaLogin.changeScene("MenuPrincipal.fxml");
+            loginDisplay.changeScene("MenuPrincipal.fxml");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

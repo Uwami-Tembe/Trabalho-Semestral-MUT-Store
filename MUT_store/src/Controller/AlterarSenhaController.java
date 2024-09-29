@@ -1,5 +1,6 @@
 package Controller;
 
+import View.MainStage;
 import View.TelaLogin;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -33,15 +34,16 @@ public class AlterarSenhaController {
 
     @FXML
     void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
+      TelaLogin lg = new TelaLogin(MainStage.primaryStage);
         //A lógica para alterar a senha do usuário fica aqui
         
-                 TelaLogin.changeScene("Carregando.fxml");
+                 lg.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("LoginDesign.fxml");
+                     lg.changeScene("LoginDesign.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -56,14 +58,15 @@ public class AlterarSenhaController {
 
     @FXML
     void On_bt_voltar_Pressed(ActionEvent event) throws Exception {
+       TelaLogin lg = new TelaLogin(MainStage.primaryStage);
         
-         TelaLogin.changeScene("Carregando.fxml");
+         lg.changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     TelaLogin.changeScene("DigitarCodigo.fxml");
+                     lg.changeScene("DigitarCodigo.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
