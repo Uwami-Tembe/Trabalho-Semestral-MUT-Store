@@ -68,6 +68,11 @@ public class ExternalAppModel {
     public String getIcon() {
         return icon;
     }
+    
+     public String getIconImage() {
+        return icon;
+    }
+
 
     public void setIcon(String icon) {
         this.icon = icon;

@@ -83,45 +83,44 @@ public class MenuPrincipalController {
     }
     @FXML
     public void updateMenu(){
-        panel_apps.setHgap(20);
-        panel_apps.setVgap(30);
-        panel_apps.setPrefWrapLength(4);
-                
-       for(AppModel app: CriarAppController.appList){
-            VBox appBox = new VBox();
-            appBox.setSpacing(20);
-            ImageView formatedImage= new ImageView();            
-            formatedImage.setImage(app.getIconImage().getImage());
-            formatedImage.setFitWidth(80);
-            formatedImage.setFitHeight(80);
-            
-            Label appName = new Label(app.getNome());
-            //appName.setAlignment(Pos.CENTER);
-            appName.setLayoutX(appBox.getLayoutX());
-            appName.setLayoutY(appBox.getLayoutY()+5);
-            appName.setStyle("-fx-text-fill: #517983");
-            appName.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,14));
-            
-            appBox.getChildren().addAll(formatedImage, appName);
-            
-            appBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent t){
-                    try {
-                       f=(FazerDownloadController)MainStage.changeScene("FazerDownload.fxml");
-                        setFazerDownloadController(f);
-                        f.loadDownloadPageContent(app.getIconImage(), app.getNome(),app.getPreco(),
-                                app.getShot1Image(), app.getShot2Image(), app.getShot3Image(), app.getShot4Image(), app.getDescription(), app.getPolitics(), app.getDeveloperName());
-    
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-           
-            
-            panel_apps.getChildren().addAll(appBox);
-        }
+//        panel_apps.setHgap(20);
+//        panel_apps.setVgap(30);
+//        panel_apps.setPrefWrapLength(4);
+//                
+//       for(AppModel app: CriarAppController.appList){
+//            VBox appBox = new VBox();
+//            appBox.setSpacing(20);
+//            ImageView formatedImage= new ImageView();            
+//            formatedImage.setImage(app.getIconImage().getImage());
+//            formatedImage.setFitWidth(80);
+//            formatedImage.setFitHeight(80);
+//            
+//            Label appName = new Label(app.getNome());
+//            //appName.setAlignment(Pos.CENTER);
+//            appName.setLayoutX(appBox.getLayoutX());
+//            appName.setLayoutY(appBox.getLayoutY()+5);
+//            appName.setStyle("-fx-text-fill: #517983");
+//            appName.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,14));
+//            
+//            appBox.getChildren().addAll(formatedImage, appName);
+//            
+//            appBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
+//                @Override
+//                public void handle(MouseEvent t){
+//                    try {
+//                       f=(FazerDownloadController)MainStage.changeScene("FazerDownload.fxml");
+//                        setFazerDownloadController(f);
+//                        f.loadDownloadPageContent(app);
+//    
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//           
+//            
+//            panel_apps.getChildren().addAll(appBox);
+//        }
    }
     
     
@@ -167,6 +166,19 @@ void On_bt_Loja_pressed(ActionEvent event) {
         // Adiciona a imagem e o nome ao VBox
         appBox.getChildren().addAll(formattedImage, appName);
         
+         appBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent t){
+                    try {
+                       f=(FazerDownloadController)MainStage.changeScene("FazerDownload.fxml");
+                        setFazerDownloadController(f);
+                        f.loadDownloadPageContent(app);
+    
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         // Adiciona o VBox ao painel de aplicativos
         panel_apps.getChildren().add(appBox);
     }

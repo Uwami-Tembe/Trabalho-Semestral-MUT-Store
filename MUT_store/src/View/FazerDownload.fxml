@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Glow?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FazerDownloadController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FazerDownloadController">
    <children>
       <AnchorPane prefHeight="811.0" prefWidth="1201.0">
          <children>
@@ -200,6 +201,12 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
+            <ProgressBar fx:id="progressBar" disable="true" layoutX="399.0" layoutY="148.0" prefHeight="27.0" prefWidth="234.0" progress="0.0" />
+            <Label fx:id="statusLabel" disable="true" layoutX="460.0" layoutY="107.0" prefHeight="27.0" prefWidth="170.0" text="status" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

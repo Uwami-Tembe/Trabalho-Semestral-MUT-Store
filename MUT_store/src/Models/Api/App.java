@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -22,12 +24,14 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
 import org.apache.http.HttpEntity;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -46,6 +50,38 @@ public class App {
 
     
 
+public static Task<Void> downloadFile(String fileURL, String savePath) {
+        return new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    HttpGet request = new HttpGet(fileURL);
+                    try (CloseableHttpResponse response = httpClient.execute(request);
+                         InputStream inputStream = response.getEntity().getContent();
+                         FileOutputStream outputStream = new FileOutputStream(savePath)) {
+
+                        long fileSize = response.getEntity().getContentLength(); // Tamanho do arquivo
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        long totalBytesRead = 0;
+
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                            totalBytesRead += bytesRead;
+
+                            // Atualiza o progresso
+                            updateProgress(totalBytesRead, fileSize);
+                        }
+                        System.out.println("Arquivo baixado com sucesso!");
+                    }
+                } catch (IOException e) {
+                    updateMessage("Erro no download: " + e.getMessage());
+                    throw e;
+                }
+                return null;
+            }
+        };
+    }
 
   public static Response adicionarApp(AppModel app) {
     try {
