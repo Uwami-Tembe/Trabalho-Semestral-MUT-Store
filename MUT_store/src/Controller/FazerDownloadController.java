@@ -118,7 +118,7 @@ public class FazerDownloadController {
         img_icon.setImage(new Image(app.getIcon()));
         lb_Nome.setText(app.getNome());
         List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
-        appfile = app.getAppFilePath();
+         appfile = app.getAppFilePath();
         img_shot_1.setImage(new Image(imagePaths.get(0)));
         img_shot_2.setImage(new Image(imagePaths.get(1)));
         img_shot_3.setImage(new Image(imagePaths.get(2)));
@@ -148,12 +148,20 @@ public class FazerDownloadController {
 
     @FXML
     void On_bt_CriarApp_pressed(ActionEvent event) {
-
+ try {
+             MainStage.changeScene("CriarApp.fxml");
+          } catch (Exception ex) {
+             ex.printStackTrace();
+             }
     }
 
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
-
+ try {
+             MainStage.changeScene("MenuPrincipal.fxml");
+          } catch (Exception ex) {
+             ex.printStackTrace();
+             }
     }
 
     @FXML
@@ -171,21 +179,32 @@ public class FazerDownloadController {
 
     }
 
+    
     @FXML
-    void On_bt_download_pressed(ActionEvent event) {
-        String fileURL = "https://example.com/app.apk";
-        String savePath = "C:/downloads/app.apk";
+void On_bt_upload_pressed(ActionEvent event) {
+    String fileURL = appfile;
+    String savePath = "C:/downloads/app.apk";
 
-        // Cria a tarefa de download
-        Task<Void> downloadTask = App.downloadFile(fileURL, savePath);
+    // Ocultar os botões e rótulos
+    bt_Baixar.setVisible(false);
+    lb_preco.setVisible(false);
+    lb_preco1.setVisible(false);
+    
+    // Mostrar a barra de progresso
+    progressBar.setVisible(true);
+    statusLabel.setVisible(true);
 
-        // Vincula o progresso e a mensagem de status à interface
-        progressBar.progressProperty().bind(downloadTask.progressProperty());
-        statusLabel.textProperty().bind(downloadTask.messageProperty());
+    // Cria a tarefa de download
+    Task<Void> downloadTask = App.downloadFile(fileURL, savePath);
 
-        // Inicia a tarefa de download em uma nova thread
-        new Thread(downloadTask).start();
-    }
+    // Vincula o progresso e a mensagem de status à interface
+    progressBar.progressProperty().bind(downloadTask.progressProperty());
+    statusLabel.textProperty().bind(downloadTask.messageProperty());
+
+    // Inicia a tarefa de download em uma nova thread
+    new Thread(downloadTask).start();
+}
+
     
 
 }

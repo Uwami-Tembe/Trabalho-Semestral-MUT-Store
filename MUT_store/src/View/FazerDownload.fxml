@@ -201,8 +201,8 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
-            <ProgressBar fx:id="progressBar" disable="true" layoutX="399.0" layoutY="148.0" prefHeight="27.0" prefWidth="234.0" progress="0.0" />
-            <Label fx:id="statusLabel" disable="true" layoutX="460.0" layoutY="107.0" prefHeight="27.0" prefWidth="170.0" text="status" textFill="#517983">
+            <ProgressBar fx:id="progressBar" layoutX="399.0" layoutY="148.0" prefHeight="27.0" prefWidth="234.0" progress="0.0" visible="false" />
+            <Label fx:id="statusLabel" layoutX="411.0" layoutY="107.0" prefHeight="27.0" prefWidth="170.0" text="status" textFill="#517983" visible="false">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

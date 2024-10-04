@@ -73,9 +73,11 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
                             updateProgress(totalBytesRead, fileSize);
                         }
                         System.out.println("Arquivo baixado com sucesso!");
+                        updateMessage("Arquivo baixado");
                     }
                 } catch (IOException e) {
                     updateMessage("Erro no download: " + e.getMessage());
+                    System.out.println(e.getMessage());
                     throw e;
                 }
                 return null;
