@@ -89,14 +89,14 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane layoutX="215.0" layoutY="95.0" prefHeight="170.0" prefWidth="961.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: transparent; -fx-border-radius: 20;">
+            <Pane layoutX="215.0" layoutY="95.0" prefHeight="124.0" prefWidth="962.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: transparent; -fx-border-radius: 20;">
                <children>
-                  <ImageView fitHeight="108.0" fitWidth="205.0" layoutX="634.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: -25;">
+                  <ImageView fitHeight="98.0" fitWidth="175.0" layoutX="649.0" layoutY="-19.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: -25;">
                      <image>
                         <Image url="@Login/imagens/Logo-Angry-Birds.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="123.0" layoutY="79.0" text="Nós temos tudo o que precisa " textFill="#79a159">
+                  <Label layoutX="104.0" layoutY="49.0" text="Nós temos tudo o que precisa " textFill="#79a159">
                      <font>
                         <Font name="System Bold" size="29.0" />
                      </font>
@@ -104,17 +104,17 @@
                         <Glow level="0.26" />
                      </effect>
                   </Label>
-                  <Label layoutX="151.0" layoutY="34.0" prefHeight="38.0" prefWidth="344.0" text="Estamos muito felizes por tê-lo aqui" textFill="#517983">
+                  <Label layoutX="142.0" layoutY="19.0" prefHeight="38.0" prefWidth="344.0" text="Estamos muito felizes por tê-lo aqui" textFill="#517983">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="126.0" fitWidth="121.0" layoutX="777.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: 30;">
+                  <ImageView fitHeight="119.0" fitWidth="96.0" layoutX="776.0" layoutY="-12.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: 30;">
                      <image>
                         <Image url="@Login/imagens/Facebook_Logo.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="117.0" fitWidth="109.0" layoutX="729.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: 15;">
+                  <ImageView fitHeight="81.0" fitWidth="81.0" layoutX="730.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: 15;">
                      <image>
                         <Image url="@Login/imagens/movitel.png" />
                      </image>
@@ -141,11 +141,44 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <VBox layoutX="221.0" layoutY="295.0" prefHeight="395.0" prefWidth="959.0">
+            <VBox layoutX="221.0" layoutY="513.0" prefHeight="178.0" prefWidth="598.0">
                <children>
-                  <ScrollPane fx:id="sp_apps" prefHeight="424.0" prefWidth="959.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                  <ScrollPane fx:id="sp_apps" prefHeight="178.0" prefWidth="863.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
                      <content>
-                        <FlowPane fx:id="panel_apps" prefHeight="380.0" prefWidth="944.0" />
+                        <FlowPane fx:id="panel_apps" prefHeight="169.0" prefWidth="590.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+            <Label layoutX="234.0" layoutY="454.0" prefHeight="38.0" prefWidth="103.0" text="Aplicações" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="244.0" layoutY="227.0" prefHeight="38.0" prefWidth="64.0" text="Jogos" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="944.0" layoutY="227.0" prefHeight="38.0" prefWidth="166.0" text="Os mais baixados" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <VBox layoutX="220.0" layoutY="275.0" prefHeight="178.0" prefWidth="598.0">
+               <children>
+                  <ScrollPane fx:id="sp_games" prefHeight="178.0" prefWidth="863.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                     <content>
+                        <FlowPane fx:id="panel_games" prefHeight="169.0" prefWidth="590.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+            <VBox layoutX="863.0" layoutY="274.0" prefHeight="416.0" prefWidth="328.0">
+               <children>
+                  <ScrollPane fx:id="sp_best" prefHeight="178.0" prefWidth="863.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                     <content>
+                        <FlowPane fx:id="panel_best" prefHeight="405.0" prefWidth="318.0" />
                      </content>
                   </ScrollPane>
                </children>

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +22,9 @@ public class MainStage extends Application {
     public FXMLLoader menuLoader;
     public FXMLLoader uploadLoader;
     public FXMLLoader downloadLoader;
+    public FXMLLoader alterarSenhaLoader;
+    public FXMLLoader digitarCodigoLoader;
+    public FXMLLoader criarContaLoader;
     public static Stage primaryStage;
     
     @Override
@@ -64,6 +68,27 @@ public class MainStage extends Application {
         telaDownload.setUserData("FazerDownload.fxml");
         registerScene("TelaDownload",telaDownload, downloadController);
         
+        alterarSenhaLoader = new FXMLLoader(getClass().getResource("AlterarSenha.fxml"));
+        Parent alterarSenhaRoot = alterarSenhaLoader.load();
+        Object alterarSenhaController = alterarSenhaLoader.getController();
+        Scene telaAlterarSenha = new Scene(alterarSenhaRoot);
+        telaAlterarSenha.setUserData("AlterarSenha.fxml");
+        registerScene("AlterarSenha", telaAlterarSenha, alterarSenhaController);
+        
+        digitarCodigoLoader = new FXMLLoader(getClass().getResource("DigitarCodigo.fxml"));
+        Parent digitarCodigoRoot =digitarCodigoLoader.load();
+        Object digitarCodigoController = digitarCodigoLoader.getController();
+        Scene telaDigitarCodigo = new Scene(digitarCodigoRoot);
+        telaDigitarCodigo.setUserData("DigitarCodigo.fxml");
+        registerScene("DigitarCodigo", telaDigitarCodigo, digitarCodigoController);
+        
+        criarContaLoader = new FXMLLoader(getClass().getResource("CriarConta.fxml"));
+        Parent criarContaRoot =criarContaLoader.load();
+        Object criarContaController = criarContaLoader.getController();
+        Scene telaCriarConta = new Scene(criarContaRoot);
+        telaCriarConta.setUserData("CriarConta.fxml");
+        registerScene("CriarConta", telaCriarConta, criarContaController);
+
         primaryStage.setTitle("MUT Store");
         primaryStage.setScene(telaLogin);
         primaryStage.show();
@@ -74,8 +99,7 @@ public class MainStage extends Application {
             e.getCause();
         }
     }
-    
-
+   
     /*public static Object changeScene (String fxml) throws Exception{
         FXMLLoader loader = new FXMLLoader(MainStage.class .getResource(fxml));
         Parent root =loader.load();
@@ -131,11 +155,11 @@ public class MainStage extends Application {
         return controllerMap.get(controllerID);
     }
     
-    public static void actualizarMenu(){
+    public static void actualizarMenu(List<AppModel>appList){
         Object controller = getController("MenuPrincipal");
         
         if(controller instanceof MenuPrincipalController){
-            ((MenuPrincipalController)controller).updateMenu();
+            ((MenuPrincipalController)controller).updateMenu(appList);
         }
     }
     

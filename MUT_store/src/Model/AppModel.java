@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
 
-public class AppModel implements Downloadable {
+public class AppModel implements Downloadable, Comparable<Object> {
     @FXML
     ImageView icon;
     ImageView shot_1;
@@ -111,6 +111,12 @@ public class AppModel implements Downloadable {
     @Override
     public void setPolitics() {
     
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        AppModel other  = (AppModel)o;
+        return this.nome.compareToIgnoreCase(other.getNome());
     }
     
 

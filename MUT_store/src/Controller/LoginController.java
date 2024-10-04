@@ -34,13 +34,13 @@ public class LoginController {
     
     @FXML
     void onBT_criarContaPressed(ActionEvent event) throws Exception {
-         MainStage.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("CriarConta.fxml");
+                     MainStage.changeScene("CriarConta");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -55,13 +55,13 @@ public class LoginController {
     
         @FXML
     void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
-         MainStage.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("DigitarCodigo.fxml");
+                     MainStage.changeScene("DigitarCodigo");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

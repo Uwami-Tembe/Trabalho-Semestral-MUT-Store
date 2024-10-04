@@ -206,7 +206,7 @@ public class CriarAppController {
         appList.add(novaApp);
         MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
         MainStage.goTo("MenuPrincipal");
-        MainStage.actualizarMenu();
+        MainStage.actualizarMenu(appList);
     }
 
     @FXML

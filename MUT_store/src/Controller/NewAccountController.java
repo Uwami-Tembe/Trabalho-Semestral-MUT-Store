@@ -52,13 +52,13 @@ public class NewAccountController {
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{
-                 MainStage.changeScene("Carregando.fxml");
+                 MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("LoginDesign.fxml");
+                     MainStage.changeScene("TelaLogin");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

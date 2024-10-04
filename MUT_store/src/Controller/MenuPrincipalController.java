@@ -3,6 +3,10 @@ package Controller;
 import Model.AppModel;
 import View.MainStage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class MenuPrincipalController {
 
@@ -43,6 +48,18 @@ public class MenuPrincipalController {
 
     @FXML
     public FlowPane panel_apps = new FlowPane();
+    
+     @FXML
+    private FlowPane panel_best = new FlowPane();
+
+    @FXML
+    private FlowPane panel_games = new FlowPane();
+
+    @FXML
+    private ScrollPane sp_best;
+
+    @FXML
+    private ScrollPane sp_games;
 
     @FXML
     private ScrollPane sp_apps;
@@ -59,15 +76,15 @@ public class MenuPrincipalController {
 
     }
     @FXML
-    public void updateMenu(){
+    public void updateMenu(List<AppModel>appList){
 
-       for(AppModel app: CriarAppController.appList){
+       for(AppModel app: appList){
             VBox appBox = new VBox();
             appBox.setSpacing(20);
             ImageView formatedImage= new ImageView();            
             formatedImage.setImage(app.getIconImage().getImage());
-            formatedImage.setFitWidth(80);
-            formatedImage.setFitHeight(80);
+            formatedImage.setFitWidth(70);
+            formatedImage.setFitHeight(70);
             
             Label appName = new Label(app.getNome());
             appName.setAlignment(Pos.CENTER);
@@ -83,7 +100,7 @@ public class MenuPrincipalController {
                 public void handle(MouseEvent t){
                     try { 
                        
-                        MainStage.resetScene("TelaDownload","FazerDownload.fxml");
+                       MainStage.resetScene("TelaDownload","FazerDownload.fxml");
                        MainStage.changeScene("TelaDownload");
                        MainStage.createDownloadPage(app);
     
@@ -98,10 +115,61 @@ public class MenuPrincipalController {
         }
    }
     
+    public static int searchAppByPrefix(List<AppModel>appList,String prefix){
+        
+        int begin =0;
+        int end = CriarAppController.appList.size()-1;
+        String key= prefix;
+      
+        while(begin<=end){
+       
+        int mid = begin+(end-begin)/2;
+        
+        if(CriarAppController.appList.get(mid).getNome().startsWith(key)){
+            if(mid==0 || !CriarAppController.appList.get(mid-1).getNome().toLowerCase().startsWith(key)){
+                return mid;
+            }  
+            
+            else{
+                end=mid-1;
+            }
+        }
+        
+        else if(CriarAppController.appList.get(mid).getNome().compareTo(key)<0){
+            begin= mid+1;
+        }
+        
+        else{
+            end= mid-1;
+            }
+        }
+      return -1;
+    }
+    
+    public static List<AppModel>searchAppListByPrefix(List<AppModel>appList,String prefix){
+        List<AppModel>all_apps_with_the_prefix=new ArrayList<>();
+        
+        int index = searchAppByPrefix(appList, prefix);
+        
+        if(index<0){
+            return all_apps_with_the_prefix;
+        }
+        
+        for(int i = index; i<=appList.size()-1; i++){
+            if(appList.get(i).getNome().startsWith(prefix)){
+                all_apps_with_the_prefix.add(appList.get(i));
+            }
+            else{
+                break;
+            }
+        }
+        return all_apps_with_the_prefix;
+    }
+    
     
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) {
-
+        updateMenu(CriarAppController.appList);
     }
 
     @FXML
@@ -120,8 +188,67 @@ public class MenuPrincipalController {
     }
 
     @FXML
-    void On_img_pesquisar_click(MouseEvent event) {
+    void On_img_pesquisar_click(MouseEvent event) throws IOException {
+        
+        Collections.sort(CriarAppController.appList);
+        String prefix = txt_pesquisa.getText();
+        List<AppModel>result =searchAppListByPrefix(CriarAppController.appList, prefix);
+        
+        if(result.isEmpty()){
+            MainStage.changeScene("Carregando");
+            
+                     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                     MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
+                     MainStage.goTo("MenuPrincipal");
+                     VBox messageBox= new VBox();
+                     Label notFound = new Label("Nenhuma aplicação encontrada");
+                     notFound.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,25));
+                     notFound.setPrefHeight(400);
+                     notFound.setPrefWidth(200);
+                     messageBox.getChildren().add(notFound);
+                     
+                     panel_apps.getChildren().add(messageBox);
+                 
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
+  
+        }
+        
+        else{
+            MainStage.changeScene("Carregando");
+         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                      MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
+                      MainStage.goTo("MenuPrincipal");
+                      MainStage.actualizarMenu(result);     
+                 
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
 
+        }
     }
+    
+    
 
 }

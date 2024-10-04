@@ -21,13 +21,13 @@ public class DigitarCodigoController {
 
     @FXML
     void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
-         MainStage.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         //Aplicar uma condição se o código for o correcto segue os códigos abaixo mudando de tela caso contrário deve emitir um erro
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("AlterarSenha.fxml");
+                     MainStage.changeScene("AlterarSenha");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -41,13 +41,13 @@ public class DigitarCodigoController {
 
     @FXML
     void On_bt_voltar_pressed(ActionEvent event) throws Exception {
-         MainStage.changeScene("Carregando.fxml");
+         MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("LoginDesign.fxml");
+                     MainStage.changeScene("TelaLogin");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
