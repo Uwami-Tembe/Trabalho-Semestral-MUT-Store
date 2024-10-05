@@ -1,5 +1,6 @@
 package Model;
 
+import Model.Payments;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;

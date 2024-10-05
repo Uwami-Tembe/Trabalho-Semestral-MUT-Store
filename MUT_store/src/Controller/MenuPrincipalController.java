@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -59,12 +61,18 @@ public class MenuPrincipalController {
     @FXML
     public FlowPane panel_apps = new FlowPane();
 
+    
+    
     @FXML
     private ScrollPane sp_apps;
 
     @FXML
     private TextField txt_pesquisa;
     
+   @FXML 
+    private ProgressIndicator progressIndicator; // Certifique-se de que isso está no controlador
+
+ 
     FazerDownloadController f = new FazerDownloadController();
     
     public void setFazerDownloadController (FazerDownloadController f){
@@ -81,6 +89,9 @@ public class MenuPrincipalController {
              }
  
     }
+     // Cria um indicador de progresso (Loader)
+
+        
     @FXML
     public void updateMenu(){
 //        panel_apps.setHgap(20);
@@ -125,64 +136,64 @@ public class MenuPrincipalController {
     
     
 @FXML
-void On_bt_Loja_pressed(ActionEvent event) {
-    panel_apps.setHgap(20);
-    panel_apps.setVgap(30);
-    panel_apps.setPrefWrapLength(4);
-    
-    // Limpa os aplicativos existentes antes de adicionar novos
-    panel_apps.getChildren().clear();
-    
-    // Busca os aplicativos da API
-    List<ExternalAppModel> appList = App.buscarApps();
-    
-    // Verifica se a lista de aplicativos está vazia
-    if (appList.isEmpty()) {
-        // Se a lista estiver vazia, exibe um alerta
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
-        alert.setContentText("Não foi possível buscar os aplicativos.");
-        alert.showAndWait();
-        return; // Sai do método se não houver aplicativos
-    }
-    
-    // Adiciona os aplicativos encontrados ao painel
-    for (ExternalAppModel app : appList) {
-        VBox appBox = new VBox();
-        appBox.setSpacing(20);
-        
-        // Carrega a imagem do ícone do aplicativo
-        ImageView formattedImage = new ImageView(app.getIcon());
-        formattedImage.setFitWidth(80);
-        formattedImage.setFitHeight(80);
-        formattedImage.setPreserveRatio(true); // Mantém a proporção da imagem
-        
-        // Cria o rótulo do nome do aplicativo
-        Label appName = new Label(app.getNome());
-        appName.setStyle("-fx-text-fill: #517983");
-        appName.setFont(Font.font("System", FontWeight.BOLD, 14));
-        
-        // Adiciona a imagem e o nome ao VBox
-        appBox.getChildren().addAll(formattedImage, appName);
-        
-         appBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent t){
-                    try {
-                       f=(FazerDownloadController)MainStage.changeScene("FazerDownload.fxml");
-                        setFazerDownloadController(f);
-                        f.loadDownloadPageContent(app);
-    
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+private void On_bt_Loja_pressed(ActionEvent event) {
+    // Torna o loader visível
+    progressIndicator.setVisible(true);
+
+    // Executa a tarefa em uma nova thread para não bloquear a UI
+    new Thread(() -> {
+        List<ExternalAppModel> appList = App.buscarApps();
+
+        // Volta à UI Thread para atualizar a interface
+        Platform.runLater(() -> {
+            panel_apps.setHgap(20);
+            panel_apps.setVgap(30);
+            panel_apps.setPrefWrapLength(4);
+            panel_apps.getChildren().clear();
+
+            if (appList.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText(null);
+                alert.setContentText("Não foi possível buscar os aplicativos.");
+                alert.showAndWait();
+            } else {
+                for (ExternalAppModel app : appList) {
+                    VBox appBox = new VBox();
+                    appBox.setSpacing(20);
+                    
+                    ImageView formattedImage = new ImageView(app.getIcon());
+                    formattedImage.setFitWidth(80);
+                    formattedImage.setFitHeight(80);
+                    formattedImage.setPreserveRatio(true);
+
+                    Label appName = new Label(app.getNome());
+                    appName.setStyle("-fx-text-fill: #517983");
+                    appName.setFont(Font.font("System", FontWeight.BOLD, 14));
+
+                    appBox.getChildren().addAll(formattedImage, appName);
+                    
+                    appBox.setOnMouseClicked(t -> {
+                        try {
+                            FazerDownloadController f = (FazerDownloadController) MainStage.changeScene("FazerDownload.fxml");
+                            setFazerDownloadController(f);
+                            f.loadDownloadPageContent(app);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    
+                    panel_apps.getChildren().add(appBox);
                 }
-            });
-        // Adiciona o VBox ao painel de aplicativos
-        panel_apps.getChildren().add(appBox);
-    }
+            }
+
+            // Oculta o loader após a tarefa
+            progressIndicator.setVisible(false);
+        });
+    }).start();
 }
+
+
 
 
 
