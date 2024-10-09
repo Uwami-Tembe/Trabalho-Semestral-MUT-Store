@@ -1,19 +1,30 @@
 
 package View;
 
+import Controller.CriarAppController;
 import Controller.FazerDownloadController;
 import Controller.MenuPrincipalController;
+import Controller.PayMetodoController;
 import Model.AppModel;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainStage extends Application {
     
@@ -25,6 +36,12 @@ public class MainStage extends Application {
     public FXMLLoader alterarSenhaLoader;
     public FXMLLoader digitarCodigoLoader;
     public FXMLLoader criarContaLoader;
+    public FXMLLoader payMetodoLoader;
+    public FXMLLoader CarteiraLoader;
+    public FXMLLoader CardLoader;
+    public FXMLLoader SucessoLoader;
+    public FXMLLoader ErroLoader;
+   
     public static Stage primaryStage;
     
     @Override
@@ -88,6 +105,42 @@ public class MainStage extends Application {
         Scene telaCriarConta = new Scene(criarContaRoot);
         telaCriarConta.setUserData("CriarConta.fxml");
         registerScene("CriarConta", telaCriarConta, criarContaController);
+        
+        payMetodoLoader = new FXMLLoader(getClass().getResource("PayMetodo.fxml"));
+        Parent payMetodoRooT = payMetodoLoader.load();
+        Object payMetodoController = payMetodoLoader.getController();
+        Scene telaPayMetodo = new Scene(payMetodoRooT);
+        telaPayMetodo.setUserData("PayMetodo.fxml");
+        registerScene("PayMetodo", telaPayMetodo, payMetodoController);
+        
+        CarteiraLoader = new FXMLLoader(getClass().getResource("Carteira.fxml"));
+        Parent CarteiraRoot = CarteiraLoader.load();
+        Object CarteiraController = CarteiraLoader.getController();
+        Scene telaCarteira = new Scene(CarteiraRoot);
+        telaCarteira.setUserData("Carteira.fxml");
+        registerScene("Carteira", telaCarteira, CarteiraController);
+        
+        CardLoader = new FXMLLoader(getClass().getResource("Card.fxml"));
+        Parent CardRoot = CardLoader.load();
+        Object CardController = CardLoader.getController();
+        Scene telaCard = new Scene(CardRoot);
+        telaCard.setUserData("Card.fxml");
+        registerScene("Card", telaCard, CardController);
+        
+        SucessoLoader = new FXMLLoader(getClass().getResource("Sucesso.fxml"));
+        Parent SucessoRoot = SucessoLoader.load();
+        Object SucessoController = SucessoLoader.getController();
+        Scene telaSucesso = new Scene(SucessoRoot);
+        telaSucesso.setUserData("Sucesso.fxml");
+        registerScene("Sucesso", telaSucesso, SucessoController);
+        
+        ErroLoader = new FXMLLoader(getClass().getResource("Erro.fxml"));
+        Parent ErroRoot = ErroLoader.load();
+        Object ErroController = ErroLoader.getController();
+        Scene telaErro = new Scene(ErroRoot);
+        telaErro.setUserData("Erro.fxml");
+        registerScene("Erro", telaErro, ErroController);
+        
 
         primaryStage.setTitle("MUT Store");
         primaryStage.setScene(telaLogin);
@@ -195,6 +248,114 @@ public class MainStage extends Application {
         scene.setUserData(fxml);
         registerScene(id, scene, controller);
     }
+    
+    public static void defineGroupForNewAppRadios(){
+        Object controller = getController("CriarApp");
+        ((CriarAppController)controller).rdbt_categoriaApp.setToggleGroup
+        (((CriarAppController)controller).grupoCategorias);
+        
+        ((CriarAppController)controller).rdbt_categoriaJogo.setToggleGroup
+        (((CriarAppController)controller).grupoCategorias);
+    }
+    
+    public static void showAvaliablePayMethods(boolean card, boolean wallet){
+       Object controller = getController("PayMetodo");
+      
+       if(!card){
+          ((PayMetodoController)controller).panel_card.setVisible(false);
+  
+       }
+       if(!wallet){
+          ((PayMetodoController)controller).panel_carteira.setVisible(false);
+       }
+
+    }
+    
+    //Isto é experimental e pode ser alterado
+/*   
+        public static void showAllComments(){
+        Object controller  = getController("TelaDownload"); 
+        
+        for(AppModel app: CriarAppController.appList){
+            for(int i=0; i< app.comentarios.size()-1;i++){
+                ((FazerDownloadController)controller).panel_comentarios.getChildren()
+                        .add(new Label(app.comentarios.get(i)));
+            }
+        }
+    }
+    
+    public static void getUserComment(){
+
+         Object controller  = getController("TelaDownload"); 
+         for(AppModel app: CriarAppController.appList){
+             app.comentarios.add(((FazerDownloadController)controller).txt_comentar.getText());
+ 
+               /* ((FazerDownloadController)controller).panel_comentarios.getChildren()
+                        .add(new Label(app.comentarios.getLast()));
+                
+            VBox CommentBox = new VBox();
+            CommentBox.setSpacing(20);
+            
+            Label username = new Label("Um comentador");
+            Label comment = new Label(app.comentarios.getLast());            
+            
+            CommentBox.getChildren().addAll(username,comment);
+           ((FazerDownloadController)controller).panel_comentarios.setSpacing(10);
+            ((FazerDownloadController)controller).panel_comentarios.getChildren().add(CommentBox);
+            
+            username.setLayoutX(CommentBox.getLayoutX()+5);
+            username.setLayoutY(CommentBox.getLayoutY());
+            username.setStyle("-fx-text-fill: #517983");
+            comment.setStyle("-fx-text-fill: black");
+            username.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,14));
+            comment.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,12));
+            username.setPrefSize(Region.USE_COMPUTED_SIZE,Region.USE_COMPUTED_SIZE);
+            comment.setPrefSize(Region.USE_COMPUTED_SIZE,Region.USE_COMPUTED_SIZE);
+            comment.setLayoutY(username.getLayoutY()+2);  
+        }
+    }*/
+    
+    public static void delaySceneWithReset(String id, String fxml,float time){
+         PauseTransition pause = new PauseTransition(Duration.seconds(time));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                      MainStage.resetScene(id, fxml);
+                      MainStage.goTo(id);     
+                 
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
+    
+    }
+    
+        public static void delaySceneWithoutReset(String id, String fxml, float time){
+         PauseTransition pause = new PauseTransition(Duration.seconds(time));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                      MainStage.goTo(id);     
+                 
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
+    
+    }
+    
     
     public static void main(String[] args) {
         launch(args);

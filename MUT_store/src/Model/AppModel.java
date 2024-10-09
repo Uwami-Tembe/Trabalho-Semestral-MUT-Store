@@ -1,6 +1,8 @@
 
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
@@ -17,11 +19,18 @@ public class AppModel implements Downloadable, Comparable<Object> {
     String developerName;
     String imagePath;
     float Preco;
+    int numberOfDownloads;
     String Description;
     String politics;
+    String categoria;
+    boolean wallet;
+    boolean card;
+    public List<String>comentarios=new ArrayList<>();
+    
     
    public AppModel(ImageView icon, String nome, float Preco, ImageView shot_1, ImageView shot_2, 
-                    ImageView shot_3, ImageView shot_4, String Description, String politics, String developerName){
+                    ImageView shot_3, ImageView shot_4, String Description, String politics, String developerName, 
+                    String categoria, boolean wallet, boolean card){
       
        this.icon = icon;
        this.nome=nome;
@@ -33,8 +42,10 @@ public class AppModel implements Downloadable, Comparable<Object> {
        this.Description=Description;
        this.politics=politics;
        this.developerName=developerName;
-          
-       
+       this.categoria = categoria;
+       this.wallet=wallet;
+       this.card=card;
+       numberOfDownloads=0;  
    } 
    
    public ImageView getIconImage(){
@@ -76,7 +87,21 @@ public class AppModel implements Downloadable, Comparable<Object> {
     public String getPolitics() {
         return politics;
     }
-      
+    public int getNumeberOfDownlaods(){
+        return numberOfDownloads;
+    }
+    
+    public String getCategoria(){
+        return categoria;
+    }
+    
+    public boolean useCard(){
+        return card;
+    }
+    
+    public boolean  useWallet(){
+        return wallet;
+    }
 
     @Override
     public void setIcon() {

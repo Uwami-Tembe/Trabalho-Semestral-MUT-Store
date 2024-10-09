@@ -81,24 +81,8 @@ public class LoginController {
         //A lógica necesssária para entar no menu principal fica aqui
         
          MainStage.changeScene("Carregando");
-         
-         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-        
-         try{ 
-             pause.setOnFinished(e->{
-                 try {
-                     
-                     MainStage.changeScene("MenuPrincipal");
-                 } catch (Exception ex) {
-                     ex.printStackTrace();
-                 }
-             });
-         }
-         catch(Exception e){
-             e.printStackTrace();
-         }
-         pause.play();
-        
+         MainStage.delaySceneWithReset("MenuPrincipal", "MenuPrincipal.fxml",1.2f);
+
     }
    @FXML
     void showPassword(MouseEvent event) {

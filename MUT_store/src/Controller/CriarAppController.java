@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -132,8 +135,15 @@ public class CriarAppController {
     @FXML
     private TextField txt_appPreco;
     
+    @FXML
+    public RadioButton rdbt_categoriaApp=new RadioButton();
+
+    @FXML
+    public RadioButton rdbt_categoriaJogo=new RadioButton();
+    
     public  String icon_path;
     
+    public ToggleGroup grupoCategorias= new ToggleGroup();
     
     public static List<AppModel>appList = new ArrayList();
     @FXML
@@ -200,13 +210,18 @@ public class CriarAppController {
 
     @FXML
     void On_bt_upload_pressed(ActionEvent event) throws IOException {
+        
+        Toggle selectedToggle = grupoCategorias.getSelectedToggle();
+        RadioButton selectedButton = (RadioButton)selectedToggle;
         AppModel novaApp = new AppModel(img_icon,txt_appNome.getText(),Float.parseFloat(txt_appPreco.getText()),
                                         img_shot_1,img_shot_2,img_shot_3,img_shot_4,txt_appDetalhes.getText(),
-                                        txt_appPolitics.getText(),"Uwami Tembe");
+                                        txt_appPolitics.getText(),"Uwami Tembe",
+                                        selectedButton.getText(),checkB_mpesaeEmola.isSelected(),checB_card.isSelected());
         appList.add(novaApp);
         MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
         MainStage.goTo("MenuPrincipal");
         MainStage.actualizarMenu(appList);
+
     }
 
     @FXML

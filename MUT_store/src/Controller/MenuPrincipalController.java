@@ -72,8 +72,8 @@ public class MenuPrincipalController {
     @FXML
     void On_bt_CriarApp_pressed(ActionEvent event) throws IOException{
             MainStage.resetScene("CriarApp", "CriarApp.fxml");
-            MainStage.changeScene("CriarApp");
-
+            MainStage.defineGroupForNewAppRadios();
+            MainStage.goTo("CriarApp");
     }
     @FXML
     public void updateMenu(List<AppModel>appList){
@@ -101,7 +101,8 @@ public class MenuPrincipalController {
                     try { 
                        
                        MainStage.resetScene("TelaDownload","FazerDownload.fxml");
-                       MainStage.changeScene("TelaDownload");
+                       MainStage.goTo("TelaDownload");
+                       //MainStage.showComments();
                        MainStage.createDownloadPage(app);
     
                     } catch (Exception e) {
@@ -109,9 +110,23 @@ public class MenuPrincipalController {
                     }
                 }
             });
-
             
-            panel_apps.getChildren().addAll(appBox);
+            
+            if(app.getPreco()>0){
+                FazerDownloadController.haveToPay=true;
+                    if(app.useCard()){
+                        FazerDownloadController.useCard=true;
+                    }
+                    if(app.useWallet()){
+                        FazerDownloadController.useWallet=true;
+                    }
+            }
+            if(app.getCategoria().equals("Jogo")){
+                panel_games.getChildren().addAll(appBox);
+            }
+            else
+               panel_apps.getChildren().addAll(appBox);
+            
         }
    }
     
@@ -195,7 +210,7 @@ public class MenuPrincipalController {
         List<AppModel>result =searchAppListByPrefix(CriarAppController.appList, prefix);
         
         if(result.isEmpty()){
-            MainStage.changeScene("Carregando");
+            MainStage.goTo("Carregando");
             
                      PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
@@ -226,7 +241,7 @@ public class MenuPrincipalController {
         }
         
         else{
-            MainStage.changeScene("Carregando");
+         MainStage.changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
