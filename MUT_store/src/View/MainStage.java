@@ -41,6 +41,7 @@ public class MainStage extends Application {
     public FXMLLoader CardLoader;
     public FXMLLoader SucessoLoader;
     public FXMLLoader ErroLoader;
+    public FXMLLoader PerfilLoader;
    
     public static Stage primaryStage;
     
@@ -140,6 +141,13 @@ public class MainStage extends Application {
         Scene telaErro = new Scene(ErroRoot);
         telaErro.setUserData("Erro.fxml");
         registerScene("Erro", telaErro, ErroController);
+        
+        PerfilLoader= new FXMLLoader(getClass().getResource("Perfil.fxml"));
+        Parent perfilRoot = PerfilLoader.load();
+        Object PerfilController = PerfilLoader.getController();
+        Scene telaPerfil= new Scene(perfilRoot);
+        telaPerfil.setUserData("Perfil.fxml");
+        registerScene("Perfil",telaPerfil, PerfilController);
         
 
         primaryStage.setTitle("MUT Store");

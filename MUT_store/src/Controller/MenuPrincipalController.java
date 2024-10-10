@@ -19,6 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -47,13 +49,13 @@ public class MenuPrincipalController {
     private Label lb_NomeDoUsuario;
 
     @FXML
-    public FlowPane panel_apps = new FlowPane();
+    public TilePane panel_apps = new TilePane();
     
-     @FXML
-    private FlowPane panel_best = new FlowPane();
+    @FXML
+    private TilePane panel_best = new TilePane();
 
     @FXML
-    private FlowPane panel_games = new FlowPane();
+    public TilePane panel_games = new TilePane();
 
     @FXML
     private ScrollPane sp_best;
@@ -66,8 +68,8 @@ public class MenuPrincipalController {
 
     @FXML
     private TextField txt_pesquisa;
-
-    public static Scene currentScene;
+    @FXML
+    private Pane panel_profile;
 
     @FXML
     void On_bt_CriarApp_pressed(ActionEvent event) throws IOException{
@@ -75,26 +77,31 @@ public class MenuPrincipalController {
             MainStage.defineGroupForNewAppRadios();
             MainStage.goTo("CriarApp");
     }
+    
+    @FXML
+    void on_panel_profile_click(MouseEvent event) throws IOException {
+        MainStage.resetScene("Perfil", "Perfil.fxml");
+        MainStage.goTo("Perfil");
+    }
     @FXML
     public void updateMenu(List<AppModel>appList){
 
        for(AppModel app: appList){
+            
+            panel_games.setPrefColumns(2);
             VBox appBox = new VBox();
-            appBox.setSpacing(20);
+            appBox.setSpacing(15);
             ImageView formatedImage= new ImageView();            
             formatedImage.setImage(app.getIconImage().getImage());
-            formatedImage.setFitWidth(70);
-            formatedImage.setFitHeight(70);
-            
+            formatedImage.setFitWidth(50);
+            formatedImage.setFitHeight(50);
             Label appName = new Label(app.getNome());
-            appName.setAlignment(Pos.CENTER);
             appName.setLayoutX(appBox.getLayoutX());
-            appName.setLayoutY(appBox.getLayoutY()+5);
+            appName.setLayoutY(appBox.getLayoutY());
             appName.setStyle("-fx-text-fill: #517983");
-            appName.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,14));
+            appName.setFont(Font.font("System",javafx.scene.text.FontWeight.BOLD,11));
             
             appBox.getChildren().addAll(formatedImage, appName);
-            
             appBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent t){
@@ -124,9 +131,9 @@ public class MenuPrincipalController {
             if(app.getCategoria().equals("Jogo")){
                 panel_games.getChildren().addAll(appBox);
             }
-            else
+            else{
                panel_apps.getChildren().addAll(appBox);
-            
+            }
         }
    }
     
@@ -199,6 +206,7 @@ public class MenuPrincipalController {
 
     @FXML
     void On_bt_sair_pressed(ActionEvent event) throws Exception {
+        MainStage.resetScene("TelaLogin", "LoginDesign.fxml");
         MainStage.goTo("TelaLogin");
     }
 
