@@ -2,7 +2,7 @@ package Models.Api;
 
 import static Constants.Constants.API_URL;
 import static Constants.Constants.TOKEN_FILE_PATH;
-import Models.Usuario;
+import Model.Usuario;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -103,6 +103,108 @@ public class User {
             return new Response(500, 1, "Erro interno no servidor.", null);
         }
     }
+    
+public static Response forgotPassword(Usuario user) {
+    try {
+        URI uri = new URI(API_URL + "/users/forgot-reset");
+
+        // Criando o corpo da requisição em JSON
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("mobileNumber", user.getMobileNumber());
+
+        String requestBodyJson = objectMapper.writeValueAsString(requestBody);
+
+        // Criando a requisição POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBodyJson))
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processando a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            return new Response(response.statusCode(), 0, "Código de verificação enviado com sucesso!", null);
+        } else {
+            return new Response(response.statusCode(), (int) responseMap.get("error_code"), (String) responseMap.get("msg"));
+        }
+
+    } catch (Exception e) {
+        return new Response(500, 1, "Erro interno no servidor ao enviar o código.", null);
+    }
+}
+
+public static Response verifyCode(Usuario user, String code) {
+    try {
+        URI uri = new URI(API_URL + "/users/verify-code");
+
+        // Criando o corpo da requisição em JSON
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("mobileNumber", user.getMobileNumber());
+        requestBody.put("resetCode", code);
+
+        String requestBodyJson = objectMapper.writeValueAsString(requestBody);
+
+        // Criando a requisição POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBodyJson))
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processando a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            return new Response(response.statusCode(), 0, "Código verificado com sucesso!", null);
+        } else {
+            return new Response(response.statusCode(), (int) responseMap.get("error_code"), (String) responseMap.get("msg"));
+        }
+
+    } catch (Exception e) {
+        return new Response(500, 1, "Erro interno no servidor ao verificar o código.", null);
+    }
+}
+
+public static Response resetPassword(Usuario user, String newPassword) {
+    try {
+        URI uri = new URI(API_URL + "/users/reset-password");
+
+        // Criando o corpo da requisição em JSON
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("mobileNumber", user.getMobileNumber());
+        requestBody.put("newPassword", newPassword);
+
+        String requestBodyJson = objectMapper.writeValueAsString(requestBody);
+
+        // Criando a requisição POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBodyJson))
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processando a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            return new Response(response.statusCode(), 0, "Senha redefinida com sucesso!", null);
+        } else {
+            return new Response(response.statusCode(), (int) responseMap.get("error_code"), (String) responseMap.get("msg"));
+        }
+
+    } catch (Exception e) {
+        return new Response(500, 1, "Erro interno no servidor ao redefinir a senha.", null);
+    }
+}
+
 
     // Método para ler o token do arquivo
     public static String readTokenFromFile() {

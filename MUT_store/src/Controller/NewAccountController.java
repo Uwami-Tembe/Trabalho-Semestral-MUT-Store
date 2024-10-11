@@ -1,8 +1,8 @@
 package Controller;
 
+import Model.Usuario;
 import Models.Api.Response;
 import Models.Api.User;
-import Models.Usuario;
 import View.MainStage;
 import View.TelaLogin;
 import javafx.animation.PauseTransition;

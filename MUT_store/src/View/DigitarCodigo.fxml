@@ -41,7 +41,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DigitarCodigoController">
+<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DigitarCodigoController">
   <children>
       <AnchorPane prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
          <children>
@@ -55,7 +55,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextField fx:id="txt_codigo" layoutX="26.0" layoutY="308.0" prefHeight="45.0" prefWidth="359.0" promptText="Digite o código" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_codigo" layoutX="26.0" layoutY="354.0" prefHeight="45.0" prefWidth="359.0" promptText="Digite o código" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -65,7 +65,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="20.0" layoutY="131.0" prefHeight="38.0" prefWidth="371.0" text="Verifique o código no seu e-mail" textFill="#517983">
+            <Label layoutX="20.0" layoutY="131.0" prefHeight="38.0" prefWidth="371.0" text="Verifique o código no telefone" textFill="#517983">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -75,14 +75,29 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
-            <Label layoutX="50.0" layoutY="169.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o código poderá redefinir a sua senha" textFill="#517983">
+            <Label layoutX="50.0" layoutY="319.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o código poderá redefinir a sua senha" textFill="#517983">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Label layoutX="146.0" layoutY="211.0" prefHeight="38.0" prefWidth="118.0" text="*** *** ***" textFill="#517983">
+            <Label layoutX="146.0" layoutY="81.0" prefHeight="38.0" prefWidth="118.0" text="*** *** ***" textFill="#517983">
                <font>
                   <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txt_number1" layoutX="26.0" layoutY="225.0" prefHeight="45.0" prefWidth="220.0" promptText="Digite o Numero" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <Button fx:id="bt_pedir1" layoutX="252.0" layoutY="229.0" mnemonicParsing="false" onAction="#On_bt_pedir_Pressed" prefHeight="38.0" prefWidth="128.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Pedir" textFill="#ededed">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Label layoutX="50.0" layoutY="192.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o numero poderá obter o codigo" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="12.0" />
                </font>
             </Label>
          </children>
