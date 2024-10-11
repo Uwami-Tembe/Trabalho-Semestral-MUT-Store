@@ -3,7 +3,8 @@ package Models.Api;
 import static Constants.Constants.API_URL;
 import static Constants.Constants.TOKEN_FILE_PATH;
 import Model.AppModel;
-import Model.ExternalAppModel;
+import Model.AppModelSummary;
+import Model.AppModelDetails;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -127,9 +128,41 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
     }
 }
   
-  public static List<ExternalAppModel> buscarApps() {
+//  public static List<ExternalAppModel> buscarApps() {
+//    try {
+//        URI uri = new URI(API_URL + "/apps/list/apps"); // Ajuste o endpoint se necessário
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(uri) // Se necessário
+//                .GET()
+//                .build();
+//
+//        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+//
+//        // Verifica se a resposta é um erro
+//        if (response.statusCode() != 200) {
+//            JsonNode errorNode = objectMapper.readTree(response.body());
+//            int errorCode = errorNode.path("code").asInt();
+//            String errorMessage = errorNode.path("message").asText();
+//            System.err.println("Erro na API: " + errorMessage);
+//            return new ArrayList<>(); // Retorna uma lista vazia em caso de erro
+//        }
+//        
+//        
+//        System.out.println(response.body());
+//        // Mapeia a resposta JSON para uma lista de AppModel
+//        JsonNode jsonResponse = objectMapper.readTree(response.body());
+//        JsonNode appsNode = jsonResponse.path("apps");
+//        
+//        return objectMapper.readValue(appsNode.toString(), new TypeReference<List<ExternalAppModel>>() {});
+//    } catch (Exception e) {
+//        System.err.println("Erro ao buscar aplicativos: " + e.getMessage());
+//        return new ArrayList<>(); // Retorna uma lista vazia em caso de exceção
+//    }
+//}
+  
+  public static List<AppModelSummary> buscarAppsResumidos() {
     try {
-        URI uri = new URI(API_URL + "/apps/list/apps"); // Ajuste o endpoint se necessário
+        URI uri = new URI(API_URL + "/apps/summary"); // Ajuste o endpoint para buscar a lista resumida
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri) // Se necessário
                 .GET()
@@ -145,20 +178,54 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
             System.err.println("Erro na API: " + errorMessage);
             return new ArrayList<>(); // Retorna uma lista vazia em caso de erro
         }
-        
-        
+
         System.out.println(response.body());
-        // Mapeia a resposta JSON para uma lista de AppModel
+        // Mapeia a resposta JSON para uma lista de ExternalAppModel
         JsonNode jsonResponse = objectMapper.readTree(response.body());
-        JsonNode appsNode = jsonResponse.path("apps");
-        
-        return objectMapper.readValue(appsNode.toString(), new TypeReference<List<ExternalAppModel>>() {});
+        JsonNode appsNode = jsonResponse.path("apps"); // Supondo que a estrutura JSON mantenha "apps"
+
+        return objectMapper.readValue(appsNode.toString(), new TypeReference<List<AppModelSummary>>() {});
     } catch (Exception e) {
         System.err.println("Erro ao buscar aplicativos: " + e.getMessage());
         return new ArrayList<>(); // Retorna uma lista vazia em caso de exceção
     }
 }
 
+public static AppModelDetails buscarDetalhesApp(String appId) {
+    try {
+        URI uri = new URI(API_URL + "/apps/moreInfo/" + appId); // Ajuste o endpoint para buscar os detalhes do app
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .build();
+
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // Verifica se a resposta é um erro
+        if (response.statusCode() != 200) {
+            JsonNode errorNode = objectMapper.readTree(response.body());
+            int errorCode = errorNode.path("code").asInt();
+            String errorMessage = errorNode.path("message").asText();
+            System.err.println("Erro na API: " + errorMessage);
+            return null; // Retorna null em caso de erro
+        }
+   System.out.println("Response Body: " + response.body());
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        JsonNode appNode = jsonResponse.get("app"); // Use get() para garantir que o nó existe
+
+  
+        if (appNode == null) {
+            System.err.println("Campo 'app' não encontrado na resposta JSON.");
+            return null; // Retorne null ou faça o tratamento adequado
+        }
+
+        return objectMapper.readValue(appNode.toString(), AppModelDetails.class);
+    } catch (Exception e) {
+        System.err.println("Erro ao buscar detalhes do aplicativo: " + e.getMessage());
+        e.printStackTrace(); // Adicione isso para ver mais detalhes da exceção
+        return null; // Retorna null em caso de exceção
+    }
+}
 private static Response adicionarArquivo(MultipartEntityBuilder builder, String campo, File arquivo) {
     if (arquivo == null || !arquivo.exists()) {
         System.out.println("Erro: O arquivo " + campo + " não foi encontrado ou o caminho é inválido.");

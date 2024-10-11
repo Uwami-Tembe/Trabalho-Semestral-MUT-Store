@@ -1,11 +1,13 @@
 
 package View;
 
+import static Constants.Constants.TOKEN_FILE_PATH;
 import Controller.CriarAppController;
 import Controller.FazerDownloadController;
 import Controller.MenuPrincipalController;
 import Controller.PayMetodoController;
 import Model.AppModel;
+import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.Map;
@@ -43,14 +45,15 @@ public class MainStage extends Application {
     public FXMLLoader ErroLoader;
     public FXMLLoader PerfilLoader;
     public FXMLLoader adminLoader;
+    private Map<String, Scene> scenes = new HashMap<>();
    
     public static Stage primaryStage;
     
-    @Override
-    public void start(Stage primaryStage){
-        MainStage.primaryStage=primaryStage;
-        try{
-       
+@Override
+public void start(Stage primaryStage) {
+    MainStage.primaryStage = primaryStage;
+    try {
+        // Carregar todas as cenas
         loginLoader = new FXMLLoader(getClass().getResource("LoginDesign.fxml"));
         Parent LoginRoot = loginLoader.load();        
         Object loginController = loginLoader.getController();
@@ -59,11 +62,11 @@ public class MainStage extends Application {
         registerScene("TelaLogin", telaLogin, loginController);
         
         carregandoLoader = new FXMLLoader(getClass().getResource("Carregando.fxml"));
-        Parent  carregandoRoot =carregandoLoader.load();        
+        Parent carregandoRoot = carregandoLoader.load();        
         Object carregandoController = carregandoLoader.getController();
         Scene telaCarregando = new Scene(carregandoRoot);
         telaCarregando.setUserData("Carregando.fxml");
-        registerScene("Carregando", telaCarregando,carregandoController);
+        registerScene("Carregando", telaCarregando, carregandoController);
         
         menuLoader = new FXMLLoader(getClass().getResource("MenuPrincipal.fxml"));
         Parent menuRoot = menuLoader.load();        
@@ -79,12 +82,12 @@ public class MainStage extends Application {
         telaCriarApp.setUserData("CriarApp.fxml");
         registerScene("CriarApp", telaCriarApp, uploadController);
         
-        downloadLoader = new FXMLLoader (getClass().getResource("FazerDownload.fxml"));
+        downloadLoader = new FXMLLoader(getClass().getResource("FazerDownload.fxml"));
         Parent downloadRoot = downloadLoader.load();
         Object downloadController = downloadLoader.getController();
         Scene telaDownload = new Scene(downloadRoot);
         telaDownload.setUserData("FazerDownload.fxml");
-        registerScene("TelaDownload",telaDownload, downloadController);
+        registerScene("TelaDownload", telaDownload, downloadController);
         
         alterarSenhaLoader = new FXMLLoader(getClass().getResource("AlterarSenha.fxml"));
         Parent alterarSenhaRoot = alterarSenhaLoader.load();
@@ -94,14 +97,14 @@ public class MainStage extends Application {
         registerScene("AlterarSenha", telaAlterarSenha, alterarSenhaController);
         
         digitarCodigoLoader = new FXMLLoader(getClass().getResource("DigitarCodigo.fxml"));
-        Parent digitarCodigoRoot =digitarCodigoLoader.load();
+        Parent digitarCodigoRoot = digitarCodigoLoader.load();
         Object digitarCodigoController = digitarCodigoLoader.getController();
         Scene telaDigitarCodigo = new Scene(digitarCodigoRoot);
         telaDigitarCodigo.setUserData("DigitarCodigo.fxml");
         registerScene("DigitarCodigo", telaDigitarCodigo, digitarCodigoController);
         
         criarContaLoader = new FXMLLoader(getClass().getResource("CriarConta.fxml"));
-        Parent criarContaRoot =criarContaLoader.load();
+        Parent criarContaRoot = criarContaLoader.load();
         Object criarContaController = criarContaLoader.getController();
         Scene telaCriarConta = new Scene(criarContaRoot);
         telaCriarConta.setUserData("CriarConta.fxml");
@@ -156,16 +159,27 @@ public class MainStage extends Application {
         telaAdmin.setUserData("MenuAdmin.fxml");
         registerScene("Admin", telaAdmin, adminController);
 
-        primaryStage.setTitle("MUT Store");
-        primaryStage.setScene(telaLogin);
+        // Verificar se o arquivo token.txt existe
+        File tokenFile = new File(TOKEN_FILE_PATH);
+        
+        if (tokenFile.exists()) {
+            // Se o arquivo existir, mostrar a tela do Menu Principal
+            primaryStage.setTitle("MUT Store - Menu Principal");
+            primaryStage.setScene(telaMenu);
+        } else {
+            // Se o arquivo não existir, mostrar a tela de Login
+            primaryStage.setTitle("MUT Store - Login");
+            primaryStage.setScene(telaLogin);
+        }
+
         primaryStage.show();
         
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        e.getCause();
     }
+}
+
    
     /*public static Object changeScene (String fxml) throws Exception{
         FXMLLoader loader = new FXMLLoader(MainStage.class .getResource(fxml));
@@ -175,6 +189,9 @@ public class MainStage extends Application {
         primaryStage.show();
         return controller;
     }*/
+    
+    // Método para registrar a cena
+
     
     public static Stack<String> sceneHistory = new Stack<>();
     public static Map<String, Scene>sceneMap = new HashMap();
@@ -189,6 +206,10 @@ public class MainStage extends Application {
         controllerMap.put(id, controller);
     }
     
+    public static Scene getScene(String sceneName) {
+    return sceneMap.get(sceneName);
+}
+
     public static void changeScene(String id){
         Scene scene=sceneMap.get(id);
         

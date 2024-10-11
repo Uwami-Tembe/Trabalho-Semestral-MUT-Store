@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.ExternalAppModel;
+import Model.AppModelDetails;
 import Models.Api.App;
 import View.MainStage;
 import java.util.List;
@@ -114,7 +114,7 @@ public class FazerDownloadController {
     
     public String appfile; 
 
-    public void loadDownloadPageContent(ExternalAppModel app) {
+    public void loadDownloadPageContent(AppModelDetails app) {
         ImageView formatedImage = new ImageView();
         img_icon.setImage(new Image(app.getIcon()));
         lb_Nome.setText(app.getNome());
@@ -155,7 +155,7 @@ public class FazerDownloadController {
     @FXML
     void On_bt_CriarApp_pressed(ActionEvent event) {
  try {
-             MainStage.changeScene("CriarApp.fxml");
+             MainStage.changeScene("CriarApp");
           } catch (Exception ex) {
              ex.printStackTrace();
              }
@@ -164,7 +164,7 @@ public class FazerDownloadController {
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
  try {
-             MainStage.changeScene("MenuPrincipal.fxml");
+             MainStage.changeScene("MenuPrincipal");
           } catch (Exception ex) {
              ex.printStackTrace();
              }

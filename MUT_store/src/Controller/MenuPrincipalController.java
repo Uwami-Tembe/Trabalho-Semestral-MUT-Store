@@ -1,7 +1,8 @@
 package Controller;
 
 import Model.AppModel;
-import Model.ExternalAppModel;
+import Model.AppModelSummary;
+import Model.AppModelDetails;
 import Models.Api.App;
 import View.MainStage;
 import static View.MainStage.changeScene;
@@ -9,6 +10,7 @@ import static View.MainStage.getController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
@@ -71,8 +73,8 @@ public class MenuPrincipalController {
     @FXML
     private TextField txt_pesquisa;
 
-    @FXML
-    private ProgressIndicator progressIndicator; // Certifique-se de que isso está no controlador
+//    @FXML
+//    private ProgressIndicator progressIndicator; // Certifique-se de que isso está no controlador
 
     FazerDownloadController f = new FazerDownloadController();
 
@@ -134,76 +136,96 @@ public class MenuPrincipalController {
 //        }
     }
 
-    @FXML
-    private void On_bt_Loja_pressed(ActionEvent event) {
-        // Torna o loader visível
-        progressIndicator.setVisible(true);
+@FXML
+void On_bt_Loja_pressed(ActionEvent event) {
+    changeScene("Carregando"); // Mostra a tela de carregamento imediatamente
 
-        // Executa a tarefa em uma nova thread para não bloquear a UI
-        new Thread(() -> {
-            List<ExternalAppModel> appList = App.buscarApps(); // Método para buscar os apps da API
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+    pause.setOnFinished(ev -> {
+        CompletableFuture.supplyAsync(() -> App.buscarAppsResumidos())
+            .thenAcceptAsync(appSummaryList -> {
+                // Mudança da cena deve ocorrer após o carregamento dos aplicativos
+                Platform.runLater(() -> {
+                    panel_apps.setHgap(20);
+                    panel_apps.setVgap(30);
+                    panel_apps.setPrefColumns(4);
+                    panel_apps.getChildren().clear();
 
-            // Volta à UI Thread para atualizar a interface
-            Platform.runLater(() -> {
-                // Configura o TilePane
-                panel_apps.setHgap(20);  // Espaçamento horizontal
-                panel_apps.setVgap(30);  // Espaçamento vertical
-                panel_apps.setPrefColumns(4);  // Número de colunas para o TilePane
-                panel_apps.getChildren().clear();  // Limpa os itens atuais no panel_apps
+                    if (appSummaryList.isEmpty()) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erro");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Não foi possível buscar os aplicativos.");
+                        alert.showAndWait();
+                        changeScene("MenuPrincipal"); 
+                    } else {
+                        for (AppModelSummary app : appSummaryList) {
+                            VBox appBox = new VBox();
+                            appBox.setSpacing(10);
 
-                // Se a lista de aplicativos estiver vazia, exibe um alerta
-                if (appList.isEmpty()) {
+                            ImageView formattedImage = new ImageView(app.getIconUrl());
+                            formattedImage.setFitWidth(80);
+                            formattedImage.setFitHeight(80);
+                            formattedImage.setPreserveRatio(true);
+
+                            Label appName = new Label(app.getNome());
+                            appName.setStyle("-fx-text-fill: #517983");
+                            appName.setFont(Font.font("System", FontWeight.BOLD, 14));
+
+                            appBox.getChildren().addAll(formattedImage, appName);
+
+                            // Ao clicar, busca detalhes completos
+                            appBox.setOnMouseClicked(t -> {
+                                try {
+                                    // Buscar detalhes do aplicativo antes de mudar de cena
+                                    CompletableFuture.supplyAsync(() -> App.buscarDetalhesApp(app.getAppIdString()))
+                                        .thenAcceptAsync(appDetails -> Platform.runLater(() -> {
+                                            // Aqui mudamos a cena após buscar os detalhes
+                                            changeScene("TelaDownload");
+
+                                            // Obter o controlador após a mudança de cena
+                                            FazerDownloadController controller = (FazerDownloadController) getController("TelaDownload");
+                                            
+                                            // Limpe ou carregue o novo conteúdo
+                                            if (controller != null) {
+                                                controller.loadDownloadPageContent(appDetails);
+                                            } else {
+                                                System.err.println("FazerDownloadController é null!");
+                                            }
+                                            System.out.println(appDetails.toString());
+                                        }));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+
+                            panel_apps.getChildren().add(appBox);
+                        }
+                        // Mantenha a tela de carregamento até que todos os detalhes estejam carregados
+                        changeScene("MenuPrincipal"); 
+                    }
+                });
+            })
+            .exceptionally(ex -> {
+                // Trate erros aqui
+                ex.printStackTrace();
+                Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro");
                     alert.setHeaderText(null);
-                    alert.setContentText("Não foi possível buscar os aplicativos.");
+                    alert.setContentText("Erro ao buscar os aplicativos: " + ex.getMessage());
                     alert.showAndWait();
-                } else {
-                    // Loop para criar caixas de apps (appBox) e adicionar ao TilePane
-                    for (ExternalAppModel app : appList) {
-                        VBox appBox = new VBox();
-                        appBox.setSpacing(10);  // Espaçamento entre imagem e nome do app
-
-                        // Configura a imagem do app
-                        ImageView formattedImage = new ImageView(app.getIcon());
-                        formattedImage.setFitWidth(80);
-                        formattedImage.setFitHeight(80);
-                        formattedImage.setPreserveRatio(true);  // Mantém a proporção da imagem
-
-                        // Configura o nome do app
-                        Label appName = new Label(app.getNome());
-                        appName.setStyle("-fx-text-fill: #517983");
-                        appName.setFont(Font.font("System", FontWeight.BOLD, 14));
-
-                        // Adiciona a imagem e o nome no VBox (appBox)
-                        appBox.getChildren().addAll(formattedImage, appName);
-
-                        // Define a ação de clique na caixa do app
-                        appBox.setOnMouseClicked(t -> {
-                            try {
-                                // Muda para a cena de download
-                                changeScene("FazerDownload.fxml");
-
-                                // Obtém o controlador da cena FazerDownloadController
-                                FazerDownloadController controller = (FazerDownloadController) getController("FazerDownloadController");
-
-                                // Carrega o conteúdo da página de download com os dados do app
-                                controller.loadDownloadPageContent(app);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-
-                        // Adiciona a appBox ao TilePane
-                        panel_apps.getChildren().add(appBox);
-                    }
-                }
-
-                // Oculta o loader após finalizar a tarefa
-                progressIndicator.setVisible(false);
+                    changeScene("MenuPrincipal"); // Retorne para a tela principal em caso de erro
+                });
+                return null;
             });
-        }).start();
-    }
+    });
+
+    pause.play();
+}
+
+
+
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
@@ -222,13 +244,13 @@ public class MenuPrincipalController {
 
     @FXML
     void On_bt_sair_pressed(ActionEvent event) throws Exception {
-        MainStage.changeScene("Carregando.fxml");
+        MainStage.changeScene("Carregando");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
 
         try {
             pause.setOnFinished(e -> {
                 try {
-                    MainStage.changeScene("LoginDesign.fxml");
+                    MainStage.changeScene("TelaLogin");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

@@ -214,7 +214,7 @@ public class CriarAppController {
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
 
-        changeScene("MenuPrincipal.fxml");
+        changeScene("MenuPrincipal");
         setMenuController(m);
         m.updateMenu();
 

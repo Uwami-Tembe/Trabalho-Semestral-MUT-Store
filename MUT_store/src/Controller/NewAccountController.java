@@ -109,7 +109,7 @@ changeScene("Carregando.fxml");
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
     pause.setOnFinished(e -> {
         try {
-         changeScene("LoginDesign.fxml");
+         changeScene("TelaLogin");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -130,13 +130,13 @@ private void mostrarMensagemErro(String mensagemErro) {
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{
-                 changeScene("Carregando.fxml");
+                 changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     changeScene("LoginDesign.fxml");
+                     changeScene("TelaLogin");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

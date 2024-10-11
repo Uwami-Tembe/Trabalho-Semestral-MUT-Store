@@ -73,7 +73,7 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
     }
 
     // Caso as senhas coincidam, prossegue com a alteração
-    changeScene("Carregando.fxml");  // Usa o MainStage diretamente para mudar de cena
+    changeScene("Carregando");  // Usa o MainStage diretamente para mudar de cena
     user.setPassword(senha1);  // Define a senha a ser alterada
 
     // Task para rodar o processo de alteração da senha em background
@@ -97,11 +97,11 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
                     if (resetResult.getError_code() == 0) {
                         // Se a senha foi alterada com sucesso, redireciona para o Menu Principal
                         JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
-                        changeScene("MenuPrincipal.fxml");  // Usa o MainStage diretamente
+                        changeScene("MenuPrincipal");  // Usa o MainStage diretamente
                     } else {
                         // Caso contrário, exibe uma mensagem de erro
                         JOptionPane.showMessageDialog(null, "Falha ao alterar a senha. Tente novamente.");
-                        changeScene("AlterarSenha.fxml");  // Volta para a tela de alterar senha, se necessário
+                        changeScene("AlterarSenha");  // Volta para a tela de alterar senha, se necessário
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -121,7 +121,7 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
         Platform.runLater(() -> {
             JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
             try {
-                changeScene("AlterarSenha.fxml");  // Mude para a tela desejada após a falha
+                changeScene("AlterarSenha");  // Mude para a tela desejada após a falha
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -139,13 +139,13 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
     void On_bt_voltar_Pressed(ActionEvent event) throws Exception {
        
 
-        changeScene("Carregando.fxml");
+        changeScene("Carregando");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
 
         try {
             pause.setOnFinished(e -> {
                 try {
-                    changeScene("DigitarCodigo.fxml");
+                    changeScene("DigitarCodigo");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

@@ -85,7 +85,7 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="txt_number1" layoutX="26.0" layoutY="225.0" prefHeight="45.0" prefWidth="220.0" promptText="Digite o Numero" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_number1" layoutX="26.0" layoutY="225.0" prefHeight="45.0" prefWidth="220.0" promptText="8XXXXXXXX" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

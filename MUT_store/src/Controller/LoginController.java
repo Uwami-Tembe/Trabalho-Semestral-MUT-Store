@@ -44,13 +44,13 @@ public class LoginController {
     @FXML
     void onBT_criarContaPressed(ActionEvent event) throws Exception {
 
-changeScene("Carregando.fxml");
+changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-   changeScene("CriarConta.fxml");
+   changeScene("CriarConta");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }
@@ -64,27 +64,28 @@ changeScene("Carregando.fxml");
     public void mostrarMensagemErro(String S){
         JOptionPane.showMessageDialog(null, S);
     }
+ @FXML
+    void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
+         MainStage.changeScene("Carregando");
+         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        
+         try{ 
+             pause.setOnFinished(e->{
+                 try {
+                     MainStage.changeScene("DigitarCodigo");
+                 } catch (Exception ex) {
+                     ex.printStackTrace();
+                 }
+             });
+         }
+         catch(Exception e){
+             e.printStackTrace();
+         }
+         pause.play();
+         
+         //O código deve ser gerado e enviado aqui
+    }
     
-@FXML
-void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
-    // Muda imediatamente para a cena de carregamento
-    changeScene("Carregando.fxml");
-
-    // Pausa de 1.2 segundos antes de mudar para a próxima cena
-    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-
-    // Após a pausa, muda para a cena de digitar código
-    pause.setOnFinished(e -> {
-        try {
-            changeScene("DigitarCodigo.fxml");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    });
-
-    // Inicia a pausa
-    pause.play();
-}
     
     @FXML
 void onBT_entrarPressed(ActionEvent event) throws Exception {
@@ -138,13 +139,13 @@ private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
     mostrarMensagemSucesso(mensagemSucesso);  // Método para exibir mensagem na GUI
          
     // Exibe a tela de carregamento antes de mudar para o próximo estágio
- changeScene("Carregando.fxml");
+ changeScene("Carregando");
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
 
     pause.setOnFinished(e -> {
         try {
             // Troca de cena para uma tela de menu ou próximo passo
-      changeScene("MenuPrincipal.fxml");
+      changeScene("MenuPrincipal");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

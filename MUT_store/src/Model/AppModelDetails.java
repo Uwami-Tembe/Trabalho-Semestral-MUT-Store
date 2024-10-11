@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ExternalAppModel {
+public class AppModelDetails {
 
     @JsonProperty("_id")
     private String _id;
@@ -46,7 +46,7 @@ public class ExternalAppModel {
     // Adicionando o objeto Payments
 
     // Construtor padrão
-    public ExternalAppModel() {
+    public AppModelDetails() {
     }
 
     // Getters e Setters
