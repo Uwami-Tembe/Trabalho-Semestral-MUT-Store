@@ -171,14 +171,16 @@ public static Response verifyCode(Usuario user, String code) {
     }
 }
 
-public static Response resetPassword(Usuario user, String newPassword) {
+public static Response resetPassword(Usuario user, String verificationCode) {
     try {
         URI uri = new URI(API_URL + "/users/reset-password");
 
         // Criando o corpo da requisição em JSON
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("mobileNumber", user.getMobileNumber());
-        requestBody.put("newPassword", newPassword);
+        requestBody.put("newPassword", user.getPassword());
+        requestBody.put("resetCode", verificationCode);
+
 
         String requestBodyJson = objectMapper.writeValueAsString(requestBody);
 
@@ -195,6 +197,19 @@ public static Response resetPassword(Usuario user, String newPassword) {
         // Processando a resposta
         Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
         if (response.statusCode() == 200) {
+            
+                        String token = (String) responseMap.get("token");
+
+                if (token != null) {
+                    // Salvar o token em um arquivo
+                    try (FileWriter fileWriter = new FileWriter(TOKEN_FILE_PATH)) {
+                        fileWriter.write(token);
+                        return new Response(response.statusCode(), 0, "Senha redefinida com sucesso!, Login feito com sucesso!", null);
+                    } catch (IOException e) {
+                        return new Response(response.statusCode(), 1, "Ocorreu um erro ao salvar o token.", null);
+                    }
+                }
+                
             return new Response(response.statusCode(), 0, "Senha redefinida com sucesso!", null);
         } else {
             return new Response(response.statusCode(), (int) responseMap.get("error_code"), (String) responseMap.get("msg"));
@@ -240,6 +255,10 @@ public static Response resetPassword(Usuario user, String newPassword) {
             // Processa a resposta
             Map<String, Object> errorResponse = objectMapper.readValue(response.body(), Map.class);
             if (response.statusCode() == 200) {
+                
+                
+                
+                
                 return new Response(response.statusCode(), 0, "Dados do usuário atualizados com sucesso!", null);
             } else {
                 return new Response(response.statusCode(), (int) errorResponse.get("error_code"), (String) errorResponse.get("msg"));

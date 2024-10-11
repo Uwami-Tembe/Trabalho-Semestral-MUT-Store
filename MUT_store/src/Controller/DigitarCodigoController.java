@@ -5,10 +5,17 @@ import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
 import View.TelaLogin;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -33,6 +40,8 @@ public class DigitarCodigoController {
 
     Usuario user = new Usuario();
     
+
+    
 @FXML
 void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
     TelaLogin lg = new TelaLogin(MainStage.primaryStage);
@@ -43,7 +52,7 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
     Task<Response> task = new Task<>() {
         @Override
         protected Response call() throws Exception {
-            return User.verifyCode(user,txt_codigo.getText() );  // Método que verifica o código
+            return User.verifyCode(user, txt_codigo.getText());  // Método que verifica o código
         }
     };
 
@@ -52,17 +61,33 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
 
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         pause.setOnFinished(e -> {
-            try {
-                if (verificationResult.getError_code() == 0) {
-                    // Se o código for correto, muda para a tela de Alterar Senha
-                    lg.changeScene("AlterarSenha.fxml");
-                } else {
-                    // Caso contrário, exibe uma mensagem de erro
+            if (verificationResult.getError_code() == 0) {
+                // Se o código for correto, muda para a tela de Alterar Senha
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/AlterarSenha.fxml"));
+                        Parent root = loader.load();
+
+                        // Obtém o controlador e passa o código de verificação
+                        AlterarSenhaController controller = loader.getController();
+                        controller.setUser(user);
+                        controller.setVerificationCode(txt_codigo.getText());  // Passa o código para o controlador
+
+                        MainStage.primaryStage.setScene(new Scene(root));
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            } else {
+                // Caso contrário, exibe uma mensagem de erro
+                Platform.runLater(() -> {
                     JOptionPane.showMessageDialog(null, "Código inválido. Por favor, verifique e tente novamente.");
-                    lg.changeScene("DigitarCodigo.fxml"); // Mude para a tela de erro, se desejar
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                    try {
+                        lg.changeScene("DigitarCodigo.fxml"); // Mude para a tela de erro, se desejar
+                    } catch (Exception ex) {
+                        Logger.getLogger(DigitarCodigoController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
             }
         });
         pause.play();
@@ -72,14 +97,14 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
         // Tratar caso haja falha na requisição
         Exception exception = (Exception) task.getException();
         exception.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
-        
-        // Retorna à tela de login após mostrar a mensagem de erro
-        try {
-            lg.changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        Platform.runLater(() -> {
+            JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
+            try {
+                lg.changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     });
 
     // Executa o task em segundo plano
@@ -87,6 +112,7 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
     thread.setDaemon(true);
     thread.start();
 }
+
 
     
 @FXML
@@ -116,9 +142,18 @@ void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
                 JOptionPane.showMessageDialog(null, "Falha no envio do SMS. Não foi possível enviar o código para o número informado.");
             }
 
-            // Retorna à tela de login após mostrar a mensagem
+            // Transição para a tela "DigitarCodigo.fxml"
             try {
-                lg.changeScene("DigitarCodigo.fxml"); // Mude para a tela desejada após a mensagem
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/DigitarCodigo.fxml"));
+                Parent root = loader.load();
+
+                // Obtém o controlador da tela "DigitarCodigo"
+                DigitarCodigoController controller = loader.getController();
+                // Passa o número de telefone para o campo txt_number1 da tela "DigitarCodigo"
+                controller.txt_number1.setText(txt_number1.getText());  // Passa o número para o controlador
+
+                // Define a nova cena
+                MainStage.primaryStage.setScene(new Scene(root));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -145,6 +180,7 @@ void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
     thread.setDaemon(true);
     thread.start();
 }
+
 
 
 
