@@ -42,6 +42,7 @@ public class MainStage extends Application {
     public FXMLLoader SucessoLoader;
     public FXMLLoader ErroLoader;
     public FXMLLoader PerfilLoader;
+    public FXMLLoader adminLoader;
    
     public static Stage primaryStage;
     
@@ -65,7 +66,6 @@ public class MainStage extends Application {
         registerScene("Carregando", telaCarregando,carregandoController);
         
         menuLoader = new FXMLLoader(getClass().getResource("MenuPrincipal.fxml"));
-
         Parent menuRoot = menuLoader.load();        
         Object menuController = menuLoader.getController();
         Scene telaMenu = new Scene(menuRoot);
@@ -149,6 +149,12 @@ public class MainStage extends Application {
         telaPerfil.setUserData("Perfil.fxml");
         registerScene("Perfil",telaPerfil, PerfilController);
         
+        adminLoader= new FXMLLoader(getClass().getResource("MenuAdmin.fxml"));
+        Parent adminRoot = adminLoader.load();
+        Object adminController = adminLoader.getController();
+        Scene telaAdmin= new Scene(adminRoot);
+        telaAdmin.setUserData("MenuAdmin.fxml");
+        registerScene("Admin", telaAdmin, adminController);
 
         primaryStage.setTitle("MUT Store");
         primaryStage.setScene(telaLogin);
