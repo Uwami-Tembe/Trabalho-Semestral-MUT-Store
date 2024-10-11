@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 public class FazerDownloadController {
 
@@ -90,7 +91,7 @@ public class FazerDownloadController {
     private Label lb_preco1;
 
     @FXML
-    private AnchorPane panel_comentarios;
+    private VBox panel_comentarios;
 
     @FXML
     private Pane panel_icon;
@@ -145,6 +146,11 @@ public class FazerDownloadController {
     void On_add_icon_click(MouseEvent event) {
 
     }
+    
+    @FXML
+    void On_bt_comentar_pressed(MouseEvent event) {
+
+    }
 
     @FXML
     void On_bt_CriarApp_pressed(ActionEvent event) {
@@ -181,7 +187,7 @@ public class FazerDownloadController {
 
     
     @FXML
-void On_bt_upload_pressed(ActionEvent event) {
+void On_bt_baixar_pressed(ActionEvent event) {
     String fileURL = appfile;
     String savePath = "C:/downloads/app.apk";
 

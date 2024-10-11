@@ -4,7 +4,7 @@ import Model.Usuario;
 import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
-import View.TelaLogin;
+import static View.MainStage.changeScene;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -99,18 +99,17 @@ private String validarEntradasCriacaoConta() {
 // Exibe a mensagem de sucesso e navega para outra tela
 private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
     // Cria uma instância de TelaLogin passando o primaryStage
-    TelaLogin lg = new TelaLogin(MainStage.primaryStage);
     
     // Exibe a mensagem de sucesso
     mostrarMensagemSucesso(mensagemSucesso);
     
     // Exibe a tela de carregamento e, depois, navega para a tela de login
-    lg.changeScene("Carregando.fxml");
+changeScene("Carregando.fxml");
     
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
     pause.setOnFinished(e -> {
         try {
-            lg.changeScene("LoginDesign.fxml");
+         changeScene("LoginDesign.fxml");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -131,14 +130,13 @@ private void mostrarMensagemErro(String mensagemErro) {
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{
-   TelaLogin lg = new TelaLogin(MainStage.primaryStage);
-                 lg.changeScene("Carregando.fxml");
+                 changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     lg.changeScene("LoginDesign.fxml");
+                     changeScene("LoginDesign.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

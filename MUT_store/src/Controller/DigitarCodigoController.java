@@ -4,7 +4,7 @@ import Model.Usuario;
 import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
-import View.TelaLogin;
+import static View.MainStage.changeScene;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,8 +44,8 @@ public class DigitarCodigoController {
     
 @FXML
 void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
-    TelaLogin lg = new TelaLogin(MainStage.primaryStage);
-    lg.changeScene("Carregando.fxml");
+    
+changeScene("Carregando.fxml");
     user.setMobileNumber(txt_number1.getText());
 
     // Task para rodar o processo de verificação do código em background
@@ -83,7 +83,7 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
                 Platform.runLater(() -> {
                     JOptionPane.showMessageDialog(null, "Código inválido. Por favor, verifique e tente novamente.");
                     try {
-                        lg.changeScene("DigitarCodigo.fxml"); // Mude para a tela de erro, se desejar
+                        changeScene("DigitarCodigo.fxml"); // Mude para a tela de erro, se desejar
                     } catch (Exception ex) {
                         Logger.getLogger(DigitarCodigoController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -100,7 +100,7 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
         Platform.runLater(() -> {
             JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
             try {
-                lg.changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
+                changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -117,9 +117,9 @@ void On_bt_verificar_Pressed(ActionEvent event) throws Exception {
     
 @FXML
 void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
-    TelaLogin lg = new TelaLogin(MainStage.primaryStage);
+   
     user.setMobileNumber(txt_number1.getText());
-    lg.changeScene("Carregando.fxml");
+    changeScene("Carregando.fxml");
 
     // Task para rodar o processo de envio do SMS em background
     Task<Response> task = new Task<>() {
@@ -169,7 +169,7 @@ void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
         
         // Retorna à tela de login após mostrar a mensagem de erro
         try {
-            lg.changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
+            changeScene("TelaLogin.fxml"); // Mude para a tela desejada após a mensagem
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -187,14 +187,13 @@ void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
 
     @FXML
     void On_bt_voltar_pressed(ActionEvent event) throws Exception {
-  TelaLogin lg = new TelaLogin(MainStage.primaryStage);
-         lg.changeScene("Carregando.fxml");
+         changeScene("Carregando.fxml");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     lg.changeScene("LoginDesign.fxml");
+                    changeScene("LoginDesign.fxml");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

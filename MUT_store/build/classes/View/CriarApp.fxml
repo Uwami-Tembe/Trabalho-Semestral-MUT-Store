@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Glow?>
@@ -120,9 +121,9 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
-            <Label fx:id="lb_nota" layoutX="401.0" layoutY="651.0" prefHeight="47.0" prefWidth="555.0" text="Por cada venda feita na nossa loja será cobrada uma taxa de 20%" textFill="#517983">
+            <Label fx:id="lb_nota" layoutX="776.0" layoutY="651.0" prefHeight="34.0" prefWidth="402.0" text="Por cada venda feita na nossa loja será cobrada uma taxa de 20%" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="13.0" />
                </font>
             </Label>
             <TextArea fx:id="txt_appPolitics" layoutX="758.0" layoutY="346.0" prefHeight="183.0" prefWidth="427.0" />
@@ -191,37 +192,37 @@
                   <Image url="@Login/imagens/recycle-bin-line-icon.png" />
                </image>
             </ImageView>
-            <Button fx:id="bt_Upload" layoutX="882.0" layoutY="575.0" mnemonicParsing="false" onAction="#On_bt_upload_pressed" prefHeight="47.0" prefWidth="195.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Upload" textFill="#ededed">
+            <Button fx:id="bt_Upload" layoutX="878.0" layoutY="578.0" mnemonicParsing="false" onAction="#On_bt_upload_pressed" prefHeight="47.0" prefWidth="195.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Upload" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
             </Button>
-            <CheckBox fx:id="checkB_mpesaeEmola" layoutX="279.0" layoutY="561.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="197.0" text="M-Pesa / E-mola" textFill="#517983">
+            <CheckBox fx:id="checkB_mpesaeEmola" layoutX="276.0" layoutY="578.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="175.0" text="M-Pesa / E-mola" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </CheckBox>
-            <Label fx:id="lb_Nome1" layoutX="278.0" layoutY="521.0" prefHeight="47.0" prefWidth="284.0" text="Métodos de pagamento aceites" textFill="#517983">
+            <Label fx:id="lb_Nome1" layoutX="275.0" layoutY="538.0" prefHeight="47.0" prefWidth="284.0" text="Métodos de pagamento aceites" textFill="#517983">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
-            <CheckBox fx:id="checB_card" layoutX="485.0" layoutY="559.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="284.0" text="Cartão de crédito/ débito" textFill="#517983">
+            <CheckBox fx:id="checB_card" layoutX="276.0" layoutY="621.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="213.0" text="Cartão de crédito/ débito" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </CheckBox>
-            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="358.0" layoutY="599.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="435.0" layoutY="577.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Login/imagens/m-pesa.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="407.0" layoutY="599.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="37.0" fitWidth="35.0" layoutX="476.0" layoutY="577.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Login/imagens/e-mola.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="55.0" fitWidth="135.0" layoutX="583.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="43.0" fitWidth="97.0" layoutX="487.0" layoutY="630.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Login/imagens/visa-mastercard.png" />
                </image>
@@ -240,6 +241,21 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
+            <Label fx:id="lb_Nome11" layoutX="589.0" layoutY="538.0" prefHeight="47.0" prefWidth="89.0" text="Categoria" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="rdbt_categoriaJogo" layoutX="589.0" layoutY="584.0" mnemonicParsing="false" text="Jogo" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="rdbt_categoriaApp" layoutX="589.0" layoutY="631.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="97.0" text="Aplicação" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </RadioButton>
          </children>
       </AnchorPane>
    </children>

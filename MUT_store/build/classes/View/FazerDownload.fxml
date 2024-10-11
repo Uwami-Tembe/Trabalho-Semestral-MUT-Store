@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Glow?>
@@ -13,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FazerDownloadController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FazerDownloadController">
    <children>
-      <AnchorPane prefHeight="811.0" prefWidth="1201.0">
+      <AnchorPane fx:id="fazerDownloadPanel" prefHeight="811.0" prefWidth="1201.0">
          <children>
             <ImageView fitHeight="705.0" fitWidth="1210.0" layoutX="-6.0" layoutY="-1.0" pickOnBounds="true">
                <image>
@@ -125,16 +124,11 @@
                      </image>
                   </ImageView>
                </children></Pane>
-            <Button fx:id="bt_Baixar" layoutX="403.0" layoutY="141.0" mnemonicParsing="false" onAction="#On_bt_upload_pressed" prefHeight="39.0" prefWidth="166.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Baixar" textFill="#ededed">
+            <Button fx:id="bt_Baixar" layoutX="403.0" layoutY="141.0" mnemonicParsing="false" onAction="#On_bt_baixar_pressed" prefHeight="39.0" prefWidth="166.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Baixar" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
-            <Label fx:id="lb_preco1" layoutX="421.0" layoutY="120.0" prefHeight="16.0" prefWidth="26.0" text="MZN" textFill="#517983">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-            </Label>
             <Pane fx:id="panel_shot_4" layoutX="660.0" layoutY="234.0" prefHeight="225.0" prefWidth="138.0" style="-fx-background-color: ffff; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: #517983; -fx-border-radius: 20;">
                <children>
                   <ImageView fx:id="img_shot_4" fitHeight="201.0" fitWidth="120.0" layoutX="8.0" layoutY="12.0" opacity="0.41" pickOnBounds="true">
@@ -179,10 +173,10 @@
             </Label>
             <VBox layoutX="826.0" layoutY="236.0" prefHeight="220.0" prefWidth="360.0">
                <children>
-                  <ScrollPane prefHeight="220.0" prefWidth="360.0">
-                    <content>
-                      <AnchorPane fx:id="panel_comentarios" minHeight="0.0" minWidth="0.0" prefHeight="218.0" prefWidth="343.0" />
-                    </content>
+                  <ScrollPane prefHeight="220.0" prefWidth="360.0" style="-fx-background-color: transparent; -fx-background: transparent;">
+                     <content>
+                        <VBox fx:id="panel_comentarios" prefHeight="214.0" prefWidth="352.0" />
+                     </content>
                   </ScrollPane>
                </children>
             </VBox>
@@ -193,20 +187,14 @@
             </Label>
             <TextArea fx:id="txt_comentar" layoutX="826.0" layoutY="491.0" prefHeight="111.0" prefWidth="349.0" promptText="Diga-nos a sua opinião">
                <font>
-                  <Font name="System Bold" size="23.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </TextArea>
-            <Button fx:id="bt_Comentar" layoutX="921.0" layoutY="624.0" mnemonicParsing="false" onAction="#On_bt_upload_pressed" prefHeight="39.0" prefWidth="166.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Comentar" textFill="#ededed">
+            <Button fx:id="bt_Comentar" layoutX="921.0" layoutY="624.0" mnemonicParsing="false" onAction="#On_bt_comentar_pressed" prefHeight="39.0" prefWidth="166.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Comentar" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
-            <ProgressBar fx:id="progressBar" layoutX="399.0" layoutY="148.0" prefHeight="27.0" prefWidth="234.0" progress="0.0" visible="false" />
-            <Label fx:id="statusLabel" layoutX="411.0" layoutY="107.0" prefHeight="27.0" prefWidth="170.0" text="status" textFill="#517983" visible="false">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
    </children>

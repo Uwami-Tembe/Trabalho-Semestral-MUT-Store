@@ -4,7 +4,7 @@ import Model.Usuario;
 import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
-import View.TelaLogin;
+import static View.MainStage.changeScene;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.animation.PauseTransition;
@@ -62,8 +62,7 @@ public class AlterarSenhaController {
 
 @FXML
 void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
-    TelaLogin lg = new TelaLogin(MainStage.primaryStage);
-    
+    // Captura as senhas digitadas
     String senha = ps_senha.getText();
     String senha1 = ps_senha1.getText();
     
@@ -72,9 +71,9 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
         JOptionPane.showMessageDialog(null, "As senhas não coincidem. Por favor, tente novamente.");
         return;  // Interrompe o processo se as senhas não forem iguais
     }
-    
+
     // Caso as senhas coincidam, prossegue com a alteração
-    lg.changeScene("Carregando.fxml");
+    changeScene("Carregando.fxml");  // Usa o MainStage diretamente para mudar de cena
     user.setPassword(senha1);  // Define a senha a ser alterada
 
     // Task para rodar o processo de alteração da senha em background
@@ -86,6 +85,7 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
         }
     };
 
+    // Quando a task for bem-sucedida
     task.setOnSucceeded(workerStateEvent -> {
         Response resetResult = task.getValue();  // Pega o resultado da alteração da senha
 
@@ -97,11 +97,11 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
                     if (resetResult.getError_code() == 0) {
                         // Se a senha foi alterada com sucesso, redireciona para o Menu Principal
                         JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
-                        lg.changeScene("MenuPrincipal.fxml");
+                        changeScene("MenuPrincipal.fxml");  // Usa o MainStage diretamente
                     } else {
                         // Caso contrário, exibe uma mensagem de erro
                         JOptionPane.showMessageDialog(null, "Falha ao alterar a senha. Tente novamente.");
-                        lg.changeScene("AlterarSenha.fxml");  // Volta para a tela de alterar senha, se necessário
+                        changeScene("AlterarSenha.fxml");  // Volta para a tela de alterar senha, se necessário
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -111,6 +111,7 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
         });
     });
 
+    // Quando a task falha
     task.setOnFailed(workerStateEvent -> {
         // Tratar caso haja falha na requisição
         Exception exception = (Exception) task.getException();
@@ -120,7 +121,7 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
         Platform.runLater(() -> {
             JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
             try {
-                lg.changeScene("AlterarSenha.fxml");  // Mude para a tela desejada após a falha
+                changeScene("AlterarSenha.fxml");  // Mude para a tela desejada após a falha
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -134,18 +135,17 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
 }
 
 
-
     @FXML
     void On_bt_voltar_Pressed(ActionEvent event) throws Exception {
-        TelaLogin lg = new TelaLogin(MainStage.primaryStage);
+       
 
-        lg.changeScene("Carregando.fxml");
+        changeScene("Carregando.fxml");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
 
         try {
             pause.setOnFinished(e -> {
                 try {
-                    lg.changeScene("DigitarCodigo.fxml");
+                    changeScene("DigitarCodigo.fxml");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

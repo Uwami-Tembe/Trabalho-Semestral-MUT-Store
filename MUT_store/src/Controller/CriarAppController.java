@@ -4,7 +4,7 @@ import Model.AppModel;
 import Models.Api.App;
 import Models.Api.Response;
 import View.MainStage;
-import View.TelaLogin;
+import static View.MainStage.changeScene;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -214,7 +214,7 @@ public class CriarAppController {
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
 
-        m = (MenuPrincipalController) MainStage.changeScene("MenuPrincipal.fxml");
+        changeScene("MenuPrincipal.fxml");
         setMenuController(m);
         m.updateMenu();
 
