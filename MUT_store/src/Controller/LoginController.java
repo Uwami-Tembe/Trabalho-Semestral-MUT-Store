@@ -65,27 +65,26 @@ changeScene("Carregando.fxml");
         JOptionPane.showMessageDialog(null, S);
     }
     
-        @FXML
-    void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
-changeScene("Carregando.fxml");
-         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-        
-         try{ 
-             pause.setOnFinished(e->{
-                 try {
+@FXML
+void On_bt_esqueci_Pressed(ActionEvent event) throws Exception {
+    // Muda imediatamente para a cena de carregamento
+    changeScene("Carregando.fxml");
+
+    // Pausa de 1.2 segundos antes de mudar para a próxima cena
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+
+    // Após a pausa, muda para a cena de digitar código
+    pause.setOnFinished(e -> {
+        try {
             changeScene("DigitarCodigo.fxml");
-                 } catch (Exception ex) {
-                     ex.printStackTrace();
-                 }
-             });
-         }
-         catch(Exception e){
-             e.printStackTrace();
-         }
-         pause.play();
-         
-         //O código deve ser gerado e enviado aqui
-    }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    });
+
+    // Inicia a pausa
+    pause.play();
+}
     
     @FXML
 void onBT_entrarPressed(ActionEvent event) throws Exception {
