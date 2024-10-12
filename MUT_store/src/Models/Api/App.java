@@ -193,7 +193,8 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
 
 public static AppModelDetails buscarDetalhesApp(String appId) {
     try {
-        URI uri = new URI(API_URL + "/apps/moreInfo/" + appId); // Ajuste o endpoint para buscar os detalhes do app
+        System.out.println("Buscando detalhes para o appId: " + appId);
+        URI uri = new URI(API_URL + "/apps/moreInfo/" + appId);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
@@ -209,23 +210,25 @@ public static AppModelDetails buscarDetalhesApp(String appId) {
             System.err.println("Erro na API: " + errorMessage);
             return null; // Retorna null em caso de erro
         }
-   System.out.println("Response Body: " + response.body());
-        JsonNode jsonResponse = objectMapper.readTree(response.body());
-        JsonNode appNode = jsonResponse.get("app"); // Use get() para garantir que o nó existe
 
-  
+        System.out.println("Response Body: " + response.body()); // Para depuração
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        JsonNode appNode = jsonResponse.get("app"); // Verifica a existência do campo "app"
+        
         if (appNode == null) {
-            System.err.println("Campo 'app' não encontrado na resposta JSON.");
+            System.err.println("Campo 'app' não encontrado na resposta JSON para appId: " + appId);
             return null; // Retorne null ou faça o tratamento adequado
         }
 
+        // Deserializar o JSON do app para AppModelDetails
         return objectMapper.readValue(appNode.toString(), AppModelDetails.class);
     } catch (Exception e) {
-        System.err.println("Erro ao buscar detalhes do aplicativo: " + e.getMessage());
-        e.printStackTrace(); // Adicione isso para ver mais detalhes da exceção
+        System.err.println("Erro ao buscar detalhes do aplicativo para appId: " + appId + " - " + e.getMessage());
+        e.printStackTrace(); // Adiciona mais detalhes da exceção
         return null; // Retorna null em caso de exceção
     }
 }
+
 private static Response adicionarArquivo(MultipartEntityBuilder builder, String campo, File arquivo) {
     if (arquivo == null || !arquivo.exists()) {
         System.out.println("Erro: O arquivo " + campo + " não foi encontrado ou o caminho é inválido.");

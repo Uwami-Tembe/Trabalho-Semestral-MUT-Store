@@ -7,6 +7,8 @@ import Controller.FazerDownloadController;
 import Controller.MenuPrincipalController;
 import Controller.PayMetodoController;
 import Model.AppModel;
+import Model.Usuario;
+import static Models.Api.User.userInfo;
 import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
@@ -70,7 +72,7 @@ public void start(Stage primaryStage) {
         
         menuLoader = new FXMLLoader(getClass().getResource("MenuPrincipal.fxml"));
         Parent menuRoot = menuLoader.load();        
-        Object menuController = menuLoader.getController();
+        MenuPrincipalController menuController = menuLoader.getController(); // Obtém o controlador específico do MenuPrincipal
         Scene telaMenu = new Scene(menuRoot);
         telaMenu.setUserData("MenuPrincipal.fxml");
         registerScene("MenuPrincipal", telaMenu, menuController);
@@ -162,15 +164,26 @@ public void start(Stage primaryStage) {
         // Verificar se o arquivo token.txt existe
         File tokenFile = new File(TOKEN_FILE_PATH);
         
-        if (tokenFile.exists()) {
-            // Se o arquivo existir, mostrar a tela do Menu Principal
-            primaryStage.setTitle("MUT Store - Menu Principal");
-            primaryStage.setScene(telaMenu);
-        } else {
-            // Se o arquivo não existir, mostrar a tela de Login
-            primaryStage.setTitle("MUT Store - Login");
-            primaryStage.setScene(telaLogin);
-        }
+       if (tokenFile.exists()) {
+        // Se o arquivo existir, mostrar a tela do Menu Principal
+        primaryStage.setTitle("MUT Store - Menu Principal");
+        primaryStage.setScene(telaMenu);
+
+        // Chama o método userInfo para obter os detalhes do usuário
+       // Chama o método userInfo para obter os detalhes do usuário
+            Usuario user = userInfo();
+            if (user != null) {
+                // Definir o nome do usuário no controlador da tela principal
+                menuController.setLb_NomeDoUsuario(user.getName()); // Atualiza o Label com o nome do usuário
+            } else {
+                // Lidar com o erro se o usuário não foi encontrado
+                System.err.println("Erro ao buscar informações do usuário.");
+            }
+    } else {
+        // Se o arquivo não existir, mostrar a tela de Login
+        primaryStage.setTitle("MUT Store - Login");
+        primaryStage.setScene(telaLogin);
+    }
 
         primaryStage.show();
         

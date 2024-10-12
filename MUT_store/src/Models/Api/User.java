@@ -104,6 +104,46 @@ public class User {
         }
     }
     
+public static Usuario userInfo() {
+    try {
+        // Carregar o token do arquivo token.txt
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token não encontrado ou inválido.");
+            return null; // Ou lançar uma exceção, conforme sua preferência
+        }
+
+        URI uri = new URI(API_URL + "/users/list/user");
+
+        // Criando a requisição GET com o token Bearer
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adicionando o token no cabeçalho
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processa a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            // Deserializando a resposta JSON para um objeto User
+            Usuario user = objectMapper.convertValue(responseMap.get("user"), Usuario.class);
+            return user; // Retorna o objeto User
+        } else {
+            System.err.println("Erro na requisição: " + responseMap.get("msg"));
+            return null; // Ou lançar uma exceção
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null; // Ou lançar uma exceção
+    }
+}
+
+    
 public static Response forgotPassword(Usuario user) {
     try {
         URI uri = new URI(API_URL + "/users/forgot-reset");

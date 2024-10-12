@@ -87,8 +87,8 @@ public class FazerDownloadController {
     @FXML
     private Label lb_preco;
 
-    @FXML
-    private Label lb_preco1;
+//    @FXML
+//    private Label lb_preco1;
 
     @FXML
     private VBox panel_comentarios;
@@ -114,33 +114,62 @@ public class FazerDownloadController {
     
     public String appfile; 
 
-    public void loadDownloadPageContent(AppModelDetails app) {
-        ImageView formatedImage = new ImageView();
-        img_icon.setImage(new Image(app.getIcon()));
-        lb_Nome.setText(app.getNome());
-        List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
-         appfile = app.getAppFilePath();
-        img_shot_1.setImage(new Image(imagePaths.get(0)));
-        img_shot_2.setImage(new Image(imagePaths.get(1)));
-        img_shot_3.setImage(new Image(imagePaths.get(2)));
-        img_shot_4.setImage(new Image(imagePaths.get(3)));
-        lb_DescricaoLonga.setText(app.getDescription());
-        lb_politicsLongo.setText(app.getPolitics());
-        lb_developerName.setText(app.getDeveloperName());
+public void loadDownloadPageContent(AppModelDetails app) {
+    // Limpa o conteúdo anterior
+    clearPreviousContent();
 
-        img_icon.setOpacity(1.0);
-        img_shot_1.setOpacity(1.0);
-        img_shot_2.setOpacity(1.0);
-        img_shot_3.setOpacity(1.0);
-        img_shot_4.setOpacity(1.0);
+    // Carrega os novos dados do aplicativo
+    img_icon.setImage(new Image(app.getIcon()));
+    lb_Nome.setText(app.getNome());
 
-        if (app.getPreco() == 0.0f) {
-            lb_preco.setText("Grátis");
-            lb_preco1.setText("");
-        } else {
-            lb_preco.setText(Float.toString((float) app.getPreco()));
-        }
+    List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
+    appfile = app.getAppFilePath();
+
+    // Carrega as imagens de captura de tela
+    img_shot_1.setImage(new Image(imagePaths.get(0)));
+    img_shot_2.setImage(new Image(imagePaths.get(1)));
+    img_shot_3.setImage(new Image(imagePaths.get(2)));
+    img_shot_4.setImage(new Image(imagePaths.get(3)));
+
+    // Outros dados do app
+    lb_DescricaoLonga.setText(app.getDescription());
+    lb_politicsLongo.setText(app.getPolitics());
+    lb_developerName.setText(app.getDeveloperName());
+
+    // Torna as imagens visíveis (caso necessário)
+    img_icon.setOpacity(1.0);
+    img_shot_1.setOpacity(1.0);
+    img_shot_2.setOpacity(1.0);
+    img_shot_3.setOpacity(1.0);
+    img_shot_4.setOpacity(1.0);
+
+    // Define o preço
+    if (app.getPreco() == 0.0f) {
+        lb_preco.setText("Grátis");
+    } else {
+        lb_preco.setText(Float.toString((float) app.getPreco()));
     }
+}
+
+// Método para limpar os campos da interface
+public void clearPreviousContent() {
+    img_icon.setImage(null);
+    lb_Nome.setText("");
+    img_shot_1.setImage(null);
+    img_shot_2.setImage(null);
+    img_shot_3.setImage(null);
+    img_shot_4.setImage(null);
+    lb_DescricaoLonga.setText("");
+    lb_politicsLongo.setText("");
+    lb_developerName.setText("");
+    lb_preco.setText("");
+    img_icon.setOpacity(0.0);
+    img_shot_1.setOpacity(0.0);
+    img_shot_2.setOpacity(0.0);
+    img_shot_3.setOpacity(0.0);
+    img_shot_4.setOpacity(0.0);
+}
+
 
     @FXML
     void On_add_icon_click(MouseEvent event) {
@@ -194,7 +223,7 @@ void On_bt_baixar_pressed(ActionEvent event) {
     // Ocultar os botões e rótulos
     bt_Baixar.setVisible(false);
     lb_preco.setVisible(false);
-    lb_preco1.setVisible(false);
+//    lb_preco1.setVisible(false);
     
     // Mostrar a barra de progresso
     progressBar.setVisible(true);
