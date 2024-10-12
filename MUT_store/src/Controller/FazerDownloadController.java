@@ -1,8 +1,12 @@
 package Controller;
 
 import Model.AppModelDetails;
+import Model.Usuario;
 import Models.Api.App;
+import static Models.Api.User.userInfo;
 import View.MainStage;
+import static View.MainStage.changeScene;
+import static View.MainStage.getController;
 import java.util.List;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -190,13 +194,23 @@ public void clearPreviousContent() {
              }
     }
 
-    @FXML
+     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
- try {
-             MainStage.changeScene("MenuPrincipal");
-          } catch (Exception ex) {
-             ex.printStackTrace();
-             }
+        MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
+        Usuario user = userInfo();
+        if (user != null) {
+            // Definir o nome do usuário no controlador da tela principal
+            menuController.setLb_NomeDoUsuario(user.getName());
+            menuController.setUser(user);// Atualiza o Label com o nome do usuário
+            menuController.appshome();
+
+        } else {
+            // Lidar com o erro se o usuário não foi encontrado
+            System.err.println("Erro ao buscar informações do usuário.");
+        }
+
+        changeScene("MenuPrincipal");
+
     }
 
     @FXML

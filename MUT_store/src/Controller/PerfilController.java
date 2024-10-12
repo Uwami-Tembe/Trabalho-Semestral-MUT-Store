@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Usuario;
 import View.MainStage;
 import java.io.File;
 import java.io.IOException;
@@ -115,6 +116,17 @@ public class PerfilController {
     void on_panel_profile_click(MouseEvent event) {
 
     }
+    
+    public void setInfoOfUser(Usuario user){
+    lb_NomeDoUsuario.setText(user.getName());
+    lb_mail.setText(user.getEmail());
+    lb_numeroDeTelefone.setText(user.getMobileNumber());
+    
+    }
+    
+    
+    
+    
     
         private String handleOpenImage(ImageView imgv){
         FileChooser fileChooser = new FileChooser();

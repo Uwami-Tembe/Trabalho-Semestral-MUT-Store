@@ -3,6 +3,7 @@ package Controller;
 import Model.AppModel;
 import Model.AppModelSummary;
 import Model.AppModelDetails;
+import Model.Usuario;
 import Models.Api.App;
 import View.MainStage;
 import java.util.logging.Logger;
@@ -75,7 +76,20 @@ public class MenuPrincipalController {
     @FXML
     private TextField txt_pesquisa;
     
+    private Usuario user = new Usuario();
 
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+    
+
+    
+    
+    
     public Label getLb_NomeDoUsuario() {
         return lb_NomeDoUsuario;
     }
@@ -153,7 +167,12 @@ public class MenuPrincipalController {
 
 @FXML
 void On_bt_Loja_pressed(ActionEvent event) {
-    changeScene("Carregando"); // Mostra a tela de carregamento
+appshome();
+}
+
+
+public void appshome(){
+ changeScene("Carregando"); // Mostra a tela de carregamento
 
     // Adicionar uma pequena pausa para simular o tempo de carregamento
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
@@ -184,7 +203,6 @@ void On_bt_Loja_pressed(ActionEvent event) {
     });
     pause.play();
 }
-
 
 // Método para mostrar um alerta de erro
 private void showError(String message) {
@@ -326,6 +344,8 @@ void on_panel_profile_click(MouseEvent event) {  // Mudando para MouseEvent
     try {
         pause.setOnFinished(e -> {
             try {
+                PerfilController pc = (PerfilController) getController("Perfil");
+                pc.setInfoOfUser(user);
                 MainStage.changeScene("Perfil");
             } catch (Exception ex) {
                 ex.printStackTrace();

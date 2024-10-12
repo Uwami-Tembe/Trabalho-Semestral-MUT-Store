@@ -3,8 +3,10 @@ package Controller;
 import Model.Usuario;
 import Models.Api.Response;
 import Models.Api.User;
+import static Models.Api.User.userInfo;
 import View.MainStage;
 import static View.MainStage.changeScene;
+import static View.MainStage.getController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
@@ -145,7 +147,15 @@ private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
     pause.setOnFinished(e -> {
         try {
             // Troca de cena para uma tela de menu ou próximo passo
-      changeScene("MenuPrincipal");
+            Usuario user = userInfo();
+            
+            if(user != null){
+                
+            MenuPrincipalController mpc = (MenuPrincipalController) getController("MenuPrincipal");
+            mpc.setUser(user);
+            mpc.setLb_NomeDoUsuario(user.getName());
+            }
+         changeScene("MenuPrincipal"); 
         } catch (Exception ex) {
             ex.printStackTrace();
         }

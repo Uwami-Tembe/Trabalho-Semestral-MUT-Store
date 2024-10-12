@@ -13,7 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Classe responsável pelas operações da API relacionadas ao usuário.
@@ -142,6 +145,54 @@ public static Usuario userInfo() {
         return null; // Ou lançar uma exceção
     }
 }
+
+public static ObservableList<Usuario> carregarUsuariosDaAPI() {
+    ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
+    
+    try {
+        // Carregar o token do arquivo token.txt
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token não encontrado ou inválido.");
+            return listaUsuarios; // Retorna uma lista vazia
+        }
+
+        URI uri = new URI(API_URL + "/users/list-all");
+
+        // Criando a requisição GET com o token Bearer
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adicionando o token no cabeçalho
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processa a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            // Supondo que a resposta contenha uma lista de usuários no campo "users"
+            List<Map<String, Object>> usersList = (List<Map<String, Object>>) responseMap.get("users");
+            
+            for (Map<String, Object> userMap : usersList) {
+               
+                // Convertendo cada entrada da lista em um objeto Usuario
+                Usuario user = objectMapper.convertValue(userMap, Usuario.class);
+                listaUsuarios.add(user); // Adiciona o usuário à lista
+            }
+        } else {
+            System.err.println("Erro na requisição: " + responseMap.get("msg"));
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return listaUsuarios; // Retorna a lista de usuários (vazia se ocorreu algum erro)
+}
+
 
     
 public static Response forgotPassword(Usuario user) {

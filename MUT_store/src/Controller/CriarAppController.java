@@ -1,10 +1,13 @@
 package Controller;
 
 import Model.AppModel;
+import Model.Usuario;
 import Models.Api.App;
 import Models.Api.Response;
+import static Models.Api.User.userInfo;
 import View.MainStage;
 import static View.MainStage.changeScene;
+import static View.MainStage.getController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,8 +31,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
-
-
 
 public class CriarAppController {
 
@@ -153,17 +154,18 @@ public class CriarAppController {
     public String imgPath2;
     public String imgPath3;
     public String imgPath4;
-   // Constantes para tipos de arquivos
+    // Constantes para tipos de arquivos
     private static final String[] IMAGE_EXTENSIONS = {"*.png", "*.jpg", "*.jpeg", "*.PNG", "*.JPG", "*.JPEG"};
     private static final String[] FILE_EXTENSIONS = {"*.apk", "*.exe", "*.APK", "*.EXE"};
     private static final double IMAGE_OPACITY_DEFAULT = 0.4;
     private static final double IMAGE_OPACITY_ACTIVE = 1.0;
     private static final double DELAY_SECONDS = 1.2;
+
     public void mostrarMensagemErro(String S) {
         JOptionPane.showMessageDialog(null, S);
     }
 
-    private void exibirMensagemSucesso(String mensagemSucesso) throws Exception { 
+    private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
         JOptionPane.showMessageDialog(null, mensagemSucesso);
 
     }
@@ -176,7 +178,7 @@ public class CriarAppController {
 
     public static List<AppModel> appList = new ArrayList();
 
-     @FXML
+    @FXML
     void On_add_file_click(MouseEvent event) {
         filePath = handleFileSelection(img_file, FILE_EXTENSIONS);
     }
@@ -213,10 +215,20 @@ public class CriarAppController {
 
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws Exception {
+        MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
+        Usuario user = userInfo();
+        if (user != null) {
+            // Definir o nome do usuário no controlador da tela principal
+            menuController.setLb_NomeDoUsuario(user.getName());
+            menuController.setUser(user);// Atualiza o Label com o nome do usuário
+            menuController.appshome();
+
+        } else {
+            // Lidar com o erro se o usuário não foi encontrado
+            System.err.println("Erro ao buscar informações do usuário.");
+        }
 
         changeScene("MenuPrincipal");
-        setMenuController(m);
-        m.updateMenu();
 
     }
 
@@ -235,73 +247,70 @@ public class CriarAppController {
 
     }
 
-@FXML
-void On_bt_upload_pressed(ActionEvent event) {
-    // Validação dos campos obrigatórios antes de criar o AppModel
-    if (txt_appNome.getText().isEmpty() || txt_appPreco.getText().isEmpty() || iconPath.isEmpty() || filePath.isEmpty()) {
-        mostrarMensagemErro("Por favor, preencha todos os campos obrigatórios e selecione os arquivos.");
-        return;
-    }
-
-    // Verificar se o preço é um número válido
-    float preco;
-    try {
-        preco = Float.parseFloat(txt_appPreco.getText());
-    } catch (NumberFormatException e) {
-        mostrarMensagemErro("Preço inválido. Insira um valor numérico.");
-        return;
-    }
-
-    // Verificar se os arquivos existem
-    File iconFile = new File(iconPath);
-    if (!iconFile.exists()) {
-        mostrarMensagemErro("O ícone selecionado não existe.");
-        return;
-    }
-
-    File appFile = new File(filePath);
-    if (!appFile.exists()) {
-        mostrarMensagemErro("O arquivo do aplicativo selecionado não existe.");
-        return;
-    }
-
-    // Verificar as capturas de tela (opcional)
-    File img1 = new File(imgPath1);
-    File img2 = new File(imgPath2);
-    File img3 = new File(imgPath3);
-    File img4 = new File(imgPath4);
-    if (!img1.exists() || !img2.exists() || !img3.exists() || !img4.exists()) {
-        mostrarMensagemErro("Uma ou mais capturas de tela não existem.");
-        return;
-    }
-
-    // Criar o AppModel com os dados e os ficheiros selecionados
-    AppModel novaApp = new AppModel(iconFile, txt_appNome.getText(), preco, img1, img2, img3, img4,
-            txt_appDetalhes.getText(), txt_appPolitics.getText(), txt_appNome.getText(),
-            checB_card.isSelected(), checkB_mpesaeEmola.isSelected(), checkB_mpesaeEmola.isSelected(), appFile);
-
-    try {
-        // Fazer o upload da nova app para a API
-        Response res = App.adicionarApp(novaApp);
-
-        if (res.getError_code() == 0) {
-            exibirMensagemSucesso(res.getMsg());
-        // Limpa o formulário após o sucesso
-        } else {
-            mostrarMensagemErro(res.getMsg());
+    @FXML
+    void On_bt_upload_pressed(ActionEvent event) {
+        // Validação dos campos obrigatórios antes de criar o AppModel
+        if (txt_appNome.getText().isEmpty() || txt_appPreco.getText().isEmpty() || iconPath.isEmpty() || filePath.isEmpty()) {
+            mostrarMensagemErro("Por favor, preencha todos os campos obrigatórios e selecione os arquivos.");
+            return;
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
-    }
 
-    // Atualiza a lista de aplicativos localmente
-}
+        // Verificar se o preço é um número válido
+        float preco;
+        try {
+            preco = Float.parseFloat(txt_appPreco.getText());
+        } catch (NumberFormatException e) {
+            mostrarMensagemErro("Preço inválido. Insira um valor numérico.");
+            return;
+        }
+
+        // Verificar se os arquivos existem
+        File iconFile = new File(iconPath);
+        if (!iconFile.exists()) {
+            mostrarMensagemErro("O ícone selecionado não existe.");
+            return;
+        }
+
+        File appFile = new File(filePath);
+        if (!appFile.exists()) {
+            mostrarMensagemErro("O arquivo do aplicativo selecionado não existe.");
+            return;
+        }
+
+        // Verificar as capturas de tela (opcional)
+        File img1 = new File(imgPath1);
+        File img2 = new File(imgPath2);
+        File img3 = new File(imgPath3);
+        File img4 = new File(imgPath4);
+        if (!img1.exists() || !img2.exists() || !img3.exists() || !img4.exists()) {
+            mostrarMensagemErro("Uma ou mais capturas de tela não existem.");
+            return;
+        }
+
+        // Criar o AppModel com os dados e os ficheiros selecionados
+        AppModel novaApp = new AppModel(iconFile, txt_appNome.getText(), preco, img1, img2, img3, img4,
+                txt_appDetalhes.getText(), txt_appPolitics.getText(), txt_appNome.getText(),
+                checB_card.isSelected(), checkB_mpesaeEmola.isSelected(), checkB_mpesaeEmola.isSelected(), appFile);
+
+        try {
+            // Fazer o upload da nova app para a API
+            Response res = App.adicionarApp(novaApp);
+
+            if (res.getError_code() == 0) {
+                exibirMensagemSucesso(res.getMsg());
+                // Limpa o formulário após o sucesso
+            } else {
+                mostrarMensagemErro(res.getMsg());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
+        }
+
+        // Atualiza a lista de aplicativos localmente
+    }
 
 // Função para limpar o formulário após o upload bem-sucedido
-
-
-
     @FXML
     void On_img_delete_shots_click(MouseEvent event) {
         ImageView defaultImage = new ImageView("/View/Login/imagens/image-icon.png");
@@ -315,64 +324,65 @@ void On_bt_upload_pressed(ActionEvent event) {
         img_shot_3.setOpacity(0.4);
         img_shot_4.setOpacity(0.4);
     }
-public String handleFileSelection(ImageView imgView, String[] extensions) {
-    // Verifica se o ImageView é nulo
-    if (imgView == null || imgView.getScene() == null) {
-        showAlert("Erro", "ImageView ou cena não podem ser nulos.");
-        return null;
-    }
-    
-    // Verifica se as extensões são válidas
-    if (extensions == null || extensions.length == 0) {
-        showAlert("Erro", "Nenhuma extensão válida foi fornecida.");
-        return null;
-    }
 
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos de Imagem", extensions));
-
-    // Verifica se lastDirectory é um diretório válido
-    if (lastDirectory != null && lastDirectory.exists() && lastDirectory.isDirectory()) {
-        fileChooser.setInitialDirectory(lastDirectory);
-    } else {
-        System.out.println("Diretório inicial inválido ou não definido.");
-    }
-
-    Stage stage = (Stage) imgView.getScene().getWindow();
-    File selectedFile = fileChooser.showOpenDialog(stage);
-
-    if (selectedFile != null) {
-        try {
-            // Verifica se o arquivo é legível
-            if (Files.isReadable(selectedFile.toPath())) {
-                lastDirectory = selectedFile.getParentFile();  // Atualiza lastDirectory
-                imgView.setImage(new Image(selectedFile.toURI().toString()));  // Define a imagem no ImageView
-                imgView.setOpacity(IMAGE_OPACITY_ACTIVE);  // Define a opacidade
-
-                // Retorna o caminho completo normalizado
-                String fullPath = selectedFile.getAbsolutePath();
-                System.out.println("Arquivo selecionado: " + fullPath);
-                return fullPath;
-            } else {
-                showAlert("Erro", "Acesso negado ao arquivo: " + selectedFile.getAbsolutePath());
-            }
-        } catch (SecurityException e) {
-            showAlert("Erro", "Problema de permissão ao acessar o arquivo: " + e.getMessage());
-            e.printStackTrace();
+    public String handleFileSelection(ImageView imgView, String[] extensions) {
+        // Verifica se o ImageView é nulo
+        if (imgView == null || imgView.getScene() == null) {
+            showAlert("Erro", "ImageView ou cena não podem ser nulos.");
+            return null;
         }
-    } else {
-        System.out.println("Nenhum arquivo foi selecionado.");
-    }
 
-    return null;
-}
+        // Verifica se as extensões são válidas
+        if (extensions == null || extensions.length == 0) {
+            showAlert("Erro", "Nenhuma extensão válida foi fornecida.");
+            return null;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Arquivos de Imagem", extensions));
+
+        // Verifica se lastDirectory é um diretório válido
+        if (lastDirectory != null && lastDirectory.exists() && lastDirectory.isDirectory()) {
+            fileChooser.setInitialDirectory(lastDirectory);
+        } else {
+            System.out.println("Diretório inicial inválido ou não definido.");
+        }
+
+        Stage stage = (Stage) imgView.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            try {
+                // Verifica se o arquivo é legível
+                if (Files.isReadable(selectedFile.toPath())) {
+                    lastDirectory = selectedFile.getParentFile();  // Atualiza lastDirectory
+                    imgView.setImage(new Image(selectedFile.toURI().toString()));  // Define a imagem no ImageView
+                    imgView.setOpacity(IMAGE_OPACITY_ACTIVE);  // Define a opacidade
+
+                    // Retorna o caminho completo normalizado
+                    String fullPath = selectedFile.getAbsolutePath();
+                    System.out.println("Arquivo selecionado: " + fullPath);
+                    return fullPath;
+                } else {
+                    showAlert("Erro", "Acesso negado ao arquivo: " + selectedFile.getAbsolutePath());
+                }
+            } catch (SecurityException e) {
+                showAlert("Erro", "Problema de permissão ao acessar o arquivo: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Nenhum arquivo foi selecionado.");
+        }
+
+        return null;
+    }
 
 // Método auxiliar para exibir alertas
-private void showAlert(String title, String message) {
-    Alert alert = new Alert(AlertType.ERROR);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
-}
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AdminController">
    <children>
       <AnchorPane prefHeight="811.0" prefWidth="1201.0">
          <children>
@@ -62,8 +62,10 @@
             </TableView>
             <TableView fx:id="tabela_users" layoutX="714.0" layoutY="108.0" prefHeight="284.0" prefWidth="432.0">
                <columns>
-                  <TableColumn fx:id="ColunaNomeDoUser" prefWidth="212.64111328125" text="Nome de usuário" />
-                  <TableColumn fx:id="ColunaDataUser" prefWidth="219.35882568359375" text="Data de requisição" />
+                  <TableColumn fx:id="ColunaNomeDoUser" prefWidth="112.0" text="Username" />
+                  <TableColumn fx:id="ColunaTipoUser" minWidth="0.0" prefWidth="132.0" text="Tipo" />
+                  <TableColumn fx:id="ColunaDataUser" maxWidth="193.0" minWidth="0.0" prefWidth="94.0" text="Data" />
+                  <TableColumn fx:id="ColunaStatusUser" maxWidth="193.0" minWidth="0.0" prefWidth="94.0" text="Status" />
                </columns>
             </TableView>
             <Label layoutX="714.0" layoutY="58.0" prefHeight="32.0" prefWidth="229.0" text="Usuários pendentes" textFill="#517983">
@@ -175,7 +177,7 @@
                   <Font name="System Bold" size="19.0" />
                </font>
             </Label>
-            <Label fx:id="lb_username" layoutX="952.0" layoutY="421.0" prefHeight="28.0" prefWidth="101.0" text="uesername" textFill="#517983">
+            <Label fx:id="lb_username" layoutX="952.0" layoutY="421.0" prefHeight="28.0" prefWidth="101.0" text="username" textFill="#517983">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>

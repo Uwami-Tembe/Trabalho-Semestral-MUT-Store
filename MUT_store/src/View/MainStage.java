@@ -2,6 +2,7 @@
 package View;
 
 import static Constants.Constants.TOKEN_FILE_PATH;
+import Controller.AdminController;
 import Controller.CriarAppController;
 import Controller.FazerDownloadController;
 import Controller.MenuPrincipalController;
@@ -29,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.swing.JOptionPane;
 
 public class MainStage extends Application {
     
@@ -156,7 +158,7 @@ public void start(Stage primaryStage) {
         
         adminLoader= new FXMLLoader(getClass().getResource("MenuAdmin.fxml"));
         Parent adminRoot = adminLoader.load();
-        Object adminController = adminLoader.getController();
+        AdminController adminController = adminLoader.getController();
         Scene telaAdmin= new Scene(adminRoot);
         telaAdmin.setUserData("MenuAdmin.fxml");
         registerScene("Admin", telaAdmin, adminController);
@@ -164,26 +166,45 @@ public void start(Stage primaryStage) {
         // Verificar se o arquivo token.txt existe
         File tokenFile = new File(TOKEN_FILE_PATH);
         
-       if (tokenFile.exists()) {
-        // Se o arquivo existir, mostrar a tela do Menu Principal
-        primaryStage.setTitle("MUT Store - Menu Principal");
-        primaryStage.setScene(telaMenu);
+ if (tokenFile.exists()) {
+    // Se o arquivo existir, mostrar a tela do Menu Principal
 
-        // Chama o método userInfo para obter os detalhes do usuário
-       // Chama o método userInfo para obter os detalhes do usuário
-            Usuario user = userInfo();
-            if (user != null) {
-                // Definir o nome do usuário no controlador da tela principal
-                menuController.setLb_NomeDoUsuario(user.getName()); // Atualiza o Label com o nome do usuário
-            } else {
-                // Lidar com o erro se o usuário não foi encontrado
-                System.err.println("Erro ao buscar informações do usuário.");
-            }
+    // Chama o método userInfo para obter os detalhes do usuário
+    Usuario user = userInfo();
+    
+    if (user != null) {
+        // Verifica o tipo de usuário e define a cena adequada
+        if (user.getUserType().equals("admin")) {
+            primaryStage.setTitle("MUT Store - Menu Principal (Admin)");
+            primaryStage.setScene(telaAdmin);
+            
+            adminController.initialize();
+            
+        } else {
+            primaryStage.setTitle("MUT Store - Menu Principal");
+            primaryStage.setScene(telaMenu);
+            
+            //        // Atualiza o controlador do menu com os dados do usuário
+        menuController.setLb_NomeDoUsuario(user.getName()); // Define o nome do usuário
+        menuController.setUser(user); // Atualiza o objeto usuário no controlador
+        menuController.appshome(); // Executa a inicialização da tela do menu
+        }
+
+
+
     } else {
-        // Se o arquivo não existir, mostrar a tela de Login
+        // Caso o usuário não seja encontrado, exibe a tela de login
+        System.err.println("Erro ao buscar informações do usuário.");
         primaryStage.setTitle("MUT Store - Login");
         primaryStage.setScene(telaLogin);
     }
+
+} else {
+    // Se o arquivo não existir, mostra a tela de Login
+    primaryStage.setTitle("MUT Store - Login");
+    primaryStage.setScene(telaLogin);
+}
+
 
         primaryStage.show();
         

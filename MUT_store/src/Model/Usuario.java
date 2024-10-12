@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author Aderito
@@ -16,7 +18,8 @@ public class Usuario {
     private String email;
     private String userType;
     private boolean userStatus;
-
+    private Date posted;
+    private int validated;
     public Usuario(){};
     
     public Usuario(String name, String username, String password, String mobileNumber, String email, String userType) {
@@ -27,12 +30,22 @@ public class Usuario {
         this.email = email;
         this.userType = userType;
         this.userStatus = true;
+        this.validated = 3;
     }
 
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
     }
+
+    public int getValidated() {
+        return validated;
+    }
+
+    public void setValidated(int validated) {
+        this.validated = validated;
+    }
+
     
 
     public boolean isUserStatus() {
@@ -41,6 +54,14 @@ public class Usuario {
 
     public void setUserStatus(boolean userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public Date getPosted() {
+        return posted;
+    }
+
+    public void setPosted(Date posted) {
+        this.posted = posted;
     }
     
 
