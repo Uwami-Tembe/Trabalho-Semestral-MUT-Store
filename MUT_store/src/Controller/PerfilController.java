@@ -65,24 +65,26 @@ public class PerfilController {
     private Pane panel_profile;
 
     @FXML
-    void On_bt_CriarApp_pressed(ActionEvent event) {
-
+    void On_bt_CriarApp_pressed(ActionEvent event) throws IOException {
+           MainStage.resetScene("CriarApp", "CriarApp.fxml");
+            MainStage.defineGroupForNewAppRadios();
+            MainStage.goTo("CriarApp");
     }
 
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) throws IOException {
-        MainStage.resetScene("MenuPrincipal", "MenuPrincipal.fxml");
+        
         MainStage.goTo("MenuPrincipal");
     }
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-
+        MainStage.goTo("Sobre");
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
-
+         MainStage.goTo("Settings");
     }
 
     @FXML

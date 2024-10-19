@@ -191,17 +191,17 @@ public class MenuPrincipalController {
     
     @FXML
     void On_bt_Loja_pressed(ActionEvent event) {
-        updateMenu(CriarAppController.appList);
+       
     }
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-        
+        MainStage.goTo("Sobre");
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
-
+        MainStage.goTo("Settings");
     }
 
     @FXML

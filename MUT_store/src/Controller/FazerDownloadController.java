@@ -1,14 +1,9 @@
 package Controller;
 
-import Model.AppModel;
 import View.MainStage;
-import com.sun.javafx.font.FontConstants;
 import java.io.IOException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -16,12 +11,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.util.Duration;
-import javax.swing.JOptionPane;
 
 public class FazerDownloadController {
 
@@ -173,17 +164,18 @@ public class FazerDownloadController {
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-
+         MainStage.goTo("Sobre");
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
-
+        MainStage.goTo("Settings");
     }
 
     @FXML
-    void On_bt_sair_pressed(ActionEvent event) {
-
+    void On_bt_sair_pressed(ActionEvent event) throws IOException {
+        MainStage.resetScene("TelaLogin", "LoginDesign.fxml");
+        MainStage.goTo("TelaLogin");
     }
        /* Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.8),e->{
         

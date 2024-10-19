@@ -14,15 +14,8 @@ import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -43,6 +36,8 @@ public class MainStage extends Application {
     public FXMLLoader ErroLoader;
     public FXMLLoader PerfilLoader;
     public FXMLLoader adminLoader;
+    public FXMLLoader settingsLoader;
+    public FXMLLoader sobreLoader;
    
     public static Stage primaryStage;
     
@@ -155,6 +150,20 @@ public class MainStage extends Application {
         Scene telaAdmin= new Scene(adminRoot);
         telaAdmin.setUserData("MenuAdmin.fxml");
         registerScene("Admin", telaAdmin, adminController);
+       
+        settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent settingsRoot = settingsLoader.load();
+        Object settingsController=settingsLoader.getController();
+        Scene telaSettings= new Scene(settingsRoot);
+        telaSettings.setUserData("Settings.fxml");
+        registerScene("Settings", telaSettings, settingsController);
+        
+        sobreLoader= new FXMLLoader(getClass().getResource("Sobre.fxml"));
+        Parent sobreRoot = sobreLoader.load();
+        Object sobreController=sobreLoader.getController();
+        Scene telaSobre= new Scene(sobreRoot);
+        telaSettings.setUserData("Sobre.fxml");
+        registerScene("Sobre", telaSobre, sobreController );
 
         primaryStage.setTitle("MUT Store");
         primaryStage.setScene(telaLogin);

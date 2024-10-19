@@ -195,16 +195,17 @@ public class CriarAppController {
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-
+         MainStage.goTo("Sobre");
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
-
+        MainStage.goTo("Settings");
     }
 
     @FXML
-    void On_bt_sair_pressed(ActionEvent event) {
+    void On_bt_sair_pressed(ActionEvent event) throws IOException {
+        MainStage.resetScene("TelaLogin", "LoginDesign.fxml");
         MainStage.goTo("TelaLogin");
     }
 
