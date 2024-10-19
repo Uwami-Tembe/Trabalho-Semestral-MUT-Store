@@ -10,7 +10,65 @@
 <project name="MUT_store" default="default" basedir=".">
     <description>Builds, tests, and runs the project MUT_store.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--
+
+
+
+     <!-- Diretórios -->
+     <property name="src.dir" location="src"/>
+     <property name="build.dir" location="build"/>
+     <property name="lib.dir" location="lib"/>
+     <property name="dist.dir" location="dist"/>
+     <property name="javafx.dir" location="lib\javaFX\lib"/> 
+     <property name="main-class" value="View.MainStage"/> <!-- Troque pela sua classe principal -->
+   
+   
+ <!-- Limpa a pasta build -->
+ <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+</target>
+
+
+<!-- Compila o código-fonte -->
+
+
+<target name="compile" depends="clean">
+    <echo message="Path to lib.dir: ${lib.dir}"/>
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}">
+        <classpath>
+            <fileset dir="${lib.dir}" includes="*.jar"/>
+            <fileset dir="${javafx.dir}" includes="*.jar"/>
+        </classpath>
+    </javac>
+    <copy todir="${build.dir}">
+        <fileset dir="${src.dir}">
+            <include name="**/*.fxml"/>
+            <include name="**/*.css"/>
+            <include name="**/*.png"/>
+            <include name="**/*.jpg"/>
+        </fileset>
+    </copy>
+</target>
+
+
+
+
+     <!-- Cria o JAR executável com todas as dependências -->
+     <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/MutStore.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Class-Path" value="${lib.dir}/*.jar ${javafx.dir}/*.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+     <!--
+
+        
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 

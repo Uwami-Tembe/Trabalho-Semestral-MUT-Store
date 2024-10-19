@@ -5,10 +5,13 @@ import static Constants.Constants.TOKEN_FILE_PATH;
 import Model.AppModel;
 import Model.AppModelSummary;
 import Model.AppModelDetails;
+import Model.Comment;
+import static Models.Api.User.readTokenFromFile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,10 +19,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.apache.http.HttpResponse;
+
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -29,6 +37,7 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import org.apache.http.HttpEntity;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -49,7 +58,15 @@ public class App {
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    
+        // Método para ler o token do arquivo
+    public static String readTokenFromFile() {
+        try {
+            return new String(Files.readAllBytes(Paths.get(TOKEN_FILE_PATH)));
+        } catch (IOException e) {
+            return null; // Não reporta erro, pois isso não deve aparecer na resposta
+        }
+    }
+
 
 public static Task<Void> downloadFile(String fileURL, String savePath) {
         return new Task<>() {
@@ -190,44 +207,294 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
         return new ArrayList<>(); // Retorna uma lista vazia em caso de exceção
     }
 }
-
-public static AppModelDetails buscarDetalhesApp(String appId) {
+  
+public static boolean buyAppCarteira(String msisdn, String appId) {
     try {
-        System.out.println("Buscando detalhes para o appId: " + appId);
-        URI uri = new URI(API_URL + "/apps/moreInfo/" + appId);
+          String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            JOptionPane.showMessageDialog(null,"Token não encontrado ou inválido.");
+            return false; // Retorna uma lista vazia
+        }
+
+        // Cria a URI para a requisição POST
+        URI uri = new URI(API_URL + "/apps/purchase/app");
+
+        // Cria o objeto JSON para o corpo da requisição
+        ObjectNode requestBody = objectMapper.createObjectNode();
+        requestBody.put("msisdn", msisdn);
+        requestBody.put("appId", appId);
+        requestBody.put("paymentOption", "Mpesa");
+
+        // Cria a requisição POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adicionando o token no cabeçalho
+                .header("Content-Type", "application/json") // Define o cabeçalho do tipo de conteúdo
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString())) // Envia o corpo da requisição
+                .build();
+
+        // Envia a requisição e obtém a resposta
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // Verifica se a resposta é um erro
+        if (response.statusCode() != 201) { // Verifica o código de status da resposta (201 para sucesso)
+            JsonNode errorNode = objectMapper.readTree(response.body());
+            int errorCode = errorNode.path("code").asInt();
+            String errorMessage = errorNode.path("message").asText();
+            System.err.println("Erro na API: " + errorMessage);
+            
+            // Exibe a mensagem de erro ao usuário
+            JOptionPane.showMessageDialog(null, errorMessage, "Erro", JOptionPane.ERROR_MESSAGE);
+            return false; // Retorna false em caso de erro
+        }
+
+        System.out.println(response.body());
+        // Mapeia a resposta JSON para um objeto apropriado
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        
+        // Aqui você pode processar a resposta, se necessário, ou apenas retornar true
+        return true; // Retorna true se a compra foi bem-sucedida
+
+    } catch (Exception e) {
+        System.err.println("Erro ao comprar aplicativo: " + e.getMessage());
+        
+        // Exibe a mensagem de erro ao usuário
+        JOptionPane.showMessageDialog(null, "Erro ao comprar aplicativo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        return false; // Retorna false em caso de exceção
+    }
+}
+
+public static Boolean comentarApp(String appId, String comentario) {
+ // Lista para armazenar os comentários
+    try {
+        // Lê o token salvo no arquivo
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Token não encontrado ou inválido.");
+            return false; // Retorna lista vazia se o token não for encontrado
+        }
+
+        // Cria a URI para a requisição POST de comentário
+        URI uri = new URI(API_URL + "/users/comment/app");
+
+        // Cria o corpo da requisição como um objeto JSON
+        ObjectNode requestBody = objectMapper.createObjectNode();
+        requestBody.put("appId", appId);
+        requestBody.put("comment", comentario); // Corrigido para 'comment'
+
+        // Cria a requisição POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adiciona o token no cabeçalho
+                .header("Content-Type", "application/json") // Define o cabeçalho do tipo de conteúdo
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString())) // Envia o corpo da requisição
+                .build();
+
+        // Envia a requisição e obtém a resposta
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // Verifica se a resposta é um erro
+        if (response.statusCode() != 200) { // Código 201 para sucesso
+            JsonNode errorNode = objectMapper.readTree(response.body());
+            int errorCode = errorNode.path("code").asInt();
+            String errorMessage = errorNode.path("message").asText();
+            System.err.println("Erro ao comentar no app: " + errorMessage);
+            
+            // Exibe a mensagem de erro ao usuário
+            JOptionPane.showMessageDialog(null, errorMessage, "Erro", JOptionPane.ERROR_MESSAGE);
+            return false; // Retorna lista vazia em caso de erro
+        }
+
+        // Exibe a resposta do corpo da requisição (opcional)
+        System.out.println("Resposta do servidor: " + response.body());
+
+        // Processa a resposta JSON
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        // Aqui você deve mapear a resposta para a lista de comentários
+//        for (JsonNode commentNode : jsonResponse.path("data")) {
+//            Comment comment = new Comment(); // Supondo que você tenha uma classe Comment
+//            comment.setAppId(commentNode.path("appId").asLong());
+//            comment.setUsername(commentNode.path("username").asText());
+//            comment.setComment(commentNode.path("comment").asText());
+//            comment.setCreatedAt(commentNode.path("createdAt").asText()); // Ou usar LocalDateTime conforme o seu modelo
+//            commentsList.add(comment); // Adiciona o comentário à lista
+//        }
+
+        return true; // Retorna a lista de comentários
+
+    } catch (Exception e) {
+        System.err.println("Erro ao comentar no app: " + e.getMessage());
+        
+        // Exibe a mensagem de erro ao usuário
+        JOptionPane.showMessageDialog(null, "Erro ao comentar no app: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        return false; // Retorna lista vazia em caso de exceção
+    }
+}
+
+public static List<Comment> listarComentariosApp(String appId) {
+    List<Comment> commentsList = new ArrayList<>(); // Lista para armazenar os comentários
+    try {
+        // Lê o token salvo no arquivo
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Token não encontrado ou inválido.");
+            return commentsList; // Retorna lista vazia se o token não for encontrado
+        }
+
+        // Cria a URI para a requisição GET para listar comentários
+        URI uri = new URI(API_URL + "/users/comments/"+appId);
+
+        // Cria a requisição GET
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adiciona o token no cabeçalho
+                .header("Content-Type", "application/json") // Define o cabeçalho do tipo de conteúdo
+                .GET() // Define o método como GET
+                .build();
+
+        // Envia a requisição e obtém a resposta
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // Verifica se a resposta é um erro
+        if (response.statusCode() != 200) { // Código 200 para sucesso
+            JsonNode errorNode = objectMapper.readTree(response.body());
+            int errorCode = errorNode.path("code").asInt();
+            String errorMessage = errorNode.path("message").asText();
+            System.err.println("Erro ao listar comentários do app: " + errorMessage);
+            
+            // Exibe a mensagem de erro ao usuário
+            JOptionPane.showMessageDialog(null, errorMessage, "Erro", JOptionPane.ERROR_MESSAGE);
+            return commentsList; // Retorna lista vazia em caso de erro
+        }
+
+        // Exibe a resposta do corpo da requisição (opcional)
+        System.out.println("Resposta do servidor: " + response.body());
+
+        // Processa a resposta JSON
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        // Aqui você deve mapear a resposta para a lista de comentários
+        for (JsonNode commentNode : jsonResponse.path("data")) {
+            Comment comment = new Comment(); // Supondo que você tenha uma classe Comment
+            comment.setAppId(commentNode.path("appId").asLong());
+            comment.setUsername(commentNode.path("username").asText());
+            comment.setComment(commentNode.path("comment").asText());
+            comment.setCreatedAt(commentNode.path("createdAt").asText()); // Ou usar LocalDateTime conforme o seu modelo
+            commentsList.add(comment); // Adiciona o comentário à lista
+        }
+
+        return commentsList; // Retorna a lista de comentários
+
+    } catch (Exception e) {
+        System.err.println("Erro ao listar comentários do app: " + e.getMessage());
+        
+        // Exibe a mensagem de erro ao usuário
+        JOptionPane.showMessageDialog(null, "Erro ao listar comentários do app: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        return commentsList; // Retorna lista vazia em caso de exceção
+    }
+}
+
+  
+public static List<AppModelSummary> buscarApps(String key) {
+    try {
+        // Constrói a URI com o parâmetro de pesquisa `key`
+        String searchUrl = API_URL + "/apps/search?keyword=" + URLEncoder.encode(key, StandardCharsets.UTF_8);
+        URI uri = new URI(searchUrl);
+
+        // Constrói a solicitação HTTP
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
                 .build();
 
+        // Envia a solicitação e captura a resposta
         var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
 
-        // Verifica se a resposta é um erro
+        // Verifica se a resposta contém um erro
         if (response.statusCode() != 200) {
             JsonNode errorNode = objectMapper.readTree(response.body());
             int errorCode = errorNode.path("code").asInt();
             String errorMessage = errorNode.path("message").asText();
             System.err.println("Erro na API: " + errorMessage);
-            return null; // Retorna null em caso de erro
+            return new ArrayList<>(); // Retorna uma lista vazia em caso de erro
         }
 
-        System.out.println("Response Body: " + response.body()); // Para depuração
+        // Exibe o corpo da resposta (para debug)
+        System.out.println(response.body());
+
+        // Mapeia a resposta JSON para uma lista de AppModelSummary
         JsonNode jsonResponse = objectMapper.readTree(response.body());
-        JsonNode appNode = jsonResponse.get("app"); // Verifica a existência do campo "app"
-        
-        if (appNode == null) {
-            System.err.println("Campo 'app' não encontrado na resposta JSON para appId: " + appId);
-            return null; // Retorne null ou faça o tratamento adequado
-        }
+        JsonNode appsNode = jsonResponse.path("apps"); // Supondo que a estrutura JSON mantenha "apps"
 
-        // Deserializar o JSON do app para AppModelDetails
-        return objectMapper.readValue(appNode.toString(), AppModelDetails.class);
+        // Converte o nó "apps" em uma lista de AppModelSummary
+        return objectMapper.readValue(appsNode.toString(), new TypeReference<List<AppModelSummary>>() {});
+
     } catch (Exception e) {
-        System.err.println("Erro ao buscar detalhes do aplicativo para appId: " + appId + " - " + e.getMessage());
-        e.printStackTrace(); // Adiciona mais detalhes da exceção
-        return null; // Retorna null em caso de exceção
+        // Exibe o erro no console e retorna uma lista vazia
+        System.err.println("Erro ao buscar aplicativos: " + e.getMessage());
+        return new ArrayList<>(); // Retorna uma lista vazia em caso de exceção
     }
 }
+
+
+public static AppModelDetails buscarDetalhesApp(String appId) {
+    try {
+        // Ler o token de um arquivo
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Token não encontrado ou inválido.");
+            return null; // Retorna null se o token for inválido
+        }
+
+        // Log para depuração
+        System.out.println("Buscando detalhes para o appId: " + appId);
+        
+        // Constrói a URI para a requisição
+        URI uri = new URI(API_URL + "/apps/moreInfo/" + appId);
+        
+        // Cria a requisição HTTP com o token de autorização
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adiciona o token ao cabeçalho
+                .header("Content-Type", "application/json") // Define o cabeçalho do tipo de conteúdo
+                .GET() // Método GET para obter os dados
+                .build();
+
+        // Envia a requisição e captura a resposta
+        var response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // Verifica se a resposta contém um erro (código diferente de 200)
+        if (response.statusCode() != 200) {
+            JsonNode errorNode = objectMapper.readTree(response.body());
+            int errorCode = errorNode.path("code").asInt(); // Pega o código de erro
+            String errorMessage = errorNode.path("message").asText(); // Pega a mensagem de erro
+            System.err.println("Erro na API (Código " + errorCode + "): " + errorMessage);
+            return null; // Retorna null se houver um erro
+        }
+
+        // Exibe o corpo da resposta para depuração
+        System.out.println("Response Body: " + response.body());
+        
+        // Lê a resposta JSON e verifica a existência do campo 'app'
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+        JsonNode appNode = jsonResponse.get("app"); // Campo "app" que contém os detalhes
+
+        // Verifica se o campo 'app' foi encontrado
+        if (appNode == null) {
+            System.err.println("Campo 'app' não encontrado na resposta JSON para appId: " + appId);
+            return null; // Retorna null se o campo 'app' não existir
+        }
+
+        // Deserializa o campo 'app' para a classe AppModelDetails
+        return objectMapper.readValue(appNode.toString(), AppModelDetails.class);
+        
+    } catch (Exception e) {
+        // Em caso de exceção, exibe o erro e stack trace para depuração
+        System.err.println("Erro ao buscar detalhes do aplicativo para appId: " + appId + " - " + e.getMessage());
+        e.printStackTrace(); // Detalha a exceção no log
+        return null; // Retorna null se ocorrer uma exceção
+    }
+}
+
 
 private static Response adicionarArquivo(MultipartEntityBuilder builder, String campo, File arquivo) {
     if (arquivo == null || !arquivo.exists()) {

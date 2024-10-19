@@ -5,6 +5,8 @@
 package Model;
 
 import java.util.Date;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -20,6 +22,7 @@ public class Usuario {
     private boolean userStatus;
     private Date posted;
     private int validated;
+    private String bi_Url;
     public Usuario(){};
     
     public Usuario(String name, String username, String password, String mobileNumber, String email, String userType) {
@@ -46,8 +49,18 @@ public class Usuario {
         this.validated = validated;
     }
 
-    
+    public String getBI_Url() {
+        return bi_Url;
+    }
 
+    public void setBI_Url(String BI_Url) {
+        this.bi_Url = BI_Url;
+    }
+
+      public Image getImg_BI() {
+        return new Image(bi_Url);
+      }
+    
     public boolean isUserStatus() {
         return userStatus;
     }

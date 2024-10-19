@@ -15,9 +15,28 @@ public class AppModelSummary {
     private String nome;
     @JsonProperty("type")
     private String type;
-
+       @JsonProperty("category")
+    private String category;
+       @JsonProperty("download")
+    private int download;
     public int getAppId() {
         return appId;
+    }
+
+    public int getDownload() {
+        return download;
+    }
+
+    public void setDownload(int download) {
+        this.download = download;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
     
       public String getAppIdString() {

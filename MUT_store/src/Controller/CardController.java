@@ -1,6 +1,8 @@
 package Controller;
 
+import Model.AppModelDetails;
 import View.MainStage;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,10 @@ import javafx.util.Duration;
 
 public class CardController {
 
+    
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     private Button bt_FinalizarCompra;
 
@@ -45,24 +51,34 @@ public class CardController {
     @FXML
     private TextField txt_titular;
 
+    public AppModelDetails app;
 
+    public AppModelDetails getApp() {
+        return app;
+    }
+
+    public void setApp(AppModelDetails app) {
+        this.app = app;
+        this.lb_valorTotal.setText(Double.toString(app.getPreco()));
+    }
 
     @FXML
     void on_bt_FinalizarCompra(ActionEvent event) {//////////////////////////inicio do método
         //Logica de pagamento 
-        
-         MainStage.goTo("Carregando");
-         MainStage.delaySceneWithReset("Sucesso", "Sucesso.fxml",1.2f);
-         MainStage.goTo("Sucesso");
-         MainStage.delaySceneWithoutReset("TelaDownload","FazerDownLoad.fxml",1.2f);
-         //Deposi disso deve iniciar o download
 
-      }/////////////////////////////////////////////////////////////fim do método
+        MainStage.goTo("Carregando");
+        MainStage.delaySceneWithReset("Sucesso", "Sucesso.fxml", 1.2f);
+        MainStage.goTo("Sucesso");
+        MainStage.delaySceneWithoutReset("TelaDownload", "FazerDownLoad.fxml", 1.2f);
+        //Deposi disso deve iniciar o download
+
+    }/////////////////////////////////////////////////////////////fim do método
 
     @FXML
     void on_bt_voltar_pressed(ActionEvent event) {
         MainStage.goTo("PayMetodo");
     }
+
     @FXML
     void hidePassword(MouseEvent event) {
         genericTextField.setManaged(false);
@@ -70,6 +86,7 @@ public class CardController {
         ps_cvv.setManaged(true);
         ps_cvv.setVisible(true);
     }
+
     @FXML
     void showPassword(MouseEvent event) {
         genericTextField.setText(ps_cvv.getText());

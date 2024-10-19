@@ -8,6 +8,7 @@ import static Models.Api.User.userInfo;
 import View.MainStage;
 import static View.MainStage.changeScene;
 import static View.MainStage.getController;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +35,10 @@ import javax.swing.JOptionPane;
 
 public class CriarAppController {
 
+    
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     public Button bt_Upload;
 
@@ -221,7 +226,7 @@ public class CriarAppController {
             // Definir o nome do usuário no controlador da tela principal
             menuController.setLb_NomeDoUsuario(user.getName());
             menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.appshome();
+            menuController.initialize(true);
 
         } else {
             // Lidar com o erro se o usuário não foi encontrado

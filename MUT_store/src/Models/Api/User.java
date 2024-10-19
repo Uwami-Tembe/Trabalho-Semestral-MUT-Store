@@ -10,6 +10,9 @@ import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -38,6 +41,7 @@ public class User {
             requestBody.put("password", user.getPassword());
             requestBody.put("username", user.getUsername());
             requestBody.put("mobileNumber", user.getMobileNumber());
+            requestBody.put("userType", user.getUserType());
 
             String requestBodyJson = objectMapper.writeValueAsString(requestBody);
 
@@ -193,8 +197,126 @@ public static ObservableList<Usuario> carregarUsuariosDaAPI() {
     return listaUsuarios; // Retorna a lista de usuários (vazia se ocorreu algum erro)
 }
 
-
+public static ObservableList<Model.App> carregarAppsDaAPI() {
+    ObservableList<Model.App> listaUsuarios = FXCollections.observableArrayList();
     
+    try {
+        // Carregar o token do arquivo token.txt
+        String token = readTokenFromFile();
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token não encontrado ou inválido.");
+            return listaUsuarios; // Retorna uma lista vazia
+        }
+
+        URI uri = new URI(API_URL + "/apps/list/apps");
+
+        // Criando a requisição GET com o token Bearer
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Authorization", "Bearer " + token) // Adicionando o token no cabeçalho
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+
+        // Enviando a requisição e recebendo a resposta
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Processa a resposta
+        Map<String, Object> responseMap = objectMapper.readValue(response.body(), Map.class);
+        if (response.statusCode() == 200) {
+            // Supondo que a resposta contenha uma lista de usuários no campo "users"
+            List<Map<String, Object>> usersList = (List<Map<String, Object>>) responseMap.get("apps");
+            
+            for (Map<String, Object> userMap : usersList) {
+               
+                // Convertendo cada entrada da lista em um objeto Usuario
+                Model.App user = objectMapper.convertValue(userMap, Model.App.class);
+                listaUsuarios.add(user); // Adiciona o usuário à lista
+            }
+        } else {
+            System.err.println("Erro na requisição: " + responseMap.get("msg"));
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return listaUsuarios; // Retorna a lista de usuários (vazia se ocorreu algum erro)
+}
+
+public static void atualizarStatusUsuario(String username, boolean status) {
+        try {
+            String token = readTokenFromFile();
+            
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token não encontrado ou inválido.");
+            return; // Ou lançar uma exceção, conforme sua preferência
+        }
+
+            URL url = new URL(API_URL + "/users/change-status");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty( "Authorization", "Bearer " + token);
+            conn.setDoOutput(true);
+
+            String jsonInputString = String.format("{\"username\": \"%s\", \"status\": %b}", username, status);
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Sucesso
+                System.out.println("Status do usuário atualizado com sucesso.");
+            } else {
+                // Tratamento de erro
+                System.err.println("Erro ao atualizar status do usuário. Código de resposta: " + responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erro ao enviar requisição à API: " + e.getMessage());
+        }
+    }
+
+public static void atualizarStatusApp(int username, boolean status) {
+        try {
+            String token = readTokenFromFile();
+            
+        if (token == null || token.isEmpty()) {
+            System.err.println("Token não encontrado ou inválido.");
+            return; // Ou lançar uma exceção, conforme sua preferência
+        }
+
+            URL url = new URL(API_URL + "/apps/change-status");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty( "Authorization", "Bearer " + token);
+            conn.setDoOutput(true);
+
+            String jsonInputString = String.format("{\"id\": \"%s\", \"status\": %b}", username, status);
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Sucesso
+                System.out.println("Status do usuário atualizado com sucesso.");
+            } else {
+                // Tratamento de erro
+                System.err.println("Erro ao atualizar status do usuário. Código de resposta: " + responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erro ao enviar requisição à API: " + e.getMessage());
+        }
+    }
+
+
 public static Response forgotPassword(Usuario user) {
     try {
         URI uri = new URI(API_URL + "/users/forgot-reset");

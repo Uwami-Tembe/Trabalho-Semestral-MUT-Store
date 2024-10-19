@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Usuario;
 import View.MainStage;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -17,6 +18,9 @@ import javafx.stage.Stage;
 
 public class PerfilController {
 
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     private Button bt_criarApp;
 

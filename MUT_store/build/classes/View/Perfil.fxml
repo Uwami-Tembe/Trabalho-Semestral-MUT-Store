@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PerfilController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PerfilController">
    <children>
       <AnchorPane prefHeight="811.0" prefWidth="1201.0">
          <children>
@@ -44,12 +44,12 @@
                         <Image url="@Login/imagens/shopping-cart-icon.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="bt_criarApp" layoutX="7.0" layoutY="307.0" mnemonicParsing="false" onAction="#On_bt_CriarApp_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="    Criar" textFill="#517983">
+                  <Button fx:id="bt_criarApp" layoutX="7.0" layoutY="307.0" mnemonicParsing="false" onAction="#On_bt_CriarApp_pressed" prefHeight="50.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="    Criar" textFill="#517983" visible="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="39.0" layoutY="309.0" opacity="0.2" pickOnBounds="true">
+                  <ImageView fx:id="img_IconCriar" fitHeight="43.0" fitWidth="44.0" layoutX="39.0" layoutY="309.0" opacity="0.2" pickOnBounds="true" visible="false">
                      <image>
                         <Image url="@Login/imagens/shopping-bag-add-icon.png" />
                      </image>

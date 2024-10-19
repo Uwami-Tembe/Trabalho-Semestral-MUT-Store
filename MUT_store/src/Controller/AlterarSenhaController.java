@@ -5,6 +5,7 @@ import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
 import static View.MainStage.changeScene;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.animation.PauseTransition;
@@ -22,6 +23,9 @@ import javax.swing.JOptionPane;
 
 public class AlterarSenhaController {
 
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     private Button bt_alterarSenha;
 

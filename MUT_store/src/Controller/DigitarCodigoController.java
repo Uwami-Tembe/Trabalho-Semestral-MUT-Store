@@ -7,6 +7,7 @@ import View.MainStage;
 import static View.MainStage.changeScene;
 import static View.MainStage.getController;
 import static View.MainStage.getScene;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,9 @@ public class DigitarCodigoController {
 
     @FXML
     private TextField txt_number1;
+    
+    @FXML
+    private ProgressIndicator ploader;
 
     @FXML
     private Button voltar;

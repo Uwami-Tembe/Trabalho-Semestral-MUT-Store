@@ -11,6 +11,8 @@ public class AppModelDetails {
     private String _id;
     @JsonProperty("id")
     private int id;
+    @JsonProperty("download")
+    private int download;
     @JsonProperty("icon")
     private String icon;
     @JsonProperty("nome")
@@ -23,6 +25,8 @@ public class AppModelDetails {
     private List<String> imagePaths;
     @JsonProperty("preco")
     private double preco;
+    @JsonProperty("category")
+    private String category;
     @JsonProperty("description")
     private String description;
     @JsonProperty("politics")
@@ -47,6 +51,14 @@ public class AppModelDetails {
 
     // Construtor padrão
     public AppModelDetails() {
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     // Getters e Setters

@@ -5,6 +5,7 @@ import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
 import static View.MainStage.changeScene;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,9 @@ import javax.swing.JOptionPane;
 
 public class NewAccountController {
 
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     private Button bt_criarConta;
 
@@ -44,6 +48,9 @@ public class NewAccountController {
 
     @FXML
     private TextField txt_usuario;
+    
+        @FXML
+    private TextField txt_username;
 
 
 
@@ -64,12 +71,12 @@ void onBT_criarContaPressed(ActionEvent event) {
 
     // Criação do objeto Usuario
     Usuario user = new Usuario(
-        "ZeFelipe",
         txt_usuario.getText(),
+        txt_username.getText(),
         ps_senha.getText(),
         txt_numeroDeTelefone.getText(),
         txt_email.getText(),
-        "Normal"
+        "normal"
     );
 
     // Chamada à API para criar a conta
