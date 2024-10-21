@@ -120,7 +120,7 @@ public static Task<Void> downloadFile(String fileURL, String savePath) {
         builder.addTextBody("isMpesa", String.valueOf(app.isIsMpesa()), ContentType.TEXT_PLAIN);
         builder.addTextBody("isEmola", String.valueOf(app.isIsEmola()), ContentType.TEXT_PLAIN);
         builder.addTextBody("isBankCard", String.valueOf(app.isIsBankCard()), ContentType.TEXT_PLAIN);
-
+        builder.addTextBody("category", String.valueOf(app.getCategory()), ContentType.TEXT_PLAIN);
         // Verificando e adicionando o ícone do aplicativo
         Response iconResponse = adicionarArquivo(builder, "icon", app.getIcon());
         if (iconResponse != null) return iconResponse;
@@ -362,8 +362,8 @@ public static List<Comment> listarComentariosApp(String appId) {
             String errorMessage = errorNode.path("message").asText();
             System.err.println("Erro ao listar comentários do app: " + errorMessage);
             
-            // Exibe a mensagem de erro ao usuário
-            JOptionPane.showMessageDialog(null, errorMessage, "Erro", JOptionPane.ERROR_MESSAGE);
+//            // Exibe a mensagem de erro ao usuário
+//            JOptionPane.showMessageDialog(null, errorMessage, "Erro", JOptionPane.ERROR_MESSAGE);
             return commentsList; // Retorna lista vazia em caso de erro
         }
 
@@ -387,8 +387,8 @@ public static List<Comment> listarComentariosApp(String appId) {
     } catch (Exception e) {
         System.err.println("Erro ao listar comentários do app: " + e.getMessage());
         
-        // Exibe a mensagem de erro ao usuário
-        JOptionPane.showMessageDialog(null, "Erro ao listar comentários do app: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+//        // Exibe a mensagem de erro ao usuário
+//        JOptionPane.showMessageDialog(null, "Erro ao listar comentários do app: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         return commentsList; // Retorna lista vazia em caso de exceção
     }
 }

@@ -27,25 +27,7 @@ public class SucessoController {
 
         MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
         Usuario user = userInfo();
-        if (user != null) {
-            
-            if(user.getUserType().equals("dev")){
-            // Definir o nome do usuário no controlador da tela principal
-            menuController.setLb_NomeDoUsuario(user.getName());
-            menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.initialize(true);
-            }
-            if(user.getUserType().equals("normal")){
-            // Definir o nome do usuário no controlador da tela principal
-            menuController.setLb_NomeDoUsuario(user.getName());
-            menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.initialize(false);
-            }
 
-        } else {
-            // Lidar com o erro se o usuário não foi encontrado
-            System.err.println("Erro ao buscar informações do usuário.");
-        }
 
         changeScene("MenuPrincipal");
 }

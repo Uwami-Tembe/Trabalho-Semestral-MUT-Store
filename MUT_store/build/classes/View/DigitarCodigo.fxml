@@ -50,12 +50,12 @@
                   <Image url="@Login/imagens/duplo25.jpg" />
                </image>
             </ImageView>
-            <Button fx:id="bt_verificar" layoutX="123.0" layoutY="446.0" mnemonicParsing="false" onAction="#On_bt_verificar_Pressed" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Verificar" textFill="#ededed">
+            <Button fx:id="bt_verificar" layoutX="117.0" layoutY="503.0" mnemonicParsing="false" onAction="#On_bt_verificar_Pressed" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Verificar" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <TextField fx:id="txt_codigo" layoutX="26.0" layoutY="354.0" prefHeight="45.0" prefWidth="359.0" promptText="Digite o código" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_codigo" layoutX="26.0" layoutY="441.0" prefHeight="45.0" prefWidth="359.0" promptText="Digite o código" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -70,12 +70,12 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="voltar" layoutX="156.0" layoutY="493.0" mnemonicParsing="false" onAction="#On_bt_voltar_pressed" prefHeight="42.0" prefWidth="98.0" style="-fx-background-color: transparent;" text="Voltar" textFill="#517983" underline="true">
+            <Button fx:id="voltar" layoutX="156.0" layoutY="551.0" mnemonicParsing="false" onAction="#On_bt_voltar_pressed" prefHeight="42.0" prefWidth="98.0" style="-fx-background-color: transparent;" text="Voltar" textFill="#517983" underline="true">
                <font>
                   <Font name="System Bold" size="19.0" />
                </font>
             </Button>
-            <Label layoutX="50.0" layoutY="319.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o código poderá redefinir a sua senha" textFill="#517983">
+            <Label layoutX="43.0" layoutY="409.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o código poderá redefinir a sua senha" textFill="#517983">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -85,21 +85,26 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="txt_number1" layoutX="26.0" layoutY="225.0" prefHeight="45.0" prefWidth="220.0" promptText="8XXXXXXXX" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_number1" layoutX="26.0" layoutY="297.0" prefHeight="45.0" prefWidth="220.0" promptText="8XXXXXXXX" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextField>
-            <Button fx:id="bt_pedir1" layoutX="252.0" layoutY="229.0" mnemonicParsing="false" onAction="#On_bt_pedir_Pressed" prefHeight="38.0" prefWidth="128.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Pedir" textFill="#ededed">
+            <Button fx:id="bt_pedir1" layoutX="254.0" layoutY="301.0" mnemonicParsing="false" onAction="#On_bt_pedir_Pressed" prefHeight="38.0" prefWidth="128.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Pedir" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Label layoutX="50.0" layoutY="192.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o numero poderá obter o codigo" textFill="#517983">
+            <Label layoutX="56.0" layoutY="206.0" prefHeight="24.0" prefWidth="326.0" text="Após introduzir o numero poderá obter o codigo" textFill="#517983">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <TextField fx:id="txt_username" layoutX="26.0" layoutY="238.0" prefHeight="45.0" prefWidth="359.0" promptText="Nome de Usuario" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
          </children>
       </AnchorPane>
   </children>

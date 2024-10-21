@@ -36,8 +36,11 @@ public class DigitarCodigoController {
     private TextField txt_codigo;
 
     @FXML
+    private TextField txt_username;
+
+    @FXML
     private TextField txt_number1;
-    
+
     @FXML
     private ProgressIndicator ploader;
 
@@ -51,6 +54,7 @@ public class DigitarCodigoController {
 
         changeScene("Carregando");
         user.setMobileNumber(txt_number1.getText());
+        user.setUsername(txt_username.getText());
 
         // Task para rodar o processo de verificação do código em background
         Task<Response> task = new Task<>() {
@@ -69,7 +73,7 @@ public class DigitarCodigoController {
                     // Se o código for correto, muda para a tela de Alterar Senha
                     Platform.runLater(() -> {
                         // Obtém o controlador e passa o código de verificação
-                        AlterarSenhaController asc = (AlterarSenhaController)  getController("AlterarSenha");
+                        AlterarSenhaController asc = (AlterarSenhaController) getController("AlterarSenha");
                         asc.setUser(user);
                         asc.setVerificationCode(txt_codigo.getText());  // Passa o código para o controlador
                         changeScene("AlterarSenha");
@@ -108,73 +112,73 @@ public class DigitarCodigoController {
         thread.setDaemon(true);
         thread.start();
     }
-    
-    
-@FXML
-void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
 
-    // Configura o número de celular
-    user.setMobileNumber(txt_number1.getText());
-    
-    // Muda a cena para a tela de carregamento
-    changeScene("Carregando");
+    @FXML
+    void On_bt_pedir_Pressed(ActionEvent event) throws Exception {
 
-    // Task para rodar o processo de envio do SMS em background
-    Task<Response> task = new Task<>() {
-        @Override
-        protected Response call() throws Exception {
-            return User.forgotPassword(user);  // Faz a requisição para enviar o SMS
-        }
-    };
+        // Configura o número de celular
+        user.setMobileNumber(txt_number1.getText());
+        user.setUsername(txt_username.getText());
 
-    // Quando o envio de SMS for bem-sucedido
-    task.setOnSucceeded(workerStateEvent -> {
-        Response smsEnviado = task.getValue();  // Pega o resultado da requisição
+        // Muda a cena para a tela de carregamento
+        changeScene("Carregando");
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
-        pause.setOnFinished(e -> {
-            if (smsEnviado.getError_code() == 0) {
-                JOptionPane.showMessageDialog(null, "Código de recuperação enviado com sucesso!");
-                
-                // Transição para a tela "DigitarCodigo.fxml"
-                try {
-                    DigitarCodigoController dcc = (DigitarCodigoController) getController("DigitarCodigo");
-                    dcc.txt_number1.setText(user.getMobileNumber());  // Passa o número para o controlador
-                    changeScene("DigitarCodigo");  // Muda para a tela de digitar o código
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Falha no envio do SMS. Não foi possível enviar o código para o número informado.");
-                voltarParaLogin();
+        // Task para rodar o processo de envio do SMS em background
+        Task<Response> task = new Task<>() {
+            @Override
+            protected Response call() throws Exception {
+                return User.forgotPassword(user);  // Faz a requisição para enviar o SMS
             }
+        };
+
+        // Quando o envio de SMS for bem-sucedido
+        task.setOnSucceeded(workerStateEvent -> {
+            Response smsEnviado = task.getValue();  // Pega o resultado da requisição
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+            pause.setOnFinished(e -> {
+                if (smsEnviado.getError_code() == 0) {
+                    JOptionPane.showMessageDialog(null, "Código de recuperação enviado com sucesso!");
+
+                    // Transição para a tela "DigitarCodigo.fxml"
+                    try {
+                        DigitarCodigoController dcc = (DigitarCodigoController) getController("DigitarCodigo");
+                        dcc.txt_number1.setText(user.getMobileNumber());
+                        dcc.txt_username.setText(user.getUsername());// Passa o número para o controlador
+                        changeScene("DigitarCodigo");  // Muda para a tela de digitar o código
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Falha no envio do SMS. Não foi possível enviar o código para o número informado.");
+                    voltarParaLogin();
+                }
+            });
+            pause.play();
         });
-        pause.play();
-    });
 
-    // Quando o envio de SMS falhar
-    task.setOnFailed(workerStateEvent -> {
-        Exception exception = (Exception) task.getException();
-        exception.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
-        voltarParaLogin();
-    });
+        // Quando o envio de SMS falhar
+        task.setOnFailed(workerStateEvent -> {
+            Exception exception = (Exception) task.getException();
+            exception.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro. Ocorreu um erro ao processar sua solicitação.");
+            voltarParaLogin();
+        });
 
-    // Executa o task em segundo plano
-    Thread thread = new Thread(task);
-    thread.setDaemon(true);
-    thread.start();
-}
+        // Executa o task em segundo plano
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
 
 // Método auxiliar para voltar à tela de login
-private void voltarParaLogin() {
-    try {
-        changeScene("TelaLogin");  // Volta para a tela de login
-    } catch (Exception ex) {
-        ex.printStackTrace();
+    private void voltarParaLogin() {
+        try {
+            changeScene("TelaLogin");  // Volta para a tela de login
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
-}
-
 
     @FXML
     void On_bt_voltar_pressed(ActionEvent event) throws Exception {

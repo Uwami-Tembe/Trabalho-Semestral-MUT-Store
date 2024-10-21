@@ -8,13 +8,16 @@ import static Models.Api.User.userInfo;
 import View.MainStage;
 import static View.MainStage.changeScene;
 import static View.MainStage.getController;
-import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -22,8 +25,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -35,10 +40,8 @@ import javax.swing.JOptionPane;
 
 public class CriarAppController {
 
-    
-    
-        @FXML
-    private ProgressIndicator ploader;
+    @FXML
+    private com.gluonhq.charm.glisten.control.ProgressIndicator ploader;
     @FXML
     public Button bt_Upload;
 
@@ -142,6 +145,14 @@ public class CriarAppController {
     private Pane panel_add_shot_4;
 
     @FXML
+    private ToggleGroup categoriaGroup;
+    @FXML
+    private RadioButton rdbt_categoriaJogo;
+
+    @FXML
+    private RadioButton rdbt_categoriaApp;
+
+    @FXML
     private TextArea txt_appDetalhes;
 
     @FXML
@@ -214,106 +225,217 @@ public class CriarAppController {
     }
 
     @FXML
-    void On_bt_CriarApp_pressed(ActionEvent event) {
+    private ImageView img_iconCriar;
 
+    @FXML
+    public void initialize() {
+        // Garantindo que a interface gráfica seja manipulada na thread correta
+        Platform.runLater(() -> {
+            // Obtendo as informações do usuário
+            Usuario user = userInfo();
+
+            // Verifica se o usuário não é nulo
+            if (user != null) {
+
+                System.out.println(user.getUserType());
+
+                // Se o tipo de usuário for "normal", esconde os botões de criação
+                if (user.getUserType().equals("normal")) {
+
+                    bt_criarApp.setVisible(false);
+                    if (img_iconCriar != null) {
+                        img_iconCriar.setVisible(false);
+                    }
+
+                    try {
+                        MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
+                        menuController.loadApps();
+                        menuController.initialize();
+                        MainStage.changeScene("MenuPrincipal");
+
+                    } catch (Exception ex) {
+                        System.out.println("Erro ao carregar a cena CriarApp: " + ex.getMessage());
+                    }
+                    return;
+                }
+
+                // Caso contrário, exibe os botões de criação
+                bt_criarApp.setVisible(true);
+                if (img_iconCriar != null) {
+                    img_iconCriar.setVisible(true);
+                }
+
+            }
+
+            // Após ajustar a interface, carrega os aplicativos
+        });
     }
 
     @FXML
-    void On_bt_Loja_pressed(ActionEvent event) throws Exception {
-        MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
-        Usuario user = userInfo();
-        if (user != null) {
-            // Definir o nome do usuário no controlador da tela principal
-            menuController.setLb_NomeDoUsuario(user.getName());
-            menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.initialize(true);
-
-        } else {
-            // Lidar com o erro se o usuário não foi encontrado
-            System.err.println("Erro ao buscar informações do usuário.");
+    void On_bt_CriarApp_pressed(ActionEvent event) throws IOException {
+        try {
+            CriarAppController menuController = (CriarAppController) getController("CriarApp");
+            menuController.initialize();
+            MainStage.changeScene("CriarApp");
+        } catch (Exception ex) {
+            System.out.println("Erro ao carregar a cena CriarApp: " + ex.getMessage());
         }
+    }
 
-        changeScene("MenuPrincipal");
+    @FXML
+    void On_bt_Loja_pressed(ActionEvent event) {
+        try {
+            MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
+            menuController.loadApps();
+            menuController.initialize();
+            MainStage.changeScene("MenuPrincipal");
 
+        } catch (Exception ex) {
+            System.out.println("Erro ao carregar a cena CriarApp: " + ex.getMessage());
+        }
     }
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-
+        MainStage.changeScene("Carregando");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        pause.setOnFinished(e -> {
+            try {
+                SobreController s = (SobreController) getController("Sobre");
+                s.initialize();
+                MainStage.changeScene("Sobre");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        pause.play();
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
+        MainStage.changeScene("Carregando");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        pause.setOnFinished(e -> {
+            try {
+                SettingsController s = (SettingsController) getController("Settings");
+                s.initialize();
+                MainStage.changeScene("Settings");
 
-    }
-
-    @FXML
-    void On_bt_sair_pressed(ActionEvent event) {
-
-    }
-
-    @FXML
-    void On_bt_upload_pressed(ActionEvent event) {
-        // Validação dos campos obrigatórios antes de criar o AppModel
-        if (txt_appNome.getText().isEmpty() || txt_appPreco.getText().isEmpty() || iconPath.isEmpty() || filePath.isEmpty()) {
-            mostrarMensagemErro("Por favor, preencha todos os campos obrigatórios e selecione os arquivos.");
-            return;
-        }
-
-        // Verificar se o preço é um número válido
-        float preco;
-        try {
-            preco = Float.parseFloat(txt_appPreco.getText());
-        } catch (NumberFormatException e) {
-            mostrarMensagemErro("Preço inválido. Insira um valor numérico.");
-            return;
-        }
-
-        // Verificar se os arquivos existem
-        File iconFile = new File(iconPath);
-        if (!iconFile.exists()) {
-            mostrarMensagemErro("O ícone selecionado não existe.");
-            return;
-        }
-
-        File appFile = new File(filePath);
-        if (!appFile.exists()) {
-            mostrarMensagemErro("O arquivo do aplicativo selecionado não existe.");
-            return;
-        }
-
-        // Verificar as capturas de tela (opcional)
-        File img1 = new File(imgPath1);
-        File img2 = new File(imgPath2);
-        File img3 = new File(imgPath3);
-        File img4 = new File(imgPath4);
-        if (!img1.exists() || !img2.exists() || !img3.exists() || !img4.exists()) {
-            mostrarMensagemErro("Uma ou mais capturas de tela não existem.");
-            return;
-        }
-
-        // Criar o AppModel com os dados e os ficheiros selecionados
-        AppModel novaApp = new AppModel(iconFile, txt_appNome.getText(), preco, img1, img2, img3, img4,
-                txt_appDetalhes.getText(), txt_appPolitics.getText(), txt_appNome.getText(),
-                checB_card.isSelected(), checkB_mpesaeEmola.isSelected(), checkB_mpesaeEmola.isSelected(), appFile);
-
-        try {
-            // Fazer o upload da nova app para a API
-            Response res = App.adicionarApp(novaApp);
-
-            if (res.getError_code() == 0) {
-                exibirMensagemSucesso(res.getMsg());
-                // Limpa o formulário após o sucesso
-            } else {
-                mostrarMensagemErro(res.getMsg());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
-        }
-
-        // Atualiza a lista de aplicativos localmente
+        });
+        pause.play();
     }
+
+    @FXML
+    void On_bt_sair_pressed(ActionEvent event) throws IOException {
+        MainStage.changeScene("Carregando");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        pause.setOnFinished(e -> {
+            try {
+                MainStage.changeScene("TelaLogin");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        pause.play();
+    }
+
+@FXML
+void On_bt_upload_pressed(ActionEvent event) {
+    // Validação dos campos obrigatórios antes de criar o AppModel
+    if (txt_appNome.getText().isEmpty() || txt_appPreco.getText().isEmpty() || iconPath.isEmpty() || filePath.isEmpty()) {
+        mostrarMensagemErro("Por favor, preencha todos os campos obrigatórios e selecione os arquivos.");
+        return;
+    }
+
+    // Verificar se o preço é um número válido
+    float preco;
+    try {
+        preco = Float.parseFloat(txt_appPreco.getText());
+    } catch (NumberFormatException e) {
+        mostrarMensagemErro("Preço inválido. Insira um valor numérico.");
+        return;
+    }
+
+    // Verificar se os arquivos existem
+    File iconFile = new File(iconPath);
+    if (!iconFile.exists()) {
+        mostrarMensagemErro("O ícone selecionado não existe.");
+        return;
+    }
+
+    File appFile = new File(filePath);
+    if (!appFile.exists()) {
+        mostrarMensagemErro("O arquivo do aplicativo selecionado não existe.");
+        return;
+    }
+
+    // Verificar as capturas de tela (opcional)
+    File img1 = new File(imgPath1);
+    File img2 = new File(imgPath2);
+    File img3 = new File(imgPath3);
+    File img4 = new File(imgPath4);
+    if (!img1.exists() || !img2.exists() || !img3.exists() || !img4.exists()) {
+        mostrarMensagemErro("Uma ou mais capturas de tela não existem.");
+        return;
+    }
+
+    // Configurar o ToggleGroup para as categorias (caso ainda não tenha feito)
+    ToggleGroup categoriaGroup = new ToggleGroup();
+    rdbt_categoriaJogo.setToggleGroup(categoriaGroup);
+    rdbt_categoriaApp.setToggleGroup(categoriaGroup);
+
+    // Pegar o RadioButton selecionado
+    RadioButton selectedCategoria = (RadioButton) categoriaGroup.getSelectedToggle();
+
+    // Obter o texto do RadioButton selecionado
+    String categoriaSelecionada = selectedCategoria.getText();
+
+    // Criar o AppModel com os dados e os ficheiros selecionados
+    AppModel novaApp = new AppModel(iconFile, txt_appNome.getText(), preco, img1, img2, img3, img4,
+            txt_appDetalhes.getText(), txt_appPolitics.getText(), txt_appNome.getText(),
+            checB_card.isSelected(), checkB_mpesaeEmola.isSelected(), checkB_mpesaeEmola.isSelected(), appFile, categoriaSelecionada);
+
+    // Task para rodar o upload em segundo plano
+    Task<Response> uploadTask = new Task<>() {
+        @Override
+        protected Response call() throws Exception {
+            // Fazer o upload da nova app para a API
+            return App.adicionarApp(novaApp);
+        }
+    };
+
+    // Mostrar o ProgressIndicator (loader) no início do upload
+    ploader.setVisible(true);
+
+    // Executar o upload em segundo plano
+    uploadTask.setOnSucceeded(e -> {
+        ploader.setVisible(false); // Esconder o loader após a conclusão
+
+        Response res = uploadTask.getValue();
+        if (res.getError_code() == 0) {
+            try {
+                exibirMensagemSucesso(res.getMsg());
+                // Limpar o formulário após o sucesso
+            } catch (Exception ex) {
+                Logger.getLogger(CriarAppController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            mostrarMensagemErro(res.getMsg());
+        }
+    });
+
+    uploadTask.setOnFailed(e -> {
+        ploader.setVisible(false); // Esconder o loader após o erro
+        mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
+    });
+
+    // Executa a tarefa em uma nova thread
+    new Thread(uploadTask).start();
+}
+
 
 // Função para limpar o formulário após o upload bem-sucedido
     @FXML

@@ -11,8 +11,10 @@ import View.MainStage;
 import static View.MainStage.changeScene;
 import static View.MainStage.getController;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
+import java.io.IOException;
 import java.util.List;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
 
@@ -60,6 +64,11 @@ public class FazerDownloadController {
     @FXML
     private Button bt_sobre;
 
+    
+    
+
+    
+    
     @FXML
     private ImageView img_icon;
 
@@ -142,48 +151,97 @@ public class FazerDownloadController {
         listarComentarios(app.getId());
     }
 
+        @FXML
+    private ImageView img_iconCriar;
+        @FXML
+    public void initialize() {
+        // Garantindo que a interface gráfica seja manipulada na thread correta
+        Platform.runLater(() -> {
+            // Obtendo as informações do usuário
+            Usuario user = userInfo();
+
+            // Verifica se o usuário não é nulo
+            if (user != null) {
+
+                System.out.println(user.getUserType());
+
+                // Se o tipo de usuário for "normal", esconde os botões de criação
+                if (user.getUserType().equals("normal")) {
+                    bt_criarApp.setVisible(false);
+                    if (img_iconCriar != null) {
+                        img_iconCriar.setVisible(false);
+                    }
+                    return;
+                }
+
+                // Caso contrário, exibe os botões de criação
+                bt_criarApp.setVisible(true);
+                if (img_iconCriar != null) {
+                    img_iconCriar.setVisible(true);
+                }
+            }
+
+            // Após ajustar a interface, carrega os aplicativos
+        });
+    }
+    
+    
 //public void initialize() {
 //    // Chama o método para listar comentários ao inicializar a tela
 //    String appId = app.getId(); // Obtém o ID do aplicativo
 //    listarComentarios(appId);
 //}
-    public void loadDownloadPageContent(AppModelDetails app) {
-        // Limpa o conteúdo anterior
-        clearPreviousContent();
+public void loadDownloadPageContent(AppModelDetails app) {
+    // Limpa o conteúdo anterior
+    clearPreviousContent();
 
-        // Carrega os novos dados do aplicativo
-        img_icon.setImage(new Image(app.getIcon()));
-        lb_Nome.setText(app.getNome());
+    Usuario user = userInfo();  // Obtém as informações do usuário atual
+    List<String> pagos = user.getPagos();  // Supondo que a classe Usuario tenha o método getPagos()
 
-        List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
-        appfile = app.getAppFilePath();
+    // Carrega os novos dados do aplicativo
+    img_icon.setImage(new Image(app.getIcon()));
+    lb_Nome.setText(app.getNome());
 
-        // Carrega as imagens de captura de tela
-        img_shot_1.setImage(new Image(imagePaths.get(0)));
-        img_shot_2.setImage(new Image(imagePaths.get(1)));
-        img_shot_3.setImage(new Image(imagePaths.get(2)));
-        img_shot_4.setImage(new Image(imagePaths.get(3)));
+    List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
+    appfile = app.getAppFilePath();
 
-        // Outros dados do app
-        lb_DescricaoLonga.setText(app.getDescription());
-        lb_politicsLongo.setText(app.getPolitics());
-        lb_developerName.setText(app.getDeveloperName());
+    // Carrega as imagens de captura de tela
+    img_shot_1.setImage(new Image(imagePaths.get(0)));
+    img_shot_2.setImage(new Image(imagePaths.get(1)));
+    img_shot_3.setImage(new Image(imagePaths.get(2)));
+    img_shot_4.setImage(new Image(imagePaths.get(3)));
 
-        // Torna as imagens visíveis (caso necessário)
-        img_icon.setOpacity(1.0);
-        img_shot_1.setOpacity(1.0);
-        img_shot_2.setOpacity(1.0);
-        img_shot_3.setOpacity(1.0);
-        img_shot_4.setOpacity(1.0);
+    // Outros dados do app
+    lb_DescricaoLonga.setText(app.getDescription());
+    lb_politicsLongo.setText(app.getPolitics());
+    lb_developerName.setText(app.getDeveloperName());
 
-        // Define o preço
+    // Torna as imagens visíveis (caso necessário)
+    img_icon.setOpacity(1.0);
+    img_shot_1.setOpacity(1.0);
+    img_shot_2.setOpacity(1.0);
+    img_shot_3.setOpacity(1.0);
+    img_shot_4.setOpacity(1.0);
+
+    // Verifica se o aplicativo já foi comprado pelo usuário
+    System.out.println(pagos.toString());
+    System.out.println("APPID"+app.getId());
+    if (pagos != null && pagos.contains(app.getId())) {
+        // Se o aplicativo já foi comprado, o preço é "Grátis" e o botão diz "Baixar"
+        lb_preco.setText("Grátis");
+        bt_Baixar.setText("Baixar");
+    } else {
+        // Se não foi comprado, exibe o preço normal
         if (app.getPreco() == 0.0f) {
             lb_preco.setText("Grátis");
+            bt_Baixar.setText("Baixar");
         } else {
+            lb_preco.setText(Float.toString((float)app.getPreco()));
             bt_Baixar.setText("Comprar");
-            lb_preco.setText(Float.toString((float) app.getPreco()));
         }
     }
+}
+
 
 // Método para limpar os campos da interface
     public void clearPreviousContent() {
@@ -225,6 +283,8 @@ public class FazerDownloadController {
         // Adiciona os comentários ao painel
         for (Comment comment : comments) {
             commentLabel = new Label(comment.getComment() + " - " + comment.getUsername());
+            commentLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+            commentLabel.setStyle("-fx-text-fill: #517983");
             panel_comentarios.getChildren().add(commentLabel); // Adiciona ao VBox
         }
     }
@@ -259,55 +319,65 @@ public class FazerDownloadController {
     }
 
     @FXML
-    void On_bt_CriarApp_pressed(ActionEvent event) {
+    void On_bt_CriarApp_pressed(ActionEvent event) throws IOException {
         try {
+            CriarAppController menuController = (CriarAppController) getController("CriarApp");
+            menuController.initialize();
             MainStage.changeScene("CriarApp");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Erro ao carregar a cena CriarApp: " + ex.getMessage());
         }
     }
 
-    @FXML
-    void On_bt_Loja_pressed(ActionEvent event) throws Exception {
-        MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
-        Usuario user = userInfo();
-        if (user != null) {
-            
-            if(user.getUserType().equals("dev")){
-            // Definir o nome do usuário no controlador da tela principal
-            menuController.setLb_NomeDoUsuario(user.getName());
-            menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.initialize(true);
-            }
-            if(user.getUserType().equals("normal")){
-            // Definir o nome do usuário no controlador da tela principal
-            menuController.setLb_NomeDoUsuario(user.getName());
-            menuController.setUser(user);// Atualiza o Label com o nome do usuário
-            menuController.initialize(false);
-            }
+      @FXML
+    void On_bt_Loja_pressed(ActionEvent event) {
+        try {
+            MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");
+            menuController.loadApps();
+            menuController.initialize();
+            MainStage.changeScene("MenuPrincipal");
 
-        } else {
-            // Lidar com o erro se o usuário não foi encontrado
-            System.err.println("Erro ao buscar informações do usuário.");
+        } catch (Exception ex) {
+            System.out.println("Erro ao carregar a cena CriarApp: " + ex.getMessage());
         }
-
-        changeScene("MenuPrincipal");
-
     }
 
     @FXML
     void On_bt_Sobre_pressed(ActionEvent event) {
-
+        MainStage.changeScene("Carregando");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        pause.setOnFinished(e -> {
+            try {
+                SobreController s = (SobreController) getController("Sobre");
+                s.initialize();
+                MainStage.changeScene("Sobre");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        pause.play();
     }
 
     @FXML
     void On_bt_definicoes_pressed(ActionEvent event) {
+        MainStage.changeScene("Carregando");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+        pause.setOnFinished(e -> {
+            try {
+                SettingsController s = (SettingsController) getController("Settings");
+                s.initialize();
+                MainStage.changeScene("Settings");
 
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        pause.play();
     }
 
     @FXML
-    void On_bt_sair_pressed(ActionEvent event) {
-                MainStage.changeScene("Carregando");
+    void On_bt_sair_pressed(ActionEvent event) throws IOException {
+        MainStage.changeScene("Carregando");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         pause.setOnFinished(e -> {
             try {
@@ -317,7 +387,6 @@ public class FazerDownloadController {
             }
         });
         pause.play();
-
     }
 // Variável para armazenar a tarefa de download
     private Task<Void> downloadTask;
@@ -387,7 +456,6 @@ public class FazerDownloadController {
             // Listener para quando o download for cancelado
             downloadTask.setOnCancelled(e -> {
                 statusLabel.textProperty().unbind();
-                statusLabel.setText("    Download cancelado.");
                 progressBar.setVisible(false);
                 bt_Baixar.setVisible(true);
                 bt_stopDownload.setVisible(false);

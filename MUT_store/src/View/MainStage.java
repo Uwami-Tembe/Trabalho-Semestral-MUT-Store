@@ -18,6 +18,7 @@ import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -48,6 +49,8 @@ public class MainStage extends Application {
     public FXMLLoader ErroLoader;
     public FXMLLoader PerfilLoader;
     public FXMLLoader adminLoader;
+    public FXMLLoader settingsLoader;
+    public FXMLLoader sobreLoader;
     private Map<String, Scene> scenes = new HashMap<>();
 
     public static Stage primaryStage;
@@ -73,7 +76,7 @@ public class MainStage extends Application {
 
             menuLoader = new FXMLLoader(getClass().getResource("MenuPrincipal.fxml"));
             Parent menuRoot = menuLoader.load();
-            MenuPrincipalController menuController = menuLoader.getController(); // Obtém o controlador específico do MenuPrincipal
+            MenuPrincipalController menuController = menuLoader.getController();
             Scene telaMenu = new Scene(menuRoot);
             telaMenu.setUserData("MenuPrincipal.fxml");
             registerScene("MenuPrincipal", telaMenu, menuController);
@@ -114,9 +117,9 @@ public class MainStage extends Application {
             registerScene("CriarConta", telaCriarConta, criarContaController);
 
             payMetodoLoader = new FXMLLoader(getClass().getResource("PayMetodo.fxml"));
-            Parent payMetodoRooT = payMetodoLoader.load();
+            Parent payMetodoRoot = payMetodoLoader.load();
             Object payMetodoController = payMetodoLoader.getController();
-            Scene telaPayMetodo = new Scene(payMetodoRooT);
+            Scene telaPayMetodo = new Scene(payMetodoRoot);
             telaPayMetodo.setUserData("PayMetodo.fxml");
             registerScene("PayMetodo", telaPayMetodo, payMetodoController);
 
@@ -162,63 +165,60 @@ public class MainStage extends Application {
             telaAdmin.setUserData("MenuAdmin.fxml");
             registerScene("Admin", telaAdmin, adminController);
 
+            settingsLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+            Parent settingsRoot = settingsLoader.load();
+            Object settingsController = settingsLoader.getController();
+            Scene telaSettings = new Scene(settingsRoot);
+            telaSettings.setUserData("Settings.fxml");
+            registerScene("Settings", telaSettings, settingsController);
+
+            sobreLoader = new FXMLLoader(getClass().getResource("Sobre.fxml"));
+            Parent sobreRoot = sobreLoader.load();
+            Object sobreController = sobreLoader.getController();
+            Scene telaSobre = new Scene(sobreRoot);
+            telaSobre.setUserData("Sobre.fxml");
+            registerScene("Sobre", telaSobre, sobreController);
+
             // Verificar se o arquivo token.txt existe
             File tokenFile = new File(TOKEN_FILE_PATH);
 
+            // Se o arquivo existir, chama o método userInfo para obter os detalhes do usuário
             if (tokenFile.exists()) {
-                // Se o arquivo existir, mostrar a tela do Menu Principal
-
-                // Chama o método userInfo para obter os detalhes do usuário
                 Usuario user = userInfo();
-
-                if (user != null) {
-                    // Verifica o tipo de usuário e define a cena adequada
-                    switch (user.getUserType()) {
-                        case "admin":
-                            primaryStage.setTitle("MUT Store - Menu Principal (Admin)");
-                            primaryStage.setScene(telaAdmin);
-                            adminController.initialize();
-                            break;
-
-                        case "dev":
-                            primaryStage.setTitle("MUT Store - Menu Principal (Dev)");
-                            primaryStage.setScene(telaMenu);
-
-                            // Atualiza o controlador do menu com os dados do usuário
-                            menuController.setLb_NomeDoUsuario(user.getName()); // Define o nome do usuário
-                            menuController.setUser(user); // Atualiza o objeto usuário no controlador
-//                menuController.appshome(); // Executa a inicialização da tela do menu
-                            menuController.initialize(true); // Executa a inicialização da tela do menu
-                            break;
-                        case "normal":
-                            primaryStage.setTitle("MUT Store - Menu Principal (Normal)");
-                            primaryStage.setScene(telaMenu);
-
-                            // Atualiza o controlador do menu com os dados do usuário
-                            menuController.setLb_NomeDoUsuario(user.getName()); // Define o nome do usuário
-                            menuController.setUser(user); // Atualiza o objeto usuário no controlador
-//                menuController.appshome(); // Executa a inicialização da tela do menu
-                            menuController.initialize(false); // Executa a inicialização da tela do menu
-                            break;
-                        default: // O caso "normal" ou qualquer outro não especificado
-                            primaryStage.setTitle("MUT Store - Menu Principal");
-                            primaryStage.setScene(telaMenu);
-
-                            // Atualiza o controlador do menu com os dados do usuário
-                            menuController.setLb_NomeDoUsuario(user.getName()); // Define o nome do usuário
-                            menuController.setUser(user);
-                            menuController.initialize(false);// Atualiza o objeto usuário no controlador
-//                menuController.appshome(); // Executa a inicialização da tela do menu // Executa a inicialização da tela do menu
-                            break;
-                    }
-
-                } else {
-                    // Caso o usuário não seja encontrado, exibe a tela de login
-                    System.err.println("Erro ao buscar informações do usuário.");
+                // Se o usuário for nulo, deleta o token e mostra a tela de login
+       
+                if (user == null) {
+                    
+                    tokenFile.delete();
                     primaryStage.setTitle("MUT Store - Login");
                     primaryStage.setScene(telaLogin);
+                } else {
+                    // Verifica o tipo de usuário e define a cena adequada
+         System.out.println(user.getName());
+                    if (user.getUserType().equals("admin")) {
+                        primaryStage.setTitle("MUT Store - Menu Principal (Admin)");
+                        primaryStage.setScene(telaAdmin);
+//                        adminController.initialize();
+                    } else {
+                        primaryStage.setTitle("MUT Store - Menu Principal");
+                        primaryStage.setScene(telaMenu);
+                        menuController.loadApps();
+                    }
                 }
 
+//                switch (user.getUserType()) {
+//                    case "admin":
+//                        primaryStage.setTitle("MUT Store - Menu Principal (Admin)");
+//                        primaryStage.setScene(telaAdmin);
+//                        adminController.initialize();
+//                        break;
+//
+//                    default: // O caso "normal" ou qualquer outro não especificado
+//                        primaryStage.setTitle("MUT Store - Menu Principal");
+//                        primaryStage.setScene(telaMenu);
+//                        menuController.initialize(); // Atualiza o controlador do menu com os dados do usuário
+//                        break;
+//                }
             } else {
                 // Se o arquivo não existir, mostra a tela de Login
                 primaryStage.setTitle("MUT Store - Login");
@@ -229,9 +229,9 @@ public class MainStage extends Application {
 
         } catch (Exception e) {
             e.printStackTrace();
-            e.getCause();
         }
     }
+
 
     /*public static Object changeScene (String fxml) throws Exception{
         FXMLLoader loader = new FXMLLoader(MainStage.class .getResource(fxml));
@@ -260,15 +260,43 @@ public class MainStage extends Application {
     }
 
     public static void changeScene(String id) {
-        Scene scene = sceneMap.get(id);
+    Scene scene = sceneMap.get(id);
 
-        if (scene != null) {
-            if (primaryStage.getScene() != null) {
-                sceneHistory.push(primaryStage.getScene().getUserData().toString());
-            }
-            primaryStage.setScene(scene);
+    if (scene != null) {
+        if (primaryStage.getScene() != null) {
+            // Salva a cena atual no histórico de navegação
+            sceneHistory.push(primaryStage.getScene().getUserData().toString());
         }
+
+        // Reinicia o controller da cena se necessário
+        try {
+            // Obtém o controller associado a essa cena
+            Object controller = scene.getUserData();
+            if (controller instanceof Initializable) {
+//                // Chama manualmente o método initialize()
+                ((Initializable) controller).initialize(null, null);  // Você pode passar os parâmetros conforme necessário
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        // Seta a nova cena no stage principal
+        primaryStage.setScene(scene);
     }
+}
+
+    
+    
+//    public static void changeScene(String id) {
+//        Scene scene = sceneMap.get(id);
+//
+//        if (scene != null) {
+//            if (primaryStage.getScene() != null) {
+//                sceneHistory.push(primaryStage.getScene().getUserData().toString());
+//            }
+//            primaryStage.setScene(scene);
+//        }
+//    }
 
     public static void goBack() {
         if (!sceneHistory.isEmpty()) {

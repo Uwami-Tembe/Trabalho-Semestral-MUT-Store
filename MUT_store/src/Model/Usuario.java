@@ -5,6 +5,7 @@
 package Model;
 
 import java.util.Date;
+import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -21,6 +22,7 @@ public class Usuario {
     private String userType;
     private boolean userStatus;
     private Date posted;
+    private List<String> pagos;
     private int validated;
     private String bi_Url;
     public Usuario(){};
@@ -39,6 +41,14 @@ public class Usuario {
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public List<String> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(List<String> pagos) {
+        this.pagos = pagos;
     }
 
     public int getValidated() {

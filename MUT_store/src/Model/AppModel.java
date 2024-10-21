@@ -33,6 +33,7 @@ public class AppModel implements Downloadable {
     float Preco;
     String Description;
     String politics;
+    String category;
     boolean isEmola;
     boolean isMpesa;
     boolean isBankCard;
@@ -40,7 +41,7 @@ public class AppModel implements Downloadable {
     
       public AppModel() {}
     public AppModel(File icon, String nome, float Preco, File shot_1, File shot_2,
-            File shot_3, File shot_4, String Description, String politics, String developerName, boolean isBankCard, boolean isMpesa, boolean isEmola, File file) {
+            File shot_3, File shot_4, String Description, String politics, String developerName, boolean isBankCard, boolean isMpesa, boolean isEmola, File file, String category) {
 
         this.icon = icon;
         this.nome = nome;
@@ -56,7 +57,16 @@ public class AppModel implements Downloadable {
         this.isEmola = isEmola;
         this.isMpesa = isMpesa;
         this.file = file;
+        this.category= category;
 
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 

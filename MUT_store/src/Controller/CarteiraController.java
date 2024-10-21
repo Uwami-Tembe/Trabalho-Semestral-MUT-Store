@@ -56,7 +56,8 @@ public class CarteiraController {
 
 @FXML
 void on_bt_FinalizarCompra(ActionEvent event) {
-    ploader.setVisible(true);
+    ploader.setVisible(true);  // Exibe o loader enquanto o pagamento está sendo processado
+
     // Obtém os dados necessários para a compra
     String msisdn = txt_numeroDeTelefone.getText(); // Número de telefone do usuário
     String appId = app.getId(); // Presumindo que o AppModelDetails tenha um método getId()
@@ -71,31 +72,31 @@ void on_bt_FinalizarCompra(ActionEvent event) {
 
         @Override
         protected void succeeded() {
-            // O que fazer se a compra for bem-sucedida
-            if (getValue()) { // getValue() retorna o resultado do método call()
-                MainStage.goTo("Carregando");
-                MainStage.delaySceneWithReset("Sucesso", "Sucesso.fxml", 1.2f);
-                MainStage.goTo("Sucesso");
-                MainStage.delaySceneWithoutReset("TelaPrincipal", "MenuPrincipal.fxml", 1.2f);
-                // Inicie o download se necessário
+            ploader.setVisible(false);  // Esconde o loader quando o processo termina
+            if (getValue()) { // Se a compra for bem-sucedida
+                JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+               
+                MenuPrincipalController mpc = (MenuPrincipalController) MainStage.getController("MenuPrincipal");
+                mpc.initialize();
+                mpc.loadApps();
+                MainStage.changeScene("MenuPrincipal"); // Altera para a cena "MenuPrincipal"
             } else {
-                // Caso a compra falhe, exiba uma mensagem de erro
-                ploader.setVisible(false);
+                // Caso a compra falhe
                 JOptionPane.showMessageDialog(null, "A compra falhou. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
 
         @Override
         protected void failed() {
-            // O que fazer se ocorrer uma falha na execução do Task
-            ploader.setVisible(false);
+            ploader.setVisible(false);  // Esconde o loader em caso de falha
             JOptionPane.showMessageDialog(null, "Ocorreu um erro durante a compra. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     };
 
-    // Executar o Task em uma nova Thread
+    // Executa o Task em uma nova Thread para evitar bloquear a UI
     new Thread(purchaseTask).start();
 }
+
 
 
     @FXML

@@ -155,20 +155,10 @@ public class LoginController {
                         changeScene("Admin");
                         return;
                     }
-                    if (user.getUserType().equals("dev")) {
-                        MenuPrincipalController mpc = (MenuPrincipalController) getController("MenuPrincipal");
-                        mpc.setUser(user);
-                        mpc.setLb_NomeDoUsuario(user.getName());
-                        mpc.initialize(true);
-                        
-                        changeScene("MenuPrincipal");
-                        mpc.initialize(true);
-                        return;
-                    }
+              
                     MenuPrincipalController mpc = (MenuPrincipalController) getController("MenuPrincipal");
-                    mpc.setUser(user);
-                    mpc.setLb_NomeDoUsuario(user.getName());
-                    mpc.initialize(false);
+                    mpc.initialize();
+                    mpc.loadApps();
                     changeScene("MenuPrincipal");
 
                 }

@@ -5,6 +5,7 @@ import Models.Api.Response;
 import Models.Api.User;
 import View.MainStage;
 import static View.MainStage.changeScene;
+import static View.MainStage.getController;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -101,7 +102,10 @@ void On_bt_alterarSenha_Pressed(ActionEvent event) throws Exception {
                     if (resetResult.getError_code() == 0) {
                         // Se a senha foi alterada com sucesso, redireciona para o Menu Principal
                         JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
-                        changeScene("MenuPrincipal");  // Usa o MainStage diretamente
+                          MenuPrincipalController mpc = (MenuPrincipalController) getController("MenuPrincipal");
+                    mpc.initialize();
+                    mpc.loadApps();
+                    changeScene("MenuPrincipal");  // Usa o MainStage diretamente
                     } else {
                         // Caso contrário, exibe uma mensagem de erro
                         JOptionPane.showMessageDialog(null, "Falha ao alterar a senha. Tente novamente.");

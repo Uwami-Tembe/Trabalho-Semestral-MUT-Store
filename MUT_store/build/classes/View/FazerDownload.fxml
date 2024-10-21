@@ -54,7 +54,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <ImageView fx:id="img_IconCriar" fitHeight="43.0" fitWidth="44.0" layoutX="39.0" layoutY="309.0" opacity="0.2" pickOnBounds="true" visible="false">
+                  <ImageView fx:id="img_iconCriar" fitHeight="43.0" fitWidth="44.0" layoutX="39.0" layoutY="309.0" opacity="0.2" pickOnBounds="true" visible="false">
                      <image>
                         <Image url="@Login/imagens/shopping-bag-add-icon.png" />
                      </image>
