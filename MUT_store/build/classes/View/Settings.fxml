@@ -96,7 +96,7 @@
                   <Image url="@Login/imagens/settings-line-icon.png" />
                </image>
             </ImageView>
-            <Pane fx:id="panel_mudarSenha" layoutX="232.0" layoutY="309.0" onMouseClicked="#On_panel_mudarSenha_click" opacity="0.45" prefHeight="122.0" prefWidth="738.0" style="-fx-background-color: ffff; -fx-border-radius: 20; -fx-background-radius: 20;">
+            <Pane fx:id="panel_mudarSenha" layoutX="232.0" layoutY="309.0" onMouseClicked="#On_panel_mudarSenha_click" prefHeight="122.0" prefWidth="738.0" style="-fx-background-color: ffff; -fx-border-radius: 20; -fx-background-radius: 20;">
                <children>
                   <Label layoutX="30.0" layoutY="13.0" prefHeight="46.0" prefWidth="185.0" text="Alterar senha" textFill="#517983">
                      <font>
@@ -134,7 +134,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="paneDeleteAcc" layoutX="229.0" layoutY="460.0" onMouseClicked="#On_clicked_deleteac" prefHeight="122.0" prefWidth="742.0" style="-fx-background-color: ffff; -fx-border-radius: 20; -fx-background-radius: 20;">
+            <Pane fx:id="paneDeleteAcc" layoutX="229.0" layoutY="460.0" onMouseClicked="#On_clicked_deleteac" opacity="0.45" prefHeight="122.0" prefWidth="742.0" style="-fx-background-color: ffff; -fx-border-radius: 20; -fx-background-radius: 20;">
                <children>
                   <Label layoutX="30.0" layoutY="13.0" prefHeight="46.0" prefWidth="277.0" text="Excluir minha conta" textFill="#517983">
                      <font>

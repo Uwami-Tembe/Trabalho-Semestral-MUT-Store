@@ -151,6 +151,11 @@ public class SettingsController {
     
      @FXML
     void On_clicked_deleteac(MouseEvent event) {
+
+    }
+
+    @FXML
+    void On_panel_mudarSenha_click(MouseEvent event) {
         MainStage.changeScene("Carregando");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         pause.setOnFinished(e -> {
@@ -161,11 +166,6 @@ public class SettingsController {
             }
         });
         pause.play();
-    }
-
-    @FXML
-    void On_panel_mudarSenha_click(MouseEvent event) {
-
     }
 
 }
