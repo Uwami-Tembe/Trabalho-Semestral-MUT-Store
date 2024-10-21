@@ -1,6 +1,11 @@
 package Controller;
 
+import Model.Usuario;
+import Models.Api.Response;
+import Models.Api.User;
 import View.MainStage;
+import static View.MainStage.changeScene;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +15,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+import javax.swing.JOptionPane;
 
 public class NewAccountController {
 
+    
+        @FXML
+    private ProgressIndicator ploader;
     @FXML
     private Button bt_criarConta;
 
@@ -39,26 +48,102 @@ public class NewAccountController {
 
     @FXML
     private TextField txt_usuario;
+    
+        @FXML
+    private TextField txt_username;
 
 
 
     @FXML
-    void onBT_criarContaPressed(ActionEvent event) {
-        //A lógica para criar a conta fica aqui
-        
-        
-        
+void onBT_criarContaPressed(ActionEvent event) {
+    // Validação dos campos obrigatórios
+    String mensagemErro = validarEntradasCriacaoConta();
+    if (mensagemErro != null) {
+        mostrarMensagemErro(mensagemErro);
+        return;
     }
+
+    // Verificação se as senhas correspondem
+    if (!ps_senha.getText().equals(ps_senha1.getText())) {
+        mostrarMensagemErro("As senhas não correspondem!");
+        return;
+    }
+
+    // Criação do objeto Usuario
+    Usuario user = new Usuario(
+        txt_usuario.getText(),
+        txt_username.getText(),
+        ps_senha.getText(),
+        txt_numeroDeTelefone.getText(),
+        txt_email.getText(),
+        "normal"
+    );
+
+    // Chamada à API para criar a conta
+    try {
+        Response res = User.criarContaAPI(user);
+
+        // Exibir a mensagem retornada pela API
+        if (res.getError_code() == 0) {
+            exibirMensagemSucesso(res.getMsg());
+        } else {
+            mostrarMensagemErro(res.getMsg());
+        }
+    } catch (Exception e) {
+        mostrarMensagemErro("Ocorreu um erro no sistema: " + e.getMessage());
+    }
+}
+
+// Valida as entradas de criação de conta e retorna uma mensagem de erro, se houver
+private String validarEntradasCriacaoConta() {
+    if (txt_usuario.getText().isEmpty() || ps_senha.getText().isEmpty() || ps_senha1.getText().isEmpty() || 
+        txt_numeroDeTelefone.getText().isEmpty() || txt_email.getText().isEmpty()) {
+        return "Todos os campos devem ser preenchidos!";
+    }
+    return null; // Nenhum erro
+}
+
+// Exibe a mensagem de sucesso e navega para outra tela
+private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
+    // Cria uma instância de TelaLogin passando o primaryStage
+    
+    // Exibe a mensagem de sucesso
+    mostrarMensagemSucesso(mensagemSucesso);
+    
+    // Exibe a tela de carregamento e, depois, navega para a tela de login
+changeScene("Carregando.fxml");
+    
+    PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
+    pause.setOnFinished(e -> {
+        try {
+         changeScene("TelaLogin");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    });
+    
+    pause.play();
+}
+
+// Método para exibir a mensagem de sucesso (deve ser definido se ainda não estiver)
+private void mostrarMensagemSucesso(String mensagem) {
+    JOptionPane.showMessageDialog(null, mensagem); // Usando JOptionPane para exibir a mensagem
+}
+// Método para exibir mensagens de erro na GUI
+private void mostrarMensagemErro(String mensagemErro) {
+    JOptionPane.showMessageDialog(null, mensagemErro); // Exemplo usando JOptionPane
+}
+
 
     @FXML
     void onBT_jaTenhoContaPressed(ActionEvent event) throws  Exception{
-                 MainStage.changeScene("Carregando.fxml");
+                 changeScene("Carregando");
          PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
         
          try{ 
              pause.setOnFinished(e->{
                  try {
-                     MainStage.changeScene("LoginDesign.fxml");
+                     changeScene("TelaLogin");
                  } catch (Exception ex) {
                      ex.printStackTrace();
                  }

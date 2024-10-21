@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
+  <children>
+      <AnchorPane prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
+         <children>
+            <ImageView fitHeight="662.0" fitWidth="412.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true">
+               <image>
+                  <Image url="@Login/imagens/duplo25.jpg" />
+               </image>
+            </ImageView>
+            <Button fx:id="bt_Entrar" layoutX="124.0" layoutY="500.0" mnemonicParsing="false" onAction="#onBT_entrarPressed" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Entrar" textFill="#ededed">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextField fx:id="genericTextField" layoutX="47.0" layoutY="433.0" prefHeight="43.0" prefWidth="316.0" promptText=" Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="ps_senha" layoutX="47.0" layoutY="433.0" prefHeight="44.0" prefWidth="317.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </PasswordField>
+            <TextField fx:id="txt_usuario" layoutX="47.0" layoutY="357.0" prefHeight="43.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <Label layoutX="151.0" layoutY="40.0" prefHeight="27.0" prefWidth="109.0" text="Bem vindo à" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="298.0" layoutY="612.0" text="version 1.0.01" textFill="#7b7b7b">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="52.0" layoutY="400.0" prefHeight="38.0" prefWidth="60.0" text="Senha" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="176.0" layoutY="275.0" prefHeight="38.0" prefWidth="60.0" text="Login" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="53.0" layoutY="326.0" prefHeight="28.0" prefWidth="86.0" text="Username" textFill="#517983">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="132.0" layoutY="67.0" text="MUT Store" textFill="#79a159">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+               <effect>
+                  <Glow level="0.26" />
+               </effect>
+            </Label>
+            <ImageView fitHeight="132.0" fitWidth="134.0" layoutX="139.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/Ideia%20de%20logo.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="19.0" fitWidth="18.0" layoutX="326.0" layoutY="370.0" opacity="0.13" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/portrait_3917494.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="img_viewPassword" fitHeight="16.0" fitWidth="25.0" layoutX="322.0" layoutY="447.0" onMouseEntered="#showPassword" onMouseExited="#hidePassword" opacity="0.13" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/eye_16516008.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="128.0" layoutY="565.0" text="Ainda não tem conta  ? " textFill="#868383">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <Button fx:id="bt_criarConta" layoutX="244.0" layoutY="561.0" mnemonicParsing="false" onAction="#onBT_criarContaPressed" prefHeight="22.0" prefWidth="48.0" style="-fx-background-color: transparent;" text="crie já" textFill="#517983" underline="true">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Button>
+            <Button fx:id="bt_esqueci" layoutX="127.0" layoutY="543.0" mnemonicParsing="false" onAction="#On_bt_esqueci_Pressed" style="-fx-background-color: transparent;" text="Esqueci-me da minha senha" textFill="#517983" underline="true">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+  </children>
+</VBox>

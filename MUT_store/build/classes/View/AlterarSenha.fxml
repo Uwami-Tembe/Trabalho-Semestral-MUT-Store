@@ -42,7 +42,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AlterarSenhaController">
+<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AlterarSenhaController">
   <children>
       <AnchorPane prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
          <children>
@@ -56,7 +56,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="ps_senha" layoutX="55.0" layoutY="276.0" prefHeight="28.0" prefWidth="318.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <PasswordField fx:id="ps_senha" layoutX="46.0" layoutY="258.0" prefHeight="46.0" prefWidth="327.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -66,7 +66,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="59.0" layoutY="257.0" prefHeight="5.0" prefWidth="60.0" text="Senha" textFill="#517983">
+            <Label layoutX="58.0" layoutY="235.0" prefHeight="5.0" prefWidth="60.0" text="Senha" textFill="#517983">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -76,17 +76,17 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <PasswordField fx:id="ps_senha1" layoutX="55.0" layoutY="332.0" prefHeight="28.0" prefWidth="318.0" promptText="Digite sua senha novamente" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <PasswordField fx:id="ps_senha1" layoutX="45.0" layoutY="346.0" prefHeight="46.0" prefWidth="327.0" promptText="Digite sua senha novamente" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </PasswordField>
-            <Label layoutX="57.0" layoutY="313.0" prefHeight="16.0" prefWidth="164.0" text="Confirme a sua senha" textFill="#517983">
+            <Label layoutX="58.0" layoutY="322.0" prefHeight="16.0" prefWidth="164.0" text="Confirme a sua senha" textFill="#517983">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ImageView fx:id="img_viewPassword" fitHeight="16.0" fitWidth="25.0" layoutX="337.0" layoutY="282.0" onMouseEntered="#showPassword" onMouseExited="#hidePassword" opacity="0.13" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="img_viewPassword" fitHeight="16.0" fitWidth="25.0" layoutX="329.0" layoutY="273.0" onMouseEntered="#showPassword" onMouseExited="#hidePassword" opacity="0.13" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Login/imagens/eye_16516008.png" />
                </image>
