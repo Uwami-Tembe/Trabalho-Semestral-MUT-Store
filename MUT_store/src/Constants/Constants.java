@@ -9,8 +9,8 @@ package Constants;
  * @author Aderito
  */
 public class Constants {
-   public static final String API_URLl = "https://mutstore-825ef4fcdfb0.herokuapp.com/mutStore/v1";
-   public static final String API_URL = "http://localhost:3000/mutStore/v1";
+   public static final String API_URL = "https://mutstore-825ef4fcdfb0.herokuapp.com/mutStore/v1";
+   public static final String API_URLl = "http://localhost:3000/mutStore/v1";
    public static final String TOKEN_FILE_PATH = "token.txt";
 
 }
