@@ -64,11 +64,6 @@ public class FazerDownloadController {
     @FXML
     private Button bt_sobre;
 
-    
-    
-
-    
-    
     @FXML
     private ImageView img_icon;
 
@@ -151,9 +146,10 @@ public class FazerDownloadController {
         listarComentarios(app.getId());
     }
 
-        @FXML
+    @FXML
     private ImageView img_iconCriar;
-        @FXML
+
+    @FXML
     public void initialize() {
         // Garantindo que a interface gráfica seja manipulada na thread correta
         Platform.runLater(() -> {
@@ -184,64 +180,62 @@ public class FazerDownloadController {
             // Após ajustar a interface, carrega os aplicativos
         });
     }
-    
-    
+
 //public void initialize() {
 //    // Chama o método para listar comentários ao inicializar a tela
 //    String appId = app.getId(); // Obtém o ID do aplicativo
 //    listarComentarios(appId);
 //}
-public void loadDownloadPageContent(AppModelDetails app) {
-    // Limpa o conteúdo anterior
-    clearPreviousContent();
+    public void loadDownloadPageContent(AppModelDetails app) {
+        // Limpa o conteúdo anterior
+        clearPreviousContent();
 
-    Usuario user = userInfo();  // Obtém as informações do usuário atual
-    List<String> pagos = user.getPagos();  // Supondo que a classe Usuario tenha o método getPagos()
+        Usuario user = userInfo();  // Obtém as informações do usuário atual
+        List<String> pagos = user.getPagos();  // Supondo que a classe Usuario tenha o método getPagos()
 
-    // Carrega os novos dados do aplicativo
-    img_icon.setImage(new Image(app.getIcon()));
-    lb_Nome.setText(app.getNome());
+        // Carrega os novos dados do aplicativo
+        img_icon.setImage(new Image(app.getIcon()));
+        lb_Nome.setText(app.getNome());
 
-    List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
-    appfile = app.getAppFilePath();
+        List<String> imagePaths = app.getImagePaths();  // Supondo que imagePaths é uma List<String>
+        appfile = app.getAppFilePath();
 
-    // Carrega as imagens de captura de tela
-    img_shot_1.setImage(new Image(imagePaths.get(0)));
-    img_shot_2.setImage(new Image(imagePaths.get(1)));
-    img_shot_3.setImage(new Image(imagePaths.get(2)));
-    img_shot_4.setImage(new Image(imagePaths.get(3)));
+        // Carrega as imagens de captura de tela
+        img_shot_1.setImage(new Image(imagePaths.get(0)));
+        img_shot_2.setImage(new Image(imagePaths.get(1)));
+        img_shot_3.setImage(new Image(imagePaths.get(2)));
+        img_shot_4.setImage(new Image(imagePaths.get(3)));
 
-    // Outros dados do app
-    lb_DescricaoLonga.setText(app.getDescription());
-    lb_politicsLongo.setText(app.getPolitics());
-    lb_developerName.setText(app.getDeveloperName());
+        // Outros dados do app
+        lb_DescricaoLonga.setText(app.getDescription());
+        lb_politicsLongo.setText(app.getPolitics());
+        lb_developerName.setText(app.getDeveloperName());
 
-    // Torna as imagens visíveis (caso necessário)
-    img_icon.setOpacity(1.0);
-    img_shot_1.setOpacity(1.0);
-    img_shot_2.setOpacity(1.0);
-    img_shot_3.setOpacity(1.0);
-    img_shot_4.setOpacity(1.0);
+        // Torna as imagens visíveis (caso necessário)
+        img_icon.setOpacity(1.0);
+        img_shot_1.setOpacity(1.0);
+        img_shot_2.setOpacity(1.0);
+        img_shot_3.setOpacity(1.0);
+        img_shot_4.setOpacity(1.0);
 
-    // Verifica se o aplicativo já foi comprado pelo usuário
-    System.out.println(pagos.toString());
-    System.out.println("APPID"+app.getId());
-    if (pagos != null && pagos.contains(app.getId())) {
-        // Se o aplicativo já foi comprado, o preço é "Grátis" e o botão diz "Baixar"
-        lb_preco.setText("Grátis");
-        bt_Baixar.setText("Baixar");
-    } else {
-        // Se não foi comprado, exibe o preço normal
-        if (app.getPreco() == 0.0f) {
+        // Verifica se o aplicativo já foi comprado pelo usuário
+        System.out.println(pagos.toString());
+        System.out.println("APPID" + app.getId());
+        if (pagos != null && pagos.contains(app.getId())) {
+            // Se o aplicativo já foi comprado, o preço é "Grátis" e o botão diz "Baixar"
             lb_preco.setText("Grátis");
             bt_Baixar.setText("Baixar");
         } else {
-            lb_preco.setText(Float.toString((float)app.getPreco()));
-            bt_Baixar.setText("Comprar");
+            // Se não foi comprado, exibe o preço normal
+            if (app.getPreco() == 0.0f) {
+                lb_preco.setText("Grátis");
+                bt_Baixar.setText("Baixar");
+            } else {
+                lb_preco.setText(Float.toString((float) app.getPreco()));
+                bt_Baixar.setText("Comprar");
+            }
         }
     }
-}
-
 
 // Método para limpar os campos da interface
     public void clearPreviousContent() {
@@ -291,31 +285,59 @@ public void loadDownloadPageContent(AppModelDetails app) {
 
     @FXML
     void On_bt_comentar_pressed(ActionEvent event) {
+        // Limpa estilos antigos de erros
+        limparEstilosDeErro();
+
         // Obtém os valores inseridos pelo usuário
         String appId = app.getId();
         String comentario = txt_comentar.getText();
 
         // Valida se os campos não estão vazios
-        if (appId.isEmpty() || comentario.isEmpty()) {
-            // Exibe mensagem de erro caso algum campo esteja vazio
-            JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+        boolean erro = false;
+        StringBuilder mensagemErro = new StringBuilder();
+
+        // Validação do comentário
+        if (comentario.isEmpty()) {
+            txt_comentar.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+            mensagemErro.append("O comentário não pode estar vazio.\n");
+            erro = true;
+        } else if (comentario.length() < 5) { // Validação de comprimento mínimo
+            txt_comentar.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+            mensagemErro.append("O comentário deve ter no mínimo 5 caracteres.\n");
+            erro = true;
+        } else if (comentario.length() > 500) { // Validação de comprimento máximo
+            txt_comentar.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+            mensagemErro.append("O comentário deve ter no máximo 500 caracteres.\n");
+            erro = true;
+        } else if (!comentario.matches("^[a-zA-Z0-9 .,!?]+$")) { // Verifica se há caracteres inválidos
+            txt_comentar.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+            mensagemErro.append("O comentário contém caracteres inválidos.\n");
+            erro = true;
+        }
+
+        if (erro) {
+            // Exibe a mensagem de erro se houver validações não passadas
+            JOptionPane.showMessageDialog(null, mensagemErro.toString(), "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Chama a função para enviar o comentário
-       boolean comments = comentarApp(appId, comentario);
+        boolean comments = comentarApp(appId, comentario);
 
-        // Verifica se os comentários foram enviados com sucesso
+        // Verifica se o comentário foi enviado com sucesso
         if (!comments) {
             JOptionPane.showMessageDialog(null, "Comentário enviado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             listarComentarios(appId);
             // Opcionalmente, pode limpar os campos após o envio
             txt_comentar.clear();
-        } else {
-          
         }
-    listarComentarios(appId);
-//    initialize();
+
+        listarComentarios(appId);
+    }
+
+// Limpa os estilos de erro antes de validar novamente
+    private void limparEstilosDeErro() {
+        txt_comentar.setStyle(""); // Remove o estilo de erro
     }
 
     @FXML
@@ -329,7 +351,7 @@ public void loadDownloadPageContent(AppModelDetails app) {
         }
     }
 
-      @FXML
+    @FXML
     void On_bt_Loja_pressed(ActionEvent event) {
         try {
             MenuPrincipalController menuController = (MenuPrincipalController) getController("MenuPrincipal");

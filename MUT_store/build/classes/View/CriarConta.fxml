@@ -43,9 +43,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.NewAccountController">
+<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.NewAccountController">
   <children>
-      <AnchorPane prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
+      <AnchorPane onKeyPressed="#onFieldKeyPressed" prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
          <children>
             <ImageView fitHeight="667.0" fitWidth="426.0" layoutX="-3.0" layoutY="-2.0" pickOnBounds="true">
                <image>
@@ -62,7 +62,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </PasswordField>
-            <TextField fx:id="txt_username" layoutX="56.0" layoutY="229.0" prefHeight="28.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_username" layoutX="56.0" layoutY="229.0" onKeyPressed="#onSenhaFieldKeyPressed" prefHeight="28.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -165,7 +165,7 @@
                   <Image url="@Login/imagens/mail.png" />
                </image>
             </ImageView>
-            <TextField fx:id="txt_usuario" layoutX="56.0" layoutY="179.0" prefHeight="28.0" prefWidth="316.0" promptText="Digite seu nome" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_usuario" layoutX="56.0" layoutY="179.0" onKeyPressed="#onUsernameFieldKeyPressed" prefHeight="28.0" prefWidth="316.0" promptText="Digite seu nome" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

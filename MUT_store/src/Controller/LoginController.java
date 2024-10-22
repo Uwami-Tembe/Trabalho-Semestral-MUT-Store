@@ -16,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -86,52 +88,106 @@ public class LoginController {
 
         //O código deve ser gerado e enviado aqui
     }
+    
+    
+    
+@FXML
+void OnUsernamePressed(KeyEvent event) {
+    // Pegue o campo de texto que disparou o evento
+    String username = txt_usuario.getText();
 
-    @FXML
-    void onBT_entrarPressed(ActionEvent event) throws Exception {
-        // Obter as entradas do usuário
-        String username = txt_usuario.getText();
-        String password = ps_senha.getText();
+    // Defina os critérios de validação
+    boolean isValid = validarUsername(username);
 
-        // Validações essenciais
-        String mensagemErro = validarEntradas(username, password);
-        if (mensagemErro != null) {
-            // Se houver erro de validação, exibe a mensagem correspondente
-            mostrarMensagemErro(mensagemErro);
-            return;
-        }
-
-        // Cria o objeto Usuario com as informações fornecidas
-        Usuario user = new Usuario(username, password);
-
-        try {
-            // Chama o método loginAPI e verifica a resposta
-            Response res = User.loginAPI(user);
-
-            // Exibe a mensagem retornada pela API, seja ela de sucesso ou falha
-            if (res.getError_code() == 0) {
-                exibirMensagemSucesso(res.getMsg());
-
-            } else {
-                mostrarMensagemErro(res.getMsg());  // Mensagem de erro da API
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
-        }
+    // Exiba uma mensagem de erro ou faça outra ação de acordo com a validação
+    if (!isValid) {
+        txt_usuario.setStyle("-fx-border-color: red;"); // Adiciona uma borda vermelha no TextField
+        System.out.println("Nome de usuário inválido! Deve conter entre 5 e 15 caracteres e apenas letras e números.");
+    } else {
+        txt_usuario.setStyle("-fx-border-color: none;"); // Remove a borda vermelha se válido
     }
 
-// Valida as entradas e retorna a mensagem de erro, se houver, ou null
-    private String validarEntradas(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            return "O nome de usuário não pode estar vazio.";
+    // Verifique se a tecla pressionada foi Enter
+    if (event.getCode() == KeyCode.ENTER) {
+        if (isValid) {
+            login(); // Chama a função de login se o nome de usuário for válido
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, corrija o nome de usuário antes de continuar.");
         }
-        if (password == null || password.trim().isEmpty()) {
-            return "A senha não pode estar vazia.";
-        }
-        return null; // Nenhum erro, retorna null
     }
+}
+
+@FXML
+void OnSenhaPressed(KeyEvent event) {
+    // Verifique se a tecla pressionada foi Enter
+    if (event.getCode() == KeyCode.ENTER) {
+        login(); // Chama a função de login ao pressionar Enter no campo de senha
+    }
+}
+
+@FXML
+void onBT_entrarPressed(ActionEvent event) throws Exception {
+    login(); // Chama a função de login ao clicar no botão
+}
+
+public void login() {
+    // Obter as entradas do usuário
+    String username = txt_usuario.getText();
+    String password = ps_senha.getText();
+
+    // Validações essenciais
+    boolean isValidUsername = validarUsername(username);
+    if (!isValidUsername) {
+        mostrarMensagemErro("Nome de usuário inválido! Deve conter entre 5 e 15 caracteres e apenas letras e números.");
+        txt_usuario.setStyle("-fx-border-color: red;");
+        return;
+    } else {
+        txt_usuario.setStyle("-fx-border-color: none;");
+    }
+
+    String mensagemErro = validarEntradas(username, password);
+    if (mensagemErro != null) {
+        mostrarMensagemErro(mensagemErro);
+        return;
+    }
+
+    // Cria o objeto Usuario com as informações fornecidas
+    Usuario user = new Usuario(username, password);
+
+    try {
+        // Chama o método loginAPI e verifica a resposta
+        Response res = User.loginAPI(user);
+
+        // Exibe a mensagem retornada pela API, seja ela de sucesso ou falha
+        if (res.getError_code() == 0) {
+            exibirMensagemSucesso(res.getMsg());
+        } else {
+            mostrarMensagemErro(res.getMsg());  // Mensagem de erro da API
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarMensagemErro("Erro no sistema. Tente novamente mais tarde.");
+    }
+}
+
+// Método auxiliar para validar o nome de usuário
+private boolean validarUsername(String username) {
+    return username.matches("[a-zA-Z0-9]*") && username.length() >= 4 && username.length() <= 15;
+}
+
+// Método auxiliar para validar username e password
+private String validarEntradas(String username, String password) {
+    if (username.isEmpty() || password.isEmpty()) {
+        return "Por favor, preencha todos os campos!";
+    }
+    return null; // Se não houver erros, retorna null
+}
+
+
+
+
+   
 
 // Exibe a mensagem de sucesso e navega para outra tela
     private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {

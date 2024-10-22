@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
@@ -54,8 +56,11 @@ public class NewAccountController {
 
 
 
-    @FXML
+@FXML
 void onBT_criarContaPressed(ActionEvent event) {
+    // Limpar estilos antigos de erros
+    limparEstilosDeErro();
+
     // Validação dos campos obrigatórios
     String mensagemErro = validarEntradasCriacaoConta();
     if (mensagemErro != null) {
@@ -65,6 +70,8 @@ void onBT_criarContaPressed(ActionEvent event) {
 
     // Verificação se as senhas correspondem
     if (!ps_senha.getText().equals(ps_senha1.getText())) {
+        ps_senha.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        ps_senha1.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
         mostrarMensagemErro("As senhas não correspondem!");
         return;
     }
@@ -94,44 +101,95 @@ void onBT_criarContaPressed(ActionEvent event) {
     }
 }
 
-// Valida as entradas de criação de conta e retorna uma mensagem de erro, se houver
+// Método auxiliar para validar as entradas de criação de conta
 private String validarEntradasCriacaoConta() {
-    if (txt_usuario.getText().isEmpty() || ps_senha.getText().isEmpty() || ps_senha1.getText().isEmpty() || 
-        txt_numeroDeTelefone.getText().isEmpty() || txt_email.getText().isEmpty()) {
-        return "Todos os campos devem ser preenchidos!";
+    boolean erro = false;
+
+    if (txt_usuario.getText().isEmpty()) {
+        txt_usuario.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        erro = true;
     }
+
+    if (txt_email.getText().isEmpty() || !txt_email.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        txt_email.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        erro = true;
+    }
+
+    if (txt_numeroDeTelefone.getText().isEmpty() || !txt_numeroDeTelefone.getText().matches("\\+258\\d{9}")) {
+        txt_numeroDeTelefone.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        erro = true;
+    }
+
+    if (ps_senha.getText().isEmpty()) {
+        ps_senha.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        erro = true;
+    }
+
+    if (ps_senha1.getText().isEmpty()) {
+        ps_senha1.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        erro = true;
+    }
+
+    if (erro) {
+        return "Por favor, corrija os campos em vermelho!";
+    }
+
     return null; // Nenhum erro
 }
 
+// Limpar os estilos de erro antes de validar novamente
+private void limparEstilosDeErro() {
+    txt_usuario.setStyle("");
+    txt_email.setStyle("");
+    txt_numeroDeTelefone.setStyle("");
+    ps_senha.setStyle("");
+    ps_senha1.setStyle("");
+}
+
+// Evento KeyPressed para validar e criar conta ao pressionar "Enter"
+@FXML
+void onFieldKeyPressed(KeyEvent event) {
+    if (event.getCode() == KeyCode.ENTER) {
+        onBT_criarContaPressed(null); // Chama o método de criação de conta
+    }
+}
+
+@FXML
+void onUsernameFieldKeyPressed(KeyEvent event) {
+
+}
+
+@FXML
+void onSenhaFieldKeyPressed(KeyEvent event) {
+
+}
+
+
+
 // Exibe a mensagem de sucesso e navega para outra tela
 private void exibirMensagemSucesso(String mensagemSucesso) throws Exception {
-    // Cria uma instância de TelaLogin passando o primaryStage
-    
-    // Exibe a mensagem de sucesso
     mostrarMensagemSucesso(mensagemSucesso);
-    
-    // Exibe a tela de carregamento e, depois, navega para a tela de login
-changeScene("Carregando.fxml");
-    
+    changeScene("Carregando.fxml");
+
     PauseTransition pause = new PauseTransition(Duration.seconds(1.2));
     pause.setOnFinished(e -> {
         try {
-         changeScene("TelaLogin");
+            changeScene("TelaLogin.fxml");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     });
-    
     pause.play();
 }
 
-// Método para exibir a mensagem de sucesso (deve ser definido se ainda não estiver)
+// Exibe mensagem de sucesso com JOptionPane
 private void mostrarMensagemSucesso(String mensagem) {
-    JOptionPane.showMessageDialog(null, mensagem); // Usando JOptionPane para exibir a mensagem
+    JOptionPane.showMessageDialog(null, mensagem);
 }
-// Método para exibir mensagens de erro na GUI
+
+// Exibe mensagem de erro com JOptionPane
 private void mostrarMensagemErro(String mensagemErro) {
-    JOptionPane.showMessageDialog(null, mensagemErro); // Exemplo usando JOptionPane
+    JOptionPane.showMessageDialog(null, mensagemErro);
 }
 
 

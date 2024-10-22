@@ -31,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -350,10 +351,14 @@ void On_bt_upload_pressed(ActionEvent event) {
         return;
     }
 
-    // Verificar se o preço é um número válido
+    // Verificar se o preço é um número válido e dentro do limite
     float preco;
     try {
         preco = Float.parseFloat(txt_appPreco.getText());
+        if (preco < 0 || preco > 1300) { // Verifica se o preço está dentro do limite
+            mostrarMensagemErro("Preço inválido. Insira um valor entre 0 e 1300.");
+            return;
+        }
     } catch (NumberFormatException e) {
         mostrarMensagemErro("Preço inválido. Insira um valor numérico.");
         return;
@@ -434,6 +439,33 @@ void On_bt_upload_pressed(ActionEvent event) {
 
     // Executa a tarefa em uma nova thread
     new Thread(uploadTask).start();
+}
+
+// Adicionando evento de keyPressed para validar o preço em tempo real
+@FXML
+void txt_appPreco_keyPressed(KeyEvent event) {
+    String precoText = txt_appPreco.getText();
+
+    // Permitir apenas números e pontos no campo de preço
+    if (!precoText.matches("[0-9]*[.]?[0-9]*")) {
+        txt_appPreco.setStyle("-fx-border-color: red;");
+    } else {
+        txt_appPreco.setStyle(""); // Remove o estilo de erro se a entrada for válida
+    }
+
+    // Verificar se o valor está dentro do limite permitido
+    if (!precoText.isEmpty()) {
+        try {
+            float preco = Float.parseFloat(precoText);
+            if (preco < 0 || preco > 1300) {
+                txt_appPreco.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+            } else {
+                txt_appPreco.setStyle(""); // Remove o estilo de erro se o valor estiver dentro do limite
+            }
+        } catch (NumberFormatException e) {
+            txt_appPreco.setStyle("-fx-border-color: red; -fx-background-color: #FFCCCC;");
+        }
+    }
 }
 
 

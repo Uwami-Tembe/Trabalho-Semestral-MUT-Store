@@ -36,14 +36,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
+<VBox prefHeight="662.0" prefWidth="411.0" style="-fx-background-radius: 50;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CarteiraController">
   <children>
       <AnchorPane prefHeight="685.0" prefWidth="402.0" style="-fx-background-color: EDEDED; -fx-background-radius: 50;">
          <children>
@@ -52,7 +51,7 @@
                   <Image url="@Login/imagens/duplo25.jpg" />
                </image>
             </ImageView>
-            <Button fx:id="bt_Entrar" layoutX="124.0" layoutY="500.0" mnemonicParsing="false" onAction="#onBT_entrarPressed" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Entrar" textFill="#ededed">
+            <Button fx:id="bt_FinalizarCompra" layoutX="30.0" layoutY="579.0" mnemonicParsing="false" onAction="#on_bt_FinalizarCompra" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: #79a159;" text="Finalizar compra" textFill="#ededed">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -62,57 +61,29 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="ps_senha" layoutX="47.0" layoutY="433.0" onKeyPressed="#OnSenhaPressed" prefHeight="44.0" prefWidth="317.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <PasswordField fx:id="ps_pin" layoutX="47.0" layoutY="433.0" prefHeight="44.0" prefWidth="317.0" promptText="Digite o pin associado ao número" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </PasswordField>
-            <TextField fx:id="txt_usuario" layoutX="47.0" layoutY="357.0" onKeyPressed="#OnUsernamePressed" prefHeight="43.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_numeroDeTelefone" layoutX="47.0" layoutY="357.0" prefHeight="43.0" prefWidth="316.0" promptText="+258" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextField>
-            <Label layoutX="151.0" layoutY="40.0" prefHeight="27.0" prefWidth="109.0" text="Bem vindo à" textFill="#517983">
+            <Label layoutX="52.0" layoutY="400.0" prefHeight="38.0" prefWidth="60.0" text="PIN" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="298.0" layoutY="612.0" text="version 1.0.01" textFill="#7b7b7b">
+            <Label layoutX="52.0" layoutY="330.0" prefHeight="28.0" prefWidth="328.0" text="Digite o número de telefone que fará a transação" textFill="#517983">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="52.0" layoutY="400.0" prefHeight="38.0" prefWidth="60.0" text="Senha" textFill="#517983">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="176.0" layoutY="275.0" prefHeight="38.0" prefWidth="60.0" text="Login" textFill="#517983">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="53.0" layoutY="326.0" prefHeight="28.0" prefWidth="86.0" text="Username" textFill="#517983">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="132.0" layoutY="67.0" text="MUT Store" textFill="#79a159">
-               <font>
-                  <Font name="System Bold" size="29.0" />
-               </font>
-               <effect>
-                  <Glow level="0.26" />
-               </effect>
-            </Label>
-            <ImageView fitHeight="132.0" fitWidth="134.0" layoutX="139.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Login/imagens/Ideia%20de%20logo.png" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="19.0" fitWidth="18.0" layoutX="326.0" layoutY="370.0" opacity="0.13" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Login/imagens/portrait_3917494.png" />
+                  <Image url="@Login/imagens/call.png" />
                </image>
             </ImageView>
             <ImageView fx:id="img_viewPassword" fitHeight="16.0" fitWidth="25.0" layoutX="322.0" layoutY="447.0" onMouseEntered="#showPassword" onMouseExited="#hidePassword" opacity="0.13" pickOnBounds="true" preserveRatio="true">
@@ -120,19 +91,34 @@
                   <Image url="@Login/imagens/eye_16516008.png" />
                </image>
             </ImageView>
-            <Label layoutX="128.0" layoutY="565.0" text="Ainda não tem conta  ? " textFill="#868383">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="220.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/e-mola.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="49.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Login/imagens/m-pesa.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="49.0" layoutY="46.0" prefHeight="38.0" prefWidth="183.0" text="Carteira Móvel" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="11.0" />
+                  <Font name="System Bold" size="26.0" />
                </font>
             </Label>
-            <Button fx:id="bt_criarConta" layoutX="244.0" layoutY="561.0" mnemonicParsing="false" onAction="#onBT_criarContaPressed" prefHeight="22.0" prefWidth="48.0" style="-fx-background-color: transparent;" text="crie já" textFill="#517983" underline="true">
+            <Label layoutX="87.0" layoutY="500.0" prefHeight="38.0" prefWidth="183.0" text="Total a pagar: " textFill="#517983">
                <font>
-                  <Font name="System Bold" size="11.0" />
+                  <Font name="System Bold" size="26.0" />
                </font>
-            </Button>
-            <Button fx:id="bt_esqueci" layoutX="127.0" layoutY="543.0" mnemonicParsing="false" onAction="#On_bt_esqueci_Pressed" style="-fx-background-color: transparent;" text="Esqueci-me da minha senha" textFill="#517983" underline="true">
+            </Label>
+            <Label fx:id="lb_valorTotal" layoutX="270.0" layoutY="500.0" prefHeight="38.0" prefWidth="60.0" text="0.00" textFill="#517983">
                <font>
-                  <Font name="System Bold" size="11.0" />
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+            <Button fx:id="bt_voltar" layoutX="218.0" layoutY="579.0" mnemonicParsing="false" onAction="#on_bt_voltar" prefHeight="38.0" prefWidth="164.0" style="-fx-background-radius: 20; -fx-background-color: red;" text="Voltar" textFill="#ededed">
+               <font>
+                  <Font name="System Bold" size="14.0" />
                </font>
             </Button>
          </children>

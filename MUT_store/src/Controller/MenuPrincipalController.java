@@ -461,6 +461,7 @@ private VBox createAppBox(AppModelSummary app) {
                     clearInterface(controller);
                     controller.loadDownloadPageContent(appDetails);
                     controller.setApp(appDetails);
+                    controller.initialize();
                     System.out.println("Mudando para a cena da tela de download.");
                     changeScene("TelaDownload");
                 } else {

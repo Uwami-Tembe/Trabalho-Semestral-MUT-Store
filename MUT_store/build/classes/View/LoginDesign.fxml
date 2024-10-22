@@ -62,12 +62,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="ps_senha" layoutX="47.0" layoutY="433.0" prefHeight="44.0" prefWidth="317.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <PasswordField fx:id="ps_senha" layoutX="47.0" layoutY="433.0" onKeyPressed="#OnSenhaPressed" prefHeight="44.0" prefWidth="317.0" promptText="Digite sua senha" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </PasswordField>
-            <TextField fx:id="txt_usuario" layoutX="47.0" layoutY="357.0" prefHeight="43.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
+            <TextField fx:id="txt_usuario" layoutX="47.0" layoutY="357.0" onKeyPressed="#OnUsernamePressed" prefHeight="43.0" prefWidth="316.0" promptText="Digite seu nome de usuário" style="-fx-background-radius: 20; -fx-background-insets: 0;">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
