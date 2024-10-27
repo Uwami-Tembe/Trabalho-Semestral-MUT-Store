@@ -223,6 +223,7 @@ public class FazerDownloadController {
         System.out.println("APPID" + app.getId());
         if (pagos != null && pagos.contains(app.getId())) {
             // Se o aplicativo já foi comprado, o preço é "Grátis" e o botão diz "Baixar"
+            app.setPreco(0);
             lb_preco.setText("Grátis");
             bt_Baixar.setText("Baixar");
         } else {
